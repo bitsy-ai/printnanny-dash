@@ -1,0 +1,7 @@
+/target
+.tmp
+
+*.db*
+env/
+target/
+.vscode
