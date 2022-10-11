@@ -1,4 +1,4 @@
-# PrintNanny Edge/Device Dashboard
+# PrintNanny OS Dashboard
 
 ![Discord](https://img.shields.io/discord/773452324692688956)
 ![Github Followers](https://img.shields.io/github/followers/leigh-johnson?style=social)
