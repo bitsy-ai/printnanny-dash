@@ -7,8 +7,8 @@ image = "bitsyai/cross-rs:armv7-unknown-linux-gnueabihf-22.04"
 xargo = false
 
 [target.x86_64-unknown-linux-gnu]
+image = "bitsyai/cross-rs:x86_64-unknown-linux-gnu-22.04"
 xargo = false
-pre-build = ["curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash", "nvm use v16"]
 
 [build.env]
 passthrough = [

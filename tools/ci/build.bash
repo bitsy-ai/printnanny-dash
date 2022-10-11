@@ -15,8 +15,8 @@ required_arg $CROSS 'CROSS'
 required_arg $TARGET_TRIPLE '<Target Triple>'
 
 if [ -z "$RELEASE_BUILD" ]; then
-    $CROSS build --target $TARGET_TRIPLE
-    $CROSS build --target $TARGET_TRIPLE --all-features
+    $CROSS build --verbose --target $TARGET_TRIPLE
+    $CROSS build --verbose --target $TARGET_TRIPLE --all-features
 else
     $CROSS build --verbose --target $TARGET_TRIPLE --all-features --release
 fi
