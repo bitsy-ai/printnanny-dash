@@ -12,4 +12,5 @@ passthrough = [
     "RUST_BACKTRACE",
     "RUST_LOG",
     "CARGO_MANIFEST_DIR",
+    "OUT_DIR"
 ]
