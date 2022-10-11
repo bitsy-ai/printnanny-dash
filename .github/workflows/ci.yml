@@ -105,7 +105,7 @@ jobs:
           matrix.target != 'sparc64-unknown-linux-gnu'
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         channel: [stable, beta]
         target:
