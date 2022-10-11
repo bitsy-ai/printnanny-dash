@@ -31,6 +31,14 @@
                 :aria-current="item.current ? 'page' : undefined"
                 >{{ item.name }}</RouterLink
               >
+
+              <a
+                v-for="item in externalLinks"
+                :key="item.name"
+                :href="item.href"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                target="_blank"
+                >{{ item.name }} <ArrowUpRightIcon class="w-4 h-4 text-sm font-medium ml-1"/></a>
             </div>
           </div>
           <div class="-mr-2 flex items-center sm:hidden">
@@ -82,19 +90,28 @@
       </DisclosurePanel>
     </Disclosure>
     <RouterView />
+
+    <FooterNav />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { Bars3Icon, XMarkIcon, ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import { useRouter, RouterLink, RouterView } from "vue-router";
 import ConnectionStatus from "@/components/ConnectionStatus.vue";
 import StickyAlerts from "./components/StickyAlerts.vue";
+import FooterNav from "@/components/FooterNav.vue";
 import routes from "@/router/routes";
 
 const router = useRouter();
+
+const externalLinks = [
+  {name: "OctoPrint", href: "/octoprint"},
+  {name: "PrintNanny Cloud", href: "https://printnanny.ai"},
+
+]
 
 const navigation = computed(() =>
   routes.map((r) => {
