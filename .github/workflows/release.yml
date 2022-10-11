@@ -11,7 +11,7 @@ on:
 name: Publish
 env:
   BIN: printnanny-dash
-  TAR: printnanny
+  TAR: printnanny-dash
   CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
 jobs:
