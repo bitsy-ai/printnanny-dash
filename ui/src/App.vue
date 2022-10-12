@@ -8,13 +8,13 @@
             <div class="flex flex-shrink-0 items-center">
               <img
                 class="block h-8 w-auto lg:hidden"
-                src="@/assets/heart.png"
-                alt="Your Company"
+                src="@/assets/logos/printnanny/logo-text-rect-dark.svg"
+                alt="PrintNanny"
               />
               <img
                 class="hidden h-8 w-auto lg:block"
-                src="@/assets/heart.png"
-                alt="Your Company"
+                src="@/assets/logos/printnanny/logo-text-rect-dark.svg"
+                alt="PrintNanny"
               />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
