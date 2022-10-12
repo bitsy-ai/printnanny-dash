@@ -8,13 +8,13 @@
             <div class="flex flex-shrink-0 items-center">
               <img
                 class="block h-8 w-auto lg:hidden"
-                src="@/assets/heart.png"
-                alt="Your Company"
+                src="@/assets/logos/printnanny/logo-text-rect-dark.svg"
+                alt="PrintNanny"
               />
               <img
                 class="hidden h-8 w-auto lg:block"
-                src="@/assets/heart.png"
-                alt="Your Company"
+                src="@/assets/logos/printnanny/logo-text-rect-dark.svg"
+                alt="PrintNanny"
               />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
@@ -38,7 +38,9 @@
                 :href="item.href"
                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 target="_blank"
-                >{{ item.name }} <ArrowUpRightIcon class="w-4 h-4 text-sm font-medium ml-1"/></a>
+                >{{ item.name }}
+                <ArrowUpRightIcon class="w-4 h-4 text-sm font-medium ml-1"
+              /></a>
             </div>
           </div>
           <div class="-mr-2 flex items-center sm:hidden">
@@ -98,7 +100,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { Bars3Icon, XMarkIcon, ArrowUpRightIcon } from "@heroicons/vue/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ArrowUpRightIcon,
+} from "@heroicons/vue/24/outline";
 import { useRouter, RouterLink, RouterView } from "vue-router";
 import ConnectionStatus from "@/components/ConnectionStatus.vue";
 import StickyAlerts from "./components/StickyAlerts.vue";
@@ -108,10 +114,10 @@ import routes from "@/router/routes";
 const router = useRouter();
 
 const externalLinks = [
-  {name: "OctoPrint", href: "/octoprint/"},
-  {name: "Update System", href: "/update/"},
-  {name: "PrintNanny Cloud", href: "https://printnanny.ai"},
-]
+  { name: "OctoPrint", href: "/octoprint/" },
+  { name: "Update System", href: "/update/" },
+  { name: "PrintNanny Cloud", href: "https://printnanny.ai" },
+];
 
 const navigation = computed(() =>
   routes.map((r) => {
