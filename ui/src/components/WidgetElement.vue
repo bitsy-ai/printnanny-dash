@@ -1,10 +1,11 @@
 <template>
   <div
-    class="w-full p-4 m-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+    class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
   >
     <div class="flex justify-end px-4 pt-4">
-      <!-- Dropdown menu -->
-      <WidgetStatus />
+      <!-- service status -->
+      <WidgetStatus v-if="item.service" />
+      <div v-else class="h-4"></div>
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -15,13 +16,14 @@
       <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
         {{ item.name }}
       </h5>
-      <span class="text-sm text-gray-500 dark:text-gray-400">{{
+      <span class="text-sm text-gray-500 dark:text-gray-400 text-center">{{
         item.description
       }}</span>
 
       <!-- toggle-->
 
       <Switch
+        v-if="item.service"
         v-model="enabled"
         :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
         class="relative inline-flex h-6 w-11 items-center rounded-full mt-4"
