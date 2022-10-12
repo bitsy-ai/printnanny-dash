@@ -35,13 +35,6 @@ const footerNavigation = {
     },
     { name: "API Status", href: "/health" },
   ],
-  company: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Partners", href: "#" },
-  ],
   legal: [
     { name: "Privacy", href: "https://printnanny.ai/privacy" },
     { name: "Terms of Service", href: "https://printnanny.ai/terms" },
@@ -89,11 +82,11 @@ const footerNavigation = {
         <div class="space-y-8 xl:col-span-1">
           <img
             class="h-10"
-            src="@/assets/logo/logo-text-rect-white.svg"
+            src="@/assets/logos/printnanny/logo-text-rect-white.svg"
             alt="PrintNanny"
           />
           <p class="text-gray-500 text-base">
-            Get a personal assistant for your 3D printer.
+            The Personal Assistant for your 3D Printer.
           </p>
           <div class="flex space-x-6">
             <a

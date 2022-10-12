@@ -114,9 +114,16 @@ import routes from "@/router/routes";
 const router = useRouter();
 
 const externalLinks = [
-  { name: "OctoPrint", href: "/octoprint/" },
+  {
+    name: "What's new?",
+    href: "https://docs.printnanny.ai/docs/category/release-history/",
+  },
   { name: "Update System", href: "/update/" },
   { name: "PrintNanny Cloud", href: "https://printnanny.ai" },
+  {
+    name: "Documentation",
+    href: "https://docs.printnanny.ai/docs/category/quick-start/",
+  },
 ];
 
 const navigation = computed(() =>

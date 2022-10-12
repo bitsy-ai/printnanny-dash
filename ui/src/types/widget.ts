@@ -6,8 +6,8 @@ export interface WidgetMenuItem {
 export interface WidgetItem {
   name: string;
   href: string;
-  service: string;
   logo: string;
   description: string;
   menuItems: Array<WidgetMenuItem>;
+  service: string;
 }
