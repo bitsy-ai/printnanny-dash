@@ -14,7 +14,7 @@
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
           <WidgetElement
-            v-for="item in printerApps"
+            v-for="item in widgets.printerManagementItems"
             :key="item.name"
             :item="item"
           />
@@ -65,7 +65,7 @@
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
           <WidgetElement
-            v-for="item in printnannyApps"
+            v-for="item in widgets.appItems"
             :key="item.name"
             :item="item"
           />
@@ -116,62 +116,64 @@
 
 <script setup lang="ts">
 import WidgetElement from "@/components/WidgetElement.vue";
-import ocotoprintLogo from "@/assets/logos/octoprint/octoprint_logo_rgb_250px.png";
-import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
-import printNannyLogo from "@/assets/logos/printnanny/logo.svg";
-import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
+
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import { useEventStore } from "@/stores/events";
+import { useWidgetStore } from "@/stores/widgets";
 
 const store = useEventStore();
+
+const widgets = useWidgetStore();
+
 store.loadEnabledServices();
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";
 
-const printerApps = [
-  {
-    name: "OctoPrint",
-    href: "/octoprint/",
-    service: "octoprint.service",
-    logo: ocotoprintLogo,
-    description: "The snappy web interface for your 3D Printer",
-    menuItems: [
-      { name: "Documentation", href: "https://docs.octoprint.org" },
-      { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
-      { name: "/r/octoprint", href: "https://www.reddit.com/r/octoprint/" },
-      { name: "Discord", href: "https://discord.octoprint.org/" },
-    ],
-  },
-  {
-    name: "Mainsail",
-    href: "/mainsail/",
-    service: "mainsail.service",
-    logo: mainsailLogo,
-    description:
-      "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
-    menuItems: [],
-  },
-];
+// const printerApps = [
+//   {
+//     name: "OctoPrint",
+//     href: "/octoprint/",
+//     service: "octoprint.service",
+//     logo: ocotoprintLogo,
+//     description: "The snappy web interface for your 3D Printer",
+//     category: WidgetCategory.PrinterManagement
+//     menuItems: [
+//       { name: "Documentation", href: "https://docs.octoprint.org" },
+//       { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
+//       { name: "/r/octoprint", href: "https://www.reddit.com/r/octoprint/" },
+//       { name: "Discord", href: "https://discord.octoprint.org/" },
+//     ],
+//   },
+//   {
+//     name: "Mainsail",
+//     href: "/mainsail/",
+//     service: "mainsail.service",
+//     logo: mainsailLogo,
+//     description:
+//       "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
+//     menuItems: [],
+//   },
+// ];
 
-const printnannyApps = [
-  {
-    name: "PrintNanny Vision",
-    href: "/vision/",
-    service: "printnanny-vision.service",
-    logo: printNannyLogo,
-    description:
-      "The privacy-first defect and failure detection system. No internet connection required.",
-    menuItems: [],
-  },
-  {
-    name: "Syncthing",
-    href: "/syncthing/",
-    logo: syncThingLogo,
-    description:
-      "Sync files between two or more computers. Like having a private Dropbox.",
-    service: "syncthing.service",
-    menuItems: [],
-  },
-];
+// const printnannyApps = [
+//   {
+//     name: "PrintNanny Vision",
+//     href: "/vision/",
+//     service: "printnanny-vision.service",
+//     logo: printNannyLogo,
+//     description:
+//       "The privacy-first defect and failure detection system. No internet connection required.",
+//     menuItems: [],
+//   },
+//   {
+//     name: "Syncthing",
+//     href: "/syncthing/",
+//     logo: syncThingLogo,
+//     description:
+//       "Sync files between two or more computers. Like having a private Dropbox.",
+//     service: "syncthing.service",
+//     menuItems: [],
+//   },
+// ];
 </script>
