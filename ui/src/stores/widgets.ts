@@ -27,6 +27,7 @@ export const useWidgetStore = defineStore({
   id: "widgets",
   state: () => ({
     enabledServices: {},
+    serviceStatus: {},
     items: {
       "octoprint": {
         name: "OctoPrint",
@@ -92,7 +93,7 @@ export const useWidgetStore = defineStore({
 
       if (natsStore.natsConnection === undefined) {
         console.warn("loadEnabledServices called before NATS connection initialized")
-        return []
+        return {}
       }
       const natsClient = toRaw(natsStore.natsConnection);
 
@@ -114,12 +115,43 @@ export const useWidgetStore = defineStore({
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
+        this.$patch({ serviceStatus: res.data });
+        return res.data
+      }
+      return {}
+    },
+
+    async showStatus(item: WidgetItem): Promise<object> {
+      const natsStore = useNatsStore();
+      if (natsStore.natsConnection === undefined) {
+        console.warn("showStatus called before NATS connection initialized")
+        return []
+      }
+      const natsClient = toRaw(natsStore.natsConnection);
+      const requestCodec = JSONCodec<NatsRequest>();
+
+      const req = {
+        service: item.service,
+        command: SystemctlCommand.Status,
+        subject: NatsSubjectPattern.SystemctlCommand
+      } as NatsRequest;
+
+      const resMsg = await natsClient?.request(req.subject, requestCodec.encode(req), { timeout: DEFAULT_NATS_TIMEOUT })
+        .catch((e) => {
+          handleError("Error loading enabled services", e);
+          console.error(`Failed to publish subject=${req.subject} req:`, req)
+        });
+
+      if (resMsg) {
+        const responseCodec = JSONCodec<NatsResponse>();
+        const res = responseCodec.decode(resMsg.data);
+        console.log("Status:", res);
         this.$patch({ enabledServices: res.data });
         return res.data
       }
 
-      return []
-    },
+
+    }
   }
 });
 

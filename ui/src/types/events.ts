@@ -29,6 +29,7 @@ export interface JanusStream {
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
   SystemctlCommand = "pi.command.systemctl",
+  MediaCommand = "pi.command.media",
 }
 
 export interface QcDataframeRow {
@@ -49,6 +50,12 @@ export interface QcDataframeRow {
   spaghetti__std: number;
   detection_scores: number;
   ts: number;
+}
+
+export enum SystemdUnitStatus {
+  Active = "active",
+  Inactive = "inactive",
+  Unknown = "unknown"
 }
 
 export enum ConnectionStatus {
@@ -89,10 +96,22 @@ export enum SystemctlCommand {
   ListEnabled = "list_enabled"
 }
 
+export enum MediaCommand {
+  Start = "start",
+  Stop = "stop",
+}
+
 export interface SystemctlCommandRequest {
   subject: string;
   service: string;
   command: SystemctlCommand;
+}
+
+export interface MediaCommandRequest {
+  subject: string;
+  service: string;
+  janus_stream: JanusStream;
+  command: MediaCommand;
 }
 
 export enum ResponseStatus {
@@ -107,6 +126,15 @@ export interface SystemctlCommandResponse {
   detail: string;
   data: object;
 }
+
+export interface MediaCommandResponse {
+  subject: string;
+  status: ResponseStatus;
+  request?: MediaCommandRequest;
+  detail: string;
+  data: object;
+}
+
 
 
 export type NatsRequest = SystemctlCommandRequest;

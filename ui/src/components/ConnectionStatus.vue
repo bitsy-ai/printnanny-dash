@@ -54,5 +54,4 @@ import TextSpinner from "@/components/TextSpinner.vue";
 const hostname = window.location.hostname;
 const store = useEventStore();
 store.connect();
-
 </script>

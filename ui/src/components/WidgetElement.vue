@@ -18,7 +18,7 @@
       </Switch>
 
 
-      <WidgetStatus v-if="item.service" class="justify-self-end"/>
+      <WidgetStatus :item="item" class="justify-self-end"/>
     </div>
     <div class="flex flex-col items-center pb-10">
       <img

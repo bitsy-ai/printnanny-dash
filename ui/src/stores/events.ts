@@ -204,17 +204,17 @@ export const useEventStore = defineStore({
       }
     },
 
-    // async publishNatsRequest(request: NatsQcStreamRequest) {
-    //   const natsClient = toRaw(this.natsConnection);
-    //   const jsonCodec = JSONCodec<NatsQcStreamRequest>();
-    //   const subject = NatsSubjectPattern.StreamRequest;
+    async publishNatsRequest(request: NatsQcStreamRequest) {
+      const natsClient = toRaw(this.natsConnection);
+      const jsonCodec = JSONCodec<NatsQcStreamRequest>();
+      const subject = NatsSubjectPattern.StreamRequest;
 
-    //   console.log("Publishing NATS request:", request);
-    //   const res = await natsClient
-    //     ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
-    //     .catch((e) => handleError("Command Failed", e));
-    //   console.log(`NATS response on subject: ${subject}`, res);
-    // },
+      console.log("Publishing NATS request:", request);
+      const res = await natsClient
+        ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
+        .catch((e) => handleError("Command Failed", e));
+      console.log(`NATS response on subject: ${subject}`, res);
+    },
 
     getDetectionAlerts(df: Array<QcDataframeRow>): Array<DetectionAlert> {
       if (df.length < 10) {
@@ -388,8 +388,8 @@ export const useEventStore = defineStore({
     },
     async reset() {
       if (this.selectedStream !== undefined) {
-        const natsRequest: NatsQcStreamRequest = {
-          subject: NatsSubjectPattern.StreamRequest,
+        const natsRequest: SystemctlCommandRequest = {
+          subject: NatsSubjectPattern.SystemctlCommand,
           janus_stream: toRaw(this.selectedStream),
           command: NatsQcCommand.Start,
         };
