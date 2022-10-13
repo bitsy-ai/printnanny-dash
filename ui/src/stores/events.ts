@@ -1,7 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
 import { connect, JSONCodec } from "nats.ws";
-import type { NatsConnection, Subscription } from "nats.ws";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
@@ -20,16 +19,7 @@ import {
   type NatsResponse,
 } from "@/types";
 import { handleError } from "@/utils";
-
-const DEFAULT_NATS_TIMEOUT = 6000;
-
-function getNatsURI() {
-  const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
-  console.log(`Connecting to NATS server: ${uri}`);
-  return uri;
-}
+import { useNatsStore } from "./nats";
 
 function getJanusUri() {
   const hostname = window.location.hostname;
@@ -50,7 +40,6 @@ export const useEventStore = defineStore({
   id: "events",
   state: () => ({
     df: [] as Array<QcDataframeRow>,
-    natsConnection: undefined as NatsConnection | undefined,
     janusWsConnection: undefined as undefined | any, // Janode.Connection, but Janode doe snot export types
     janusSession: undefined as undefined | any,
     janusPeerConnection: undefined as undefined | RTCPeerConnection,
@@ -74,7 +63,6 @@ export const useEventStore = defineStore({
         description: "When a print job is failing, PrintNanny will notify you.",
       } as DetectionAlert,
     ] as Array<DetectionAlert>,
-    enabledServices: {}
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -98,64 +86,6 @@ export const useEventStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
-    async connectNats(): Promise<boolean> {
-      // create nats connection if not initialized
-      if (this.natsConnection === undefined) {
-        const servers = [getNatsURI()];
-        const connectOptions = {
-          servers,
-          debug: false,
-        };
-
-        if (import.meta.env.VITE_PRINTNANNY_DEBUG == true) {
-          connectOptions.debug = true;
-        }
-        const natsConnection = await connect(connectOptions).catch((e: Error) =>
-          handleError("Failed to connect to NATS server", e)
-        );
-        if (natsConnection) {
-          console.log(`Initialized NATs connection to ${servers}`);
-          this.$patch({ natsConnection });
-          await this.subscribeQcDataframes();
-          return true;
-        }
-        return false;
-      } else {
-        return true;
-      }
-    },
-
-    async loadEnabledServices(): Promise<object> {
-      if (this.natsConnection === undefined) {
-        console.warn("loadEnabledServices called before NATS connection initialized")
-        return []
-      }
-      const natsClient = toRaw(this.natsConnection);
-
-      const req = {
-        service: "",
-        command: SystemctlCommand.ListEnabled,
-        subject: NatsSubjectPattern.SystemctlCommand
-      } as NatsRequest;
-
-      const requestCodec = JSONCodec<NatsRequest>();
-
-      const resMsg = await natsClient?.request(req.subject, requestCodec.encode(req), { timeout: DEFAULT_NATS_TIMEOUT })
-        .catch((e) => {
-          handleError("Error loading enabled services", e);
-          console.error(`Failed to publish subject=${req.subject} req:`, req)
-        });
-
-      if (resMsg) {
-        const responseCodec = JSONCodec<NatsResponse>();
-        const res = responseCodec.decode(resMsg.data);
-        console.log("Enabled services:", res);
-        this.$patch({ enabledServices: res.data });
-        return res.data
-      }
-
-      return []
-    },
 
     async connectJanus(): Promise<boolean> {
       const janusUri = getJanusUri();
@@ -261,8 +191,11 @@ export const useEventStore = defineStore({
       return true;
     },
     async connect(): Promise<void> {
+
+      const natsStore = useNatsStore();
+
       this.$patch({ status: ConnectionStatus.ConnectionLoading });
-      const natsOk = await this.connectNats();
+      const natsOk = await natsStore.connect();
       const janusOk = await this.connectJanus();
       if (natsOk && janusOk) {
         this.$patch({ status: ConnectionStatus.ConnectionReady });
@@ -271,17 +204,17 @@ export const useEventStore = defineStore({
       }
     },
 
-    async publishNatsRequest(request: NatsQcStreamRequest) {
-      const natsClient = toRaw(this.natsConnection);
-      const jsonCodec = JSONCodec<NatsQcStreamRequest>();
-      const subject = NatsSubjectPattern.StreamRequest;
+    // async publishNatsRequest(request: NatsQcStreamRequest) {
+    //   const natsClient = toRaw(this.natsConnection);
+    //   const jsonCodec = JSONCodec<NatsQcStreamRequest>();
+    //   const subject = NatsSubjectPattern.StreamRequest;
 
-      console.log("Publishing NATS request:", request);
-      const res = await natsClient
-        ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
-        .catch((e) => handleError("Command Failed", e));
-      console.log(`NATS response on subject: ${subject}`, res);
-    },
+    //   console.log("Publishing NATS request:", request);
+    //   const res = await natsClient
+    //     ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
+    //     .catch((e) => handleError("Command Failed", e));
+    //   console.log(`NATS response on subject: ${subject}`, res);
+    // },
 
     getDetectionAlerts(df: Array<QcDataframeRow>): Array<DetectionAlert> {
       if (df.length < 10) {

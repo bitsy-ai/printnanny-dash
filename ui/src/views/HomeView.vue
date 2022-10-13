@@ -125,7 +125,7 @@ const store = useEventStore();
 
 const widgets = useWidgetStore();
 
-store.loadEnabledServices();
+widgets.loadEnabledServices();
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";
