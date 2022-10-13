@@ -78,3 +78,34 @@ export interface NatsQcStreamRequest {
   janus_stream: JanusStream;
   command: NatsQcCommand;
 }
+
+export enum SystemctlCommand {
+  Start = "start",
+  Stop = "stop",
+  Restart = "restart",
+  Status = "status",
+  Enable = "enable",
+  Disable = "disable",
+  ListEnabled = "list_enabled"
+}
+
+export interface SystemctlCommandRequest {
+  service: string;
+  command: SystemctlCommand;
+}
+
+export enum ResponseStatus {
+  Ok = "ok",
+  Error = "error",
+}
+
+export interface SystemctlCommandResponse {
+  status: ResponseStatus;
+  request?: SystemctlCommandRequest;
+  detail: string;
+  data: object;
+}
+
+
+export type NatsRequest = SystemctlCommandRequest;
+export type NatsResponse = SystemctlCommandResponse;

@@ -32,6 +32,7 @@
                 >{{ item.name }}</RouterLink
               >
 
+              
               <a
                 v-for="item in externalLinks"
                 :key="item.name"
@@ -114,10 +115,6 @@ import routes from "@/router/routes";
 const router = useRouter();
 
 const externalLinks = [
-  {
-    name: "What's new?",
-    href: "https://docs.printnanny.ai/docs/category/release-history/",
-  },
   { name: "Update System", href: "/update/" },
   { name: "PrintNanny Cloud", href: "https://printnanny.ai" },
   {

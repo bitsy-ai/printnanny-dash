@@ -2,10 +2,24 @@
   <div
     class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
   >
-    <div class="flex justify-end px-4 pt-4">
-      <!-- service status -->
-      <WidgetStatus v-if="item.service" />
-      <div v-else class="h-4"></div>
+    <div class="flex px-4 pt-4 grid grid-cols-2">
+      <!-- toggle-->
+
+      <Switch
+        v-if="item.service"
+        v-model="enabled"
+        :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
+        class="relative inline-flex h-6 w-11 items-center rounded-full"
+      >
+        <span class="sr-only">Enable {{ item.name }}</span>
+        <span
+          :class="enabled ? 'translate-x-6' : 'translate-x-1'"
+          class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+        />
+      </Switch>
+
+
+      <WidgetStatus v-if="item.service" class="justify-self-end"/>
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -20,20 +34,6 @@
         item.description
       }}</span>
 
-      <!-- toggle-->
-
-      <Switch
-        v-if="item.service"
-        v-model="enabled"
-        :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
-        class="relative inline-flex h-6 w-11 items-center rounded-full mt-4"
-      >
-        <span class="sr-only">Enable {{ item.name }}</span>
-        <span
-          :class="enabled ? 'translate-x-6' : 'translate-x-1'"
-          class="inline-block h-4 w-4 transform rounded-full bg-white transition"
-        />
-      </Switch>
 
       <div class="flex mt-4 space-x-3 md:mt-6">
         <a
