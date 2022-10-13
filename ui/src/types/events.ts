@@ -28,7 +28,7 @@ export interface JanusStream {
 
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
-  StreamRequest = "pi.qc.stream",
+  SystemctlCommand = "pi.command.systemctl",
 }
 
 export interface QcDataframeRow {
@@ -90,6 +90,7 @@ export enum SystemctlCommand {
 }
 
 export interface SystemctlCommandRequest {
+  subject: string;
   service: string;
   command: SystemctlCommand;
 }
@@ -100,6 +101,7 @@ export enum ResponseStatus {
 }
 
 export interface SystemctlCommandResponse {
+  subject: string;
   status: ResponseStatus;
   request?: SystemctlCommandRequest;
   detail: string;

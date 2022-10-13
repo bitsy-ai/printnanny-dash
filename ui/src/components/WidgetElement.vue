@@ -6,7 +6,6 @@
       <!-- toggle-->
 
       <Switch
-        v-if="item.service"
         v-model="enabled"
         :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
         class="relative inline-flex h-6 w-11 items-center rounded-full"
@@ -52,20 +51,33 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed, toRaw } from "vue";
 import type { PropType } from "vue";
 import { Switch } from "@headlessui/vue";
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import WidgetMenu from "@/components/WidgetMenu.vue";
 import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
+import { useEventStore } from "@/stores/events";
 
-defineProps({
+
+const store = useEventStore();
+
+
+const props = defineProps({
   item: {
     type: Object as PropType<WidgetItem>,
     required: true,
   },
 });
 
-const enabled = ref(true);
+const enabled = computed(() => {
+  const enabledServices = toRaw(store.enabledServices)
+  if (store.enabledServices){
+    return props.item.service in enabledServices
+  }
+  return false
+});
+
+
 </script>

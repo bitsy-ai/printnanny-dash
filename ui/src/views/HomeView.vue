@@ -121,6 +121,10 @@ import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
 import printNannyLogo from "@/assets/logos/printnanny/logo.svg";
 import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
+import { useEventStore } from "@/stores/events";
+
+const store = useEventStore();
+store.loadEnabledServices();
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";

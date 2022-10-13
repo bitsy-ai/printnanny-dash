@@ -15,23 +15,26 @@ import {
   type QcDataframeRow,
   type UiStickyAlert,
   NatsQcCommand,
+  type NatsRequest,
+  SystemctlCommand,
+  type NatsResponse,
 } from "@/types";
 import { handleError } from "@/utils";
 
+const DEFAULT_NATS_TIMEOUT = 6000;
+
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -71,6 +74,7 @@ export const useEventStore = defineStore({
         description: "When a print job is failing, PrintNanny will notify you.",
       } as DetectionAlert,
     ] as Array<DetectionAlert>,
+    enabledServices: {}
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -119,6 +123,38 @@ export const useEventStore = defineStore({
       } else {
         return true;
       }
+    },
+
+    async loadEnabledServices(): Promise<object> {
+      if (this.natsConnection === undefined) {
+        console.warn("loadEnabledServices called before NATS connection initialized")
+        return []
+      }
+      const natsClient = toRaw(this.natsConnection);
+
+      const req = {
+        service: "",
+        command: SystemctlCommand.ListEnabled,
+        subject: NatsSubjectPattern.SystemctlCommand
+      } as NatsRequest;
+
+      const requestCodec = JSONCodec<NatsRequest>();
+
+      const resMsg = await natsClient?.request(req.subject, requestCodec.encode(req), { timeout: DEFAULT_NATS_TIMEOUT })
+        .catch((e) => {
+          handleError("Error loading enabled services", e);
+          console.error(`Failed to publish subject=${req.subject} req:`, req)
+        });
+
+      if (resMsg) {
+        const responseCodec = JSONCodec<NatsResponse>();
+        const res = responseCodec.decode(resMsg.data);
+        console.log("Enabled services:", res);
+        this.$patch({ enabledServices: res.data });
+        return res.data
+      }
+
+      return []
     },
 
     async connectJanus(): Promise<boolean> {
@@ -213,8 +249,7 @@ export const useEventStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${
-              janusStreamingPluginHandle.name
+            `${janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
