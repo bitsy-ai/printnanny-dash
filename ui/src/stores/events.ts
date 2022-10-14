@@ -1,7 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { connect, JSONCodec } from "nats.ws";
-import type { NatsConnection, Subscription } from "nats.ws";
+import { JSONCodec, type Subscription } from "nats.ws";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
@@ -11,27 +10,18 @@ import {
   NatsSubjectPattern,
   type JanusStream,
   type DetectionAlert,
-  type NatsQcStreamRequest,
   type QcDataframeRow,
   type UiStickyAlert,
-  NatsQcCommand,
+  type SystemctlCommandRequest,
+  type MediaCommandRequest, MediaCommand,
 } from "@/types";
 import { handleError } from "@/utils";
-
-function getNatsURI() {
-  const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
-  console.log(`Connecting to NATS server: ${uri}`);
-  return uri;
-}
+import { useNatsStore } from "./nats";
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -47,7 +37,6 @@ export const useEventStore = defineStore({
   id: "events",
   state: () => ({
     df: [] as Array<QcDataframeRow>,
-    natsConnection: undefined as NatsConnection | undefined,
     janusWsConnection: undefined as undefined | any, // Janode.Connection, but Janode doe snot export types
     janusSession: undefined as undefined | any,
     janusPeerConnection: undefined as undefined | RTCPeerConnection,
@@ -94,33 +83,6 @@ export const useEventStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
-    async connectNats(): Promise<boolean> {
-      // create nats connection if not initialized
-      if (this.natsConnection === undefined) {
-        const servers = [getNatsURI()];
-        const connectOptions = {
-          servers,
-          debug: false,
-        };
-
-        if (import.meta.env.VITE_PRINTNANNY_DEBUG == true) {
-          connectOptions.debug = true;
-        }
-        const natsConnection = await connect(connectOptions).catch((e: Error) =>
-          handleError("Failed to connect to NATS server", e)
-        );
-        if (natsConnection) {
-          console.log(`Initialized NATs connection to ${servers}`);
-          this.$patch({ natsConnection });
-          await this.subscribeQcDataframes();
-          return true;
-        }
-        return false;
-      } else {
-        return true;
-      }
-    },
-
     async connectJanus(): Promise<boolean> {
       const janusUri = getJanusUri();
       const connectOpts = {
@@ -213,8 +175,7 @@ export const useEventStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${
-              janusStreamingPluginHandle.name
+            `${janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -226,8 +187,10 @@ export const useEventStore = defineStore({
       return true;
     },
     async connect(): Promise<void> {
+      const natsStore = useNatsStore();
+
       this.$patch({ status: ConnectionStatus.ConnectionLoading });
-      const natsOk = await this.connectNats();
+      const natsOk = await natsStore.connect();
       const janusOk = await this.connectJanus();
       if (natsOk && janusOk) {
         this.$patch({ status: ConnectionStatus.ConnectionReady });
@@ -236,10 +199,11 @@ export const useEventStore = defineStore({
       }
     },
 
-    async publishNatsRequest(request: NatsQcStreamRequest) {
-      const natsClient = toRaw(this.natsConnection);
-      const jsonCodec = JSONCodec<NatsQcStreamRequest>();
-      const subject = NatsSubjectPattern.StreamRequest;
+    async publishNatsRequest(request: MediaCommandRequest) {
+      const natsStore = useNatsStore();
+      const natsClient = toRaw(natsStore.natsConnection);
+      const jsonCodec = JSONCodec<MediaCommandRequest>();
+      const subject = NatsSubjectPattern.MediaCommand;
 
       console.log("Publishing NATS request:", request);
       const res = await natsClient
@@ -353,11 +317,16 @@ export const useEventStore = defineStore({
     },
 
     async subscribeQcDataframes() {
-      if (this.natsConnection == undefined) {
-        return;
-      }
+      const natsStore = useNatsStore();
 
-      const natsClient = toRaw(this.natsConnection);
+      if (natsStore.natsConnection === undefined) {
+        console.warn(
+          "subscribeQcDataframes called before NATS connection initialized"
+        );
+        return
+      }
+      const natsClient = toRaw(natsStore.natsConnection);
+
       // create a JSON codec/decoder
       const jsonCodec = JSONCodec<Array<QcDataframeRow>>();
 
@@ -420,10 +389,11 @@ export const useEventStore = defineStore({
     },
     async reset() {
       if (this.selectedStream !== undefined) {
-        const natsRequest: NatsQcStreamRequest = {
-          subject: NatsSubjectPattern.StreamRequest,
+        const natsRequest: MediaCommandRequest = {
+          subject: NatsSubjectPattern.SystemctlCommand,
           janus_stream: toRaw(this.selectedStream),
-          command: NatsQcCommand.Start,
+          command: MediaCommand.Stop,
+          service: "printnanny-gst-pipeline.service"
         };
         await this.publishNatsRequest(natsRequest);
       }
@@ -504,10 +474,11 @@ export const useEventStore = defineStore({
         detectionAlerts: [],
       });
 
-      const natsRequest: NatsQcStreamRequest = {
-        subject: NatsSubjectPattern.StreamRequest,
+      const natsRequest: MediaCommandRequest = {
+        service: "printnanny-gst-pipeline.service",
+        subject: NatsSubjectPattern.MediaCommand,
         janus_stream: toRaw(this.selectedStream),
-        command: NatsQcCommand.Start,
+        command: MediaCommand.Start,
       };
       await this.publishNatsRequest(natsRequest);
 

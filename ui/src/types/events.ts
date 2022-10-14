@@ -28,7 +28,8 @@ export interface JanusStream {
 
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
-  StreamRequest = "pi.qc.stream",
+  SystemctlCommand = "pi.command.systemctl",
+  MediaCommand = "pi.command.media",
 }
 
 export interface QcDataframeRow {
@@ -51,6 +52,12 @@ export interface QcDataframeRow {
   ts: number;
 }
 
+export enum SystemdUnitStatus {
+  Active = "active",
+  Inactive = "inactive",
+  Unknown = "unknown",
+}
+
 export enum ConnectionStatus {
   ConnectionNotStarted,
   ConnectionLoading,
@@ -68,13 +75,54 @@ export interface DetectionAlert {
   icon: FunctionalComponent<HTMLAttributes & VNodeProps>;
 }
 
-export enum NatsQcCommand {
-  Start = "Start",
-  Stop = "Stop",
+export enum SystemctlCommand {
+  Start = "start",
+  Stop = "stop",
+  Restart = "restart",
+  Status = "status",
+  Enable = "enable",
+  Disable = "disable",
+  ListEnabled = "list_enabled",
 }
 
-export interface NatsQcStreamRequest {
-  subject: string;
-  janus_stream: JanusStream;
-  command: NatsQcCommand;
+export enum MediaCommand {
+  Start = "start",
+  Stop = "stop",
 }
+
+export interface SystemctlCommandRequest {
+  subject: string;
+  service: string;
+  command: SystemctlCommand;
+}
+
+export interface MediaCommandRequest {
+  subject: string;
+  service: string;
+  janus_stream: JanusStream;
+  command: MediaCommand;
+}
+
+export enum ResponseStatus {
+  Ok = "ok",
+  Error = "error",
+}
+
+export interface SystemctlCommandResponse {
+  subject: string;
+  status: ResponseStatus;
+  request?: SystemctlCommandRequest;
+  detail: string;
+  data: Map<string, any>
+}
+
+export interface MediaCommandResponse {
+  subject: string;
+  status: ResponseStatus;
+  request?: MediaCommandRequest;
+  detail: string;
+  data: Map<string, any>
+}
+
+export type NatsRequest = SystemctlCommandRequest;
+export type NatsResponse = SystemctlCommandResponse;

@@ -1,3 +1,8 @@
+export enum WidgetCategory {
+  PrinterManagement = "PrinterManagement",
+  Apps = "Apps",
+}
+
 export interface WidgetMenuItem {
   name: string;
   href: string;
@@ -10,4 +15,5 @@ export interface WidgetItem {
   description: string;
   menuItems: Array<WidgetMenuItem>;
   service: string;
+  category: WidgetCategory;
 }
