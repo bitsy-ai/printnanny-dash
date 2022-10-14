@@ -118,10 +118,7 @@
 import WidgetElement from "@/components/WidgetElement.vue";
 
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
-import { useEventStore } from "@/stores/events";
 import { useWidgetStore } from "@/stores/widgets";
-
-const store = useEventStore();
 
 const widgets = useWidgetStore();
 
@@ -129,51 +126,4 @@ widgets.loadEnabledServices();
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";
-
-// const printerApps = [
-//   {
-//     name: "OctoPrint",
-//     href: "/octoprint/",
-//     service: "octoprint.service",
-//     logo: ocotoprintLogo,
-//     description: "The snappy web interface for your 3D Printer",
-//     category: WidgetCategory.PrinterManagement
-//     menuItems: [
-//       { name: "Documentation", href: "https://docs.octoprint.org" },
-//       { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
-//       { name: "/r/octoprint", href: "https://www.reddit.com/r/octoprint/" },
-//       { name: "Discord", href: "https://discord.octoprint.org/" },
-//     ],
-//   },
-//   {
-//     name: "Mainsail",
-//     href: "/mainsail/",
-//     service: "mainsail.service",
-//     logo: mainsailLogo,
-//     description:
-//       "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
-//     menuItems: [],
-//   },
-// ];
-
-// const printnannyApps = [
-//   {
-//     name: "PrintNanny Vision",
-//     href: "/vision/",
-//     service: "printnanny-vision.service",
-//     logo: printNannyLogo,
-//     description:
-//       "The privacy-first defect and failure detection system. No internet connection required.",
-//     menuItems: [],
-//   },
-//   {
-//     name: "Syncthing",
-//     href: "/syncthing/",
-//     logo: syncThingLogo,
-//     description:
-//       "Sync files between two or more computers. Like having a private Dropbox.",
-//     service: "syncthing.service",
-//     menuItems: [],
-//   },
-// ];
 </script>

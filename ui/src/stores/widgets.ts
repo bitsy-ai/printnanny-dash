@@ -1,11 +1,9 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { WidgetCategory } from "@/types";
-import type {
-  WidgetItem
-} from "@/types";
+import type { WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
-import { connect, JSONCodec } from "nats.ws";
+import { JSONCodec } from "nats.ws";
 
 import ocotoprintLogo from "@/assets/logos/octoprint/octoprint_logo_rgb_250px.png";
 import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
@@ -20,7 +18,6 @@ import {
 } from "@/types";
 import { handleError } from "@/utils";
 
-
 const DEFAULT_NATS_TIMEOUT = 6000;
 
 export const useWidgetStore = defineStore({
@@ -29,7 +26,7 @@ export const useWidgetStore = defineStore({
     enabledServices: {},
     serviceStatus: {},
     items: {
-      "octoprint": {
+      octoprint: {
         name: "OctoPrint",
         href: "/octoprint/",
         service: "octoprint.service",
@@ -43,7 +40,7 @@ export const useWidgetStore = defineStore({
           { name: "Discord", href: "https://discord.octoprint.org/" },
         ],
       } as WidgetItem,
-      "mainsail": {
+      mainsail: {
         name: "Mainsail",
         href: "/mainsail/",
         service: "mainsail.service",
@@ -54,7 +51,7 @@ export const useWidgetStore = defineStore({
         menuItems: [],
       } as WidgetItem,
 
-      "printnannyVision": {
+      printnannyVision: {
         name: "PrintNanny Vision",
         href: "/vision/",
         service: "printnanny-vision.service",
@@ -65,7 +62,7 @@ export const useWidgetStore = defineStore({
         menuItems: [],
       } as WidgetItem,
 
-      "syncthing": {
+      syncthing: {
         name: "Syncthing",
         href: "/syncthing/",
         logo: syncThingLogo,
@@ -75,40 +72,49 @@ export const useWidgetStore = defineStore({
         service: "syncthing.service",
         menuItems: [],
       },
-    }
+    },
   }),
 
   getters: {
     printerManagementItems(state): Array<WidgetItem> {
-      return Object.values(state.items).filter(x => x.category === WidgetCategory.PrinterManagement)
+      return Object.values(state.items).filter(
+        (x) => x.category === WidgetCategory.PrinterManagement
+      );
     },
     appItems(state): Array<WidgetItem> {
-      return Object.values(state.items).filter(x => x.category === WidgetCategory.Apps)
-    }
+      return Object.values(state.items).filter(
+        (x) => x.category === WidgetCategory.Apps
+      );
+    },
   },
 
   actions: {
-    async loadEnabledServices(): Promise<object> {
+    async loadEnabledServices(): Promise<NatsResponse | undefined> {
       const natsStore = useNatsStore();
 
       if (natsStore.natsConnection === undefined) {
-        console.warn("loadEnabledServices called before NATS connection initialized")
-        return {}
+        console.warn(
+          "loadEnabledServices called before NATS connection initialized"
+        );
+        return
       }
       const natsClient = toRaw(natsStore.natsConnection);
 
       const req = {
         service: "",
         command: SystemctlCommand.ListEnabled,
-        subject: NatsSubjectPattern.SystemctlCommand
+        subject: NatsSubjectPattern.SystemctlCommand,
       } as NatsRequest;
 
       const requestCodec = JSONCodec<NatsRequest>();
 
-      const resMsg = await natsClient?.request(req.subject, requestCodec.encode(req), { timeout: DEFAULT_NATS_TIMEOUT })
+      const resMsg = await natsClient
+        ?.request(req.subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
         .catch((e) => {
           handleError("Error loading enabled services", e);
-          console.error(`Failed to publish subject=${req.subject} req:`, req)
+          console.error(`Failed to publish subject=${req.subject} req:`, req);
         });
 
       if (resMsg) {
@@ -116,16 +122,15 @@ export const useWidgetStore = defineStore({
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
         this.$patch({ serviceStatus: res.data });
-        return res.data
+        return res
       }
-      return {}
     },
 
-    async showStatus(item: WidgetItem): Promise<object> {
+    async showStatus(item: WidgetItem): Promise<NatsResponse | undefined> {
       const natsStore = useNatsStore();
       if (natsStore.natsConnection === undefined) {
-        console.warn("showStatus called before NATS connection initialized")
-        return []
+        console.warn("showStatus called before NATS connection initialized");
+        return
       }
       const natsClient = toRaw(natsStore.natsConnection);
       const requestCodec = JSONCodec<NatsRequest>();
@@ -133,13 +138,16 @@ export const useWidgetStore = defineStore({
       const req = {
         service: item.service,
         command: SystemctlCommand.Status,
-        subject: NatsSubjectPattern.SystemctlCommand
+        subject: NatsSubjectPattern.SystemctlCommand,
       } as NatsRequest;
 
-      const resMsg = await natsClient?.request(req.subject, requestCodec.encode(req), { timeout: DEFAULT_NATS_TIMEOUT })
+      const resMsg = await natsClient
+        ?.request(req.subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
         .catch((e) => {
           handleError("Error loading enabled services", e);
-          console.error(`Failed to publish subject=${req.subject} req:`, req)
+          console.error(`Failed to publish subject=${req.subject} req:`, req);
         });
 
       if (resMsg) {
@@ -147,12 +155,10 @@ export const useWidgetStore = defineStore({
         const res = responseCodec.decode(resMsg.data);
         console.log("Status:", res);
         this.$patch({ enabledServices: res.data });
-        return res.data
+        return res
       }
-
-
-    }
-  }
+    },
+  },
 });
 
 if (import.meta.hot) {

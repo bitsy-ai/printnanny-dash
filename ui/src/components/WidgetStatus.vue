@@ -6,9 +6,7 @@
       mode="out-in"
       :duration="{ enter: 800, leave: 500 }"
     >
-      <TextSpinner
-        v-if="status == SystemdUnitStatus.Unknown"
-      />
+      <TextSpinner v-if="status == SystemdUnitStatus.Unknown" />
       <div
         class="flex items-center space-x-3 font-medium text-gray-600"
         v-else-if="status == SystemdUnitStatus.Active"
@@ -44,9 +42,9 @@
 }
 </style>
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import type { PropType } from "vue";
-import type { WidgetItem } from "@/types";
+import type { WidgetItem, MediaCommandResponse, SystemctlCommandResponse } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
 import { SystemdUnitStatus } from "@/types";
 import { useWidgetStore } from "@/stores/widgets";
@@ -61,27 +59,27 @@ const store = useWidgetStore();
 
 const status = ref(SystemdUnitStatus.Unknown);
 
-
-async function refreshStatus(){
-    const res = await store.showStatus(props.item);
-    if (res.data && res.data["ActiveState"] !== undefined){
-        const state = res.data["ActiveState"];
-        switch (state){
-            case "active":
-                status.value = SystemdUnitStatus.Active
-                break
-            case "inactive":
-                status.value = SystemdUnitStatus.Inactive
-                break
-            default:
-                status.value = SystemdUnitStatus.Unknown
-        }
-    }
-    status.value = SystemdUnitStatus.Unknown
+async function refreshStatus() {
+  const res: SystemctlCommandResponse | undefined = await store.showStatus(props.item);
+  if (res === undefined){
+    status.value = SystemdUnitStatus.Unknown;
+  }
+  else {
+    const state = res.data.get("ActiveState");
+    switch (state) {
+      case "active":
+        status.value = SystemdUnitStatus.Active;
+        break;
+      case "inactive":
+        status.value = SystemdUnitStatus.Inactive;
+        break;
+      default:
+        status.value = SystemdUnitStatus.Unknown;
+    } 
+  }
+  status.value = SystemdUnitStatus.Unknown;
 }
 window.setInterval(async () => {
-    refreshStatus 
-  }, 3000)
-
-
+  refreshStatus;
+}, 3000);
 </script>

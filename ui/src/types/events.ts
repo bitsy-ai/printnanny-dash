@@ -55,7 +55,7 @@ export interface QcDataframeRow {
 export enum SystemdUnitStatus {
   Active = "active",
   Inactive = "inactive",
-  Unknown = "unknown"
+  Unknown = "unknown",
 }
 
 export enum ConnectionStatus {
@@ -75,17 +75,6 @@ export interface DetectionAlert {
   icon: FunctionalComponent<HTMLAttributes & VNodeProps>;
 }
 
-export enum NatsQcCommand {
-  Start = "Start",
-  Stop = "Stop",
-}
-
-export interface NatsQcStreamRequest {
-  subject: string;
-  janus_stream: JanusStream;
-  command: NatsQcCommand;
-}
-
 export enum SystemctlCommand {
   Start = "start",
   Stop = "stop",
@@ -93,7 +82,7 @@ export enum SystemctlCommand {
   Status = "status",
   Enable = "enable",
   Disable = "disable",
-  ListEnabled = "list_enabled"
+  ListEnabled = "list_enabled",
 }
 
 export enum MediaCommand {
@@ -124,7 +113,7 @@ export interface SystemctlCommandResponse {
   status: ResponseStatus;
   request?: SystemctlCommandRequest;
   detail: string;
-  data: object;
+  data: Map<string, any>
 }
 
 export interface MediaCommandResponse {
@@ -132,10 +121,8 @@ export interface MediaCommandResponse {
   status: ResponseStatus;
   request?: MediaCommandRequest;
   detail: string;
-  data: object;
+  data: Map<string, any>
 }
-
-
 
 export type NatsRequest = SystemctlCommandRequest;
 export type NatsResponse = SystemctlCommandResponse;

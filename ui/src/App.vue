@@ -32,7 +32,6 @@
                 >{{ item.name }}</RouterLink
               >
 
-              
               <a
                 v-for="item in externalLinks"
                 :key="item.name"

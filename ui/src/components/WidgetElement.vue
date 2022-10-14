@@ -17,8 +17,7 @@
         />
       </Switch>
 
-
-      <WidgetStatus :item="item" class="justify-self-end"/>
+      <WidgetStatus :item="item" class="justify-self-end" />
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -32,7 +31,6 @@
       <span class="text-sm text-gray-500 dark:text-gray-400 text-center">{{
         item.description
       }}</span>
-
 
       <div class="flex mt-4 space-x-3 md:mt-6">
         <a
@@ -51,7 +49,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, toRaw } from "vue";
+import { computed, toRaw } from "vue";
 import type { PropType } from "vue";
 import { Switch } from "@headlessui/vue";
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
@@ -59,10 +57,9 @@ import WidgetMenu from "@/components/WidgetMenu.vue";
 import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
 import { useEventStore } from "@/stores/events";
+import { useWidgetStore } from "@/stores/widgets";
 
-
-const store = useEventStore();
-
+const store = useWidgetStore()
 
 const props = defineProps({
   item: {
@@ -71,13 +68,12 @@ const props = defineProps({
   },
 });
 
+
 const enabled = computed(() => {
-  const enabledServices = toRaw(store.enabledServices)
-  if (store.enabledServices){
-    return props.item.service in enabledServices
+  const enabledServices = toRaw(store.enabledServices);
+  if (store.enabledServices) {
+    return props.item.service in enabledServices;
   }
-  return false
+  return false;
 });
-
-
 </script>

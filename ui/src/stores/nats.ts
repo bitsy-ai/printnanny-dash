@@ -1,14 +1,14 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 
-import type { NatsConnection, Subscription } from "nats.ws";
-import { connect, JSONCodec } from "nats.ws";
+import type { NatsConnection } from "nats.ws";
+import { connect } from "nats.ws";
 import { handleError } from "@/utils";
-
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
@@ -18,7 +18,6 @@ export const useNatsStore = defineStore({
 
   state: () => ({
     natsConnection: undefined as NatsConnection | undefined,
-
   }),
 
   actions: {
@@ -47,7 +46,7 @@ export const useNatsStore = defineStore({
         return true;
       }
     },
-  }
+  },
 });
 
 if (import.meta.hot) {
