@@ -20,9 +20,8 @@ import { useNatsStore } from "./nats";
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -161,8 +160,7 @@ export const useEventStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${
-              janusStreamingPluginHandle.name
+            `${janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -231,7 +229,8 @@ export const useEventStore = defineStore({
           header: "Calibration: Nozzle",
           icon: ExclamationTriangleIcon,
           color: "indigo",
-          description: "Calibration needed to improve nozzle monitoring.",
+          message: "Calibration needed to improve nozzle monitoring.",
+          actions: []
         };
         const showAlert =
           this.alerts.filter((a) => a.header === alert.header).length === 0;
@@ -244,7 +243,8 @@ export const useEventStore = defineStore({
           header: "Calibration: Printer",
           icon: ExclamationTriangleIcon,
           color: "indigo",
-          description: "Calibration needed to improve print object detection.",
+          message: "Calibration needed to improve print object detection.",
+          actions: []
         };
         const printerAlertShown = this.alerts.filter(
           (a) => a.header === alert.header
@@ -259,7 +259,9 @@ export const useEventStore = defineStore({
           header: "Calibration: Raft",
           icon: ExclamationTriangleIcon,
           color: "indigo",
-          description: "Calibration needed to improve raft detection.",
+          message: "Calibration needed to improve raft detection.",
+          actions: []
+
         };
 
         const showAlert =
@@ -274,7 +276,8 @@ export const useEventStore = defineStore({
           header: "Failure: Bed Adhesion",
           icon: ExclamationTriangleIcon,
           color: "red",
-          description: "Critical failures detected. Pausing 3D print job.",
+          message: "Critical failures detected. Pausing 3D print job.",
+          actions: []
         };
         const showAlert =
           this.alerts.filter((a) => a.header === alert.header).length === 0;
@@ -287,7 +290,8 @@ export const useEventStore = defineStore({
           header: "Failure: Spaghetti",
           icon: ExclamationTriangleIcon,
           color: "red",
-          description: "Critical failures detected. Pausing 3D print job.",
+          message: "Critical failures detected. Pausing 3D print job.",
+          action: []
         };
         const showAlert =
           this.alerts.filter((a) => a.header === alert.header).length === 0;
@@ -312,7 +316,7 @@ export const useEventStore = defineStore({
       const jsonCodec = JSONCodec<Array<QcDataframeRow>>();
 
       // this subscription listens for all Pi events (scoped to NATs account/org)
-      const sub = natsClient.subscribe("pi.qc");
+      const sub = natsClient.subscribe(NatsSubjectPattern.DataframeRow);
       (async (sub: Subscription) => {
         console.log(`Subscribed to ${sub.getSubject()} events...`);
         for await (const msg of sub) {

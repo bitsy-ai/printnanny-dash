@@ -11,6 +11,7 @@ import {
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import TextSpinner from "@/components/TextSpinner.vue";
 const store = useEventStore();
+store.subscribeQcDataframes();
 </script>
 
 <template>
