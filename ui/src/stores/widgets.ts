@@ -96,7 +96,7 @@ export const useWidgetStore = defineStore({
         console.warn(
           "loadEnabledServices called before NATS connection initialized"
         );
-        return
+        return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
 
@@ -122,7 +122,7 @@ export const useWidgetStore = defineStore({
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
         this.$patch({ serviceStatus: res.data });
-        return res
+        return res;
       }
     },
 
@@ -130,7 +130,7 @@ export const useWidgetStore = defineStore({
       const natsStore = useNatsStore();
       if (natsStore.natsConnection === undefined) {
         console.warn("showStatus called before NATS connection initialized");
-        return
+        return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
       const requestCodec = JSONCodec<NatsRequest>();
@@ -155,7 +155,7 @@ export const useWidgetStore = defineStore({
         const res = responseCodec.decode(resMsg.data);
         console.log("Status:", res);
         this.$patch({ enabledServices: res.data });
-        return res
+        return res;
       }
     },
   },

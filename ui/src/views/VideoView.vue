@@ -8,8 +8,7 @@
     >
       <!-- Replace with your content -->
       <div class="px-4 py-8 sm:px-0 grid grid-cols-3 gap-2 flex">
-        <VideoElement class="col-span-2 flex-1" />
-        <DetectionSummary class="col-span-1" />
+        <VideoElement class="col-span-3 flex-1" />
         <div class="col-span-3 mt-4">
           <PlotlyElement />
         </div>
@@ -22,5 +21,4 @@
 <script setup lang="ts">
 import VideoElement from "@/components/VideoElement.vue";
 import PlotlyElement from "@/components/PlotlyElement.vue";
-import DetectionSummary from "@/components/DetectionSummary.vue";
 </script>

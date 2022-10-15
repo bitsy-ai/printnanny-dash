@@ -12,16 +12,17 @@ import {
   type DetectionAlert,
   type QcDataframeRow,
   type UiStickyAlert,
-  type SystemctlCommandRequest,
-  type MediaCommandRequest, MediaCommand,
+  type MediaCommandRequest,
+  MediaCommand,
 } from "@/types";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+  }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -42,24 +43,9 @@ export const useEventStore = defineStore({
     janusPeerConnection: undefined as undefined | RTCPeerConnection,
     janusStreamingPluginHandle: undefined as undefined | any,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
-    alerts: [] as Array<UiStickyAlert>,
+    alerts: [] as Array<UiStickyAlert | DetectionAlert>,
     streamList: [] as Array<JanusStream>,
     selectedStream: undefined as undefined | JanusStream,
-    detectionAlerts: [
-      {
-        id: "Example: Calibration Alert",
-        icon: ExclamationTriangleIcon,
-        color: "indigo",
-        description:
-          "If PrintNanny doesn't recognize your 3D printer, you'll see calibration recommendations.",
-      } as DetectionAlert,
-      {
-        id: "Example: Failure Alert",
-        icon: ExclamationTriangleIcon,
-        color: "red",
-        description: "When a print job is failing, PrintNanny will notify you.",
-      } as DetectionAlert,
-    ] as Array<DetectionAlert>,
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -175,7 +161,8 @@ export const useEventStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${janusStreamingPluginHandle.name
+            `${
+              janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -212,12 +199,12 @@ export const useEventStore = defineStore({
       console.log(`NATS response on subject: ${subject}`, res);
     },
 
-    getDetectionAlerts(df: Array<QcDataframeRow>): Array<DetectionAlert> {
+    getDetectionAlerts(df: Array<QcDataframeRow>): void {
       if (df.length < 10) {
         console.warn(
           "Skipping getDetectionAlerts(), less than 10 datapoints available"
         );
-        return [];
+        return;
       }
       const nozzleDetected = atLeast(
         df.map((el) => el.nozzle__count > 0),
@@ -241,37 +228,34 @@ export const useEventStore = defineStore({
       );
       if (!nozzleDetected) {
         const alert: DetectionAlert = {
-          id: "nozzle",
           header: "Calibration: Nozzle",
           icon: ExclamationTriangleIcon,
           color: "indigo",
           description: "Calibration needed to improve nozzle monitoring.",
         };
         const showAlert =
-          this.detectionAlerts.filter((a) => a.id === alert.id).length === 0;
+          this.alerts.filter((a) => a.header === alert.header).length === 0;
         if (showAlert) {
-          this.detectionAlerts.push(alert);
+          this.alerts.push(alert);
         }
       }
       if (!printDetected) {
         const alert: DetectionAlert = {
-          id: "print",
           header: "Calibration: Printer",
           icon: ExclamationTriangleIcon,
           color: "indigo",
           description: "Calibration needed to improve print object detection.",
         };
-        const printerAlertShown = this.detectionAlerts.filter(
-          (a) => a.id === alert.id
+        const printerAlertShown = this.alerts.filter(
+          (a) => a.header === alert.header
         );
         if (!printerAlertShown) {
-          this.detectionAlerts.push(alert);
+          this.alerts.push(alert);
         }
       }
 
       if (!raftDetected) {
         const alert: DetectionAlert = {
-          id: "raft",
           header: "Calibration: Raft",
           icon: ExclamationTriangleIcon,
           color: "indigo",
@@ -279,41 +263,38 @@ export const useEventStore = defineStore({
         };
 
         const showAlert =
-          this.detectionAlerts.filter((a) => a.id === alert.id).length === 0;
+          this.alerts.filter((a) => a.header === alert.header).length === 0;
         if (showAlert) {
-          this.detectionAlerts.push(alert);
+          this.alerts.push(alert);
         }
       }
 
       if (adhesionFailureDetected) {
         const alert: DetectionAlert = {
-          id: "adhesion",
           header: "Failure: Bed Adhesion",
           icon: ExclamationTriangleIcon,
           color: "red",
           description: "Critical failures detected. Pausing 3D print job.",
         };
         const showAlert =
-          this.detectionAlerts.filter((a) => a.id === alert.id).length === 0;
+          this.alerts.filter((a) => a.header === alert.header).length === 0;
         if (showAlert) {
-          this.detectionAlerts.push(alert);
+          this.alerts.push(alert);
         }
       }
       if (spaghettiFailureDetected) {
         const alert: DetectionAlert = {
-          id: "spaghetti",
           header: "Failure: Spaghetti",
           icon: ExclamationTriangleIcon,
           color: "red",
           description: "Critical failures detected. Pausing 3D print job.",
         };
         const showAlert =
-          this.detectionAlerts.filter((a) => a.id === alert.id).length === 0;
+          this.alerts.filter((a) => a.header === alert.header).length === 0;
         if (showAlert) {
-          this.detectionAlerts.push(alert);
+          this.alerts.push(alert);
         }
       }
-      return this.detectionAlerts;
     },
 
     async subscribeQcDataframes() {
@@ -323,7 +304,7 @@ export const useEventStore = defineStore({
         console.warn(
           "subscribeQcDataframes called before NATS connection initialized"
         );
-        return
+        return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
 
@@ -393,7 +374,7 @@ export const useEventStore = defineStore({
           subject: NatsSubjectPattern.SystemctlCommand,
           janus_stream: toRaw(this.selectedStream),
           command: MediaCommand.Stop,
-          service: "printnanny-gst-pipeline.service"
+          service: "printnanny-gst-pipeline.service",
         };
         await this.publishNatsRequest(natsRequest);
       }
