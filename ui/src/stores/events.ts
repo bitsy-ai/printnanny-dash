@@ -9,7 +9,6 @@ import {
   ConnectionStatus,
   NatsSubjectPattern,
   type JanusStream,
-  type DetectionAlert,
   type QcDataframeRow,
   type UiStickyAlert,
   type MediaCommandRequest,
@@ -20,8 +19,9 @@ import { useNatsStore } from "./nats";
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+  }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -42,7 +42,7 @@ export const useEventStore = defineStore({
     janusPeerConnection: undefined as undefined | RTCPeerConnection,
     janusStreamingPluginHandle: undefined as undefined | any,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
-    alerts: [] as Array<UiStickyAlert | DetectionAlert>,
+    alerts: [] as Array<UiStickyAlert>,
     streamList: [] as Array<JanusStream>,
     selectedStream: undefined as undefined | JanusStream,
   }),
@@ -160,7 +160,8 @@ export const useEventStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${janusStreamingPluginHandle.name
+            `${
+              janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -225,12 +226,12 @@ export const useEventStore = defineStore({
         0.15
       );
       if (!nozzleDetected) {
-        const alert: DetectionAlert = {
+        const alert: UiStickyAlert = {
           header: "Calibration: Nozzle",
           icon: ExclamationTriangleIcon,
           color: "indigo",
           message: "Calibration needed to improve nozzle monitoring.",
-          actions: []
+          actions: [],
         };
         const showAlert =
           this.alerts.filter((a) => a.header === alert.header).length === 0;
@@ -239,12 +240,12 @@ export const useEventStore = defineStore({
         }
       }
       if (!printDetected) {
-        const alert: DetectionAlert = {
+        const alert: UiStickyAlert = {
           header: "Calibration: Printer",
           icon: ExclamationTriangleIcon,
           color: "indigo",
           message: "Calibration needed to improve print object detection.",
-          actions: []
+          actions: [],
         };
         const printerAlertShown = this.alerts.filter(
           (a) => a.header === alert.header
@@ -255,13 +256,12 @@ export const useEventStore = defineStore({
       }
 
       if (!raftDetected) {
-        const alert: DetectionAlert = {
+        const alert: UiStickyAlert = {
           header: "Calibration: Raft",
           icon: ExclamationTriangleIcon,
           color: "indigo",
           message: "Calibration needed to improve raft detection.",
-          actions: []
-
+          actions: [],
         };
 
         const showAlert =
@@ -272,12 +272,12 @@ export const useEventStore = defineStore({
       }
 
       if (adhesionFailureDetected) {
-        const alert: DetectionAlert = {
+        const alert: UiStickyAlert = {
           header: "Failure: Bed Adhesion",
           icon: ExclamationTriangleIcon,
           color: "red",
           message: "Critical failures detected. Pausing 3D print job.",
-          actions: []
+          actions: [],
         };
         const showAlert =
           this.alerts.filter((a) => a.header === alert.header).length === 0;
@@ -286,12 +286,12 @@ export const useEventStore = defineStore({
         }
       }
       if (spaghettiFailureDetected) {
-        const alert: DetectionAlert = {
+        const alert: UiStickyAlert = {
           header: "Failure: Spaghetti",
           icon: ExclamationTriangleIcon,
           color: "red",
           message: "Critical failures detected. Pausing 3D print job.",
-          action: []
+          actions: [],
         };
         const showAlert =
           this.alerts.filter((a) => a.header === alert.header).length === 0;
@@ -456,7 +456,6 @@ export const useEventStore = defineStore({
       }
       this.$patch({
         status: ConnectionStatus.ConnectionStreamLoading,
-        detectionAlerts: [],
       });
 
       const natsRequest: MediaCommandRequest = {

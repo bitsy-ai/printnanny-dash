@@ -10,7 +10,7 @@ export interface UiStickyAlert {
   message: string;
   header: string;
   actions: Array<AlertAction>;
-  error: Error | undefined | string;
+  error?: Error | undefined | string;
   icon?: FunctionalComponent<HTMLAttributes & VNodeProps>;
   color?: string;
 }
