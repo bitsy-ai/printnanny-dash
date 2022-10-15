@@ -9,7 +9,8 @@ export interface AlertAction {
 export interface UiStickyAlert {
   message: string;
   header: string;
-  icon?: FunctionalComponent<HTMLAttributes & VNodeProps>;
   actions: Array<AlertAction>;
-  error: Error | undefined | string;
+  error?: Error | undefined | string;
+  icon?: FunctionalComponent<HTMLAttributes & VNodeProps>;
+  color?: string;
 }

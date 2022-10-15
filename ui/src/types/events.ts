@@ -1,5 +1,3 @@
-import type { FunctionalComponent, HTMLAttributes, VNodeProps } from "vue";
-
 export interface JanusMedia {
   age_ms: number;
   codec: string;
@@ -67,14 +65,6 @@ export enum ConnectionStatus {
   ConnectionError,
 }
 
-export interface DetectionAlert {
-  id: string;
-  color: string;
-  header: string;
-  description: string;
-  icon: FunctionalComponent<HTMLAttributes & VNodeProps>;
-}
-
 export enum SystemctlCommand {
   Start = "start",
   Stop = "stop",
@@ -113,7 +103,7 @@ export interface SystemctlCommandResponse {
   status: ResponseStatus;
   request?: SystemctlCommandRequest;
   detail: string;
-  data: Map<string, any>
+  data: Map<string, any>;
 }
 
 export interface MediaCommandResponse {
@@ -121,7 +111,7 @@ export interface MediaCommandResponse {
   status: ResponseStatus;
   request?: MediaCommandRequest;
   detail: string;
-  data: Map<string, any>
+  data: Map<string, any>;
 }
 
 export type NatsRequest = SystemctlCommandRequest;

@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { PropType } from "vue";
-import type { WidgetItem, MediaCommandResponse, SystemctlCommandResponse } from "@/types";
+import type { WidgetItem, SystemctlCommandResponse } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
 import { SystemdUnitStatus } from "@/types";
 import { useWidgetStore } from "@/stores/widgets";
@@ -60,11 +60,12 @@ const store = useWidgetStore();
 const status = ref(SystemdUnitStatus.Unknown);
 
 async function refreshStatus() {
-  const res: SystemctlCommandResponse | undefined = await store.showStatus(props.item);
-  if (res === undefined){
+  const res: SystemctlCommandResponse | undefined = await store.showStatus(
+    props.item
+  );
+  if (res === undefined) {
     status.value = SystemdUnitStatus.Unknown;
-  }
-  else {
+  } else {
     const state = res.data.get("ActiveState");
     switch (state) {
       case "active":
@@ -75,7 +76,7 @@ async function refreshStatus() {
         break;
       default:
         status.value = SystemdUnitStatus.Unknown;
-    } 
+    }
   }
   status.value = SystemdUnitStatus.Unknown;
 }

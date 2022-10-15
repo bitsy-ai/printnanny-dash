@@ -56,10 +56,9 @@ import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import WidgetMenu from "@/components/WidgetMenu.vue";
 import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
-import { useEventStore } from "@/stores/events";
 import { useWidgetStore } from "@/stores/widgets";
 
-const store = useWidgetStore()
+const store = useWidgetStore();
 
 const props = defineProps({
   item: {
@@ -67,7 +66,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 
 const enabled = computed(() => {
   const enabledServices = toRaw(store.enabledServices);

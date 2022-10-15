@@ -171,6 +171,6 @@ store.$subscribe(() => {
   } as Plotly.PlotData;
 
   const plots = [nozzlePlot, printPlot, raftPlot, adhesionPlot, spaghettiPlot];
-  Plotly.react(props.plotId, plots, plotlyLayout, config);
+  Plotly.react(props.plotId, plots, plotlyLayout);
 });
 </script>

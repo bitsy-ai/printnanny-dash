@@ -11,6 +11,7 @@ import {
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import TextSpinner from "@/components/TextSpinner.vue";
 const store = useEventStore();
+store.subscribeQcDataframes();
 </script>
 
 <template>
@@ -28,7 +29,7 @@ const store = useEventStore();
       aria-placeholder=" Video stream is loading"
       poster="@/assets/video-paused.svg"
     ></video>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="md:w-1/3 sm:w-3/4 m-auto">
       <Listbox as="div" v-model="store.selectedStream">
         <ListboxLabel
           class="block text-sm font-medium text-gray-700 text-center"
