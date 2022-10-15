@@ -19,9 +19,8 @@ import { useNatsStore } from "./nats";
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -160,8 +159,7 @@ export const useEventStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${
-              janusStreamingPluginHandle.name
+            `${janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -378,7 +376,7 @@ export const useEventStore = defineStore({
           subject: NatsSubjectPattern.SystemctlCommand,
           janus_stream: toRaw(this.selectedStream),
           command: MediaCommand.Stop,
-          service: "printnanny-gst-pipeline.service",
+          service: "printnanny-vision.service",
         };
         await this.publishNatsRequest(natsRequest);
       }
@@ -459,7 +457,7 @@ export const useEventStore = defineStore({
       });
 
       const natsRequest: MediaCommandRequest = {
-        service: "printnanny-gst-pipeline.service",
+        service: "printnanny-vision.service",
         subject: NatsSubjectPattern.MediaCommand,
         janus_stream: toRaw(this.selectedStream),
         command: MediaCommand.Start,
