@@ -103,7 +103,7 @@ export interface SystemctlCommandResponse {
   status: ResponseStatus;
   request?: SystemctlCommandRequest;
   detail: string;
-  data: Map<string, any>;
+  data: { [key: string]: any };
 }
 
 export interface MediaCommandResponse {
@@ -111,7 +111,7 @@ export interface MediaCommandResponse {
   status: ResponseStatus;
   request?: MediaCommandRequest;
   detail: string;
-  data: Map<string, any>;
+  data: { [key: string]: any };
 }
 
 export type NatsRequest = SystemctlCommandRequest;

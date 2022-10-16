@@ -1,0 +1,15 @@
+[Unit]
+Description=Fake PrintNanny Vision
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+SyslogIdentifier=printnanny-vision
+RuntimeDirectory=printnanny
+ExecStart=/bin/bash -c "echo 'Starting fake printnanny-vision.service'; while true; do echo 'fake printnanny-vision.service running' && sleep 30; done"
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

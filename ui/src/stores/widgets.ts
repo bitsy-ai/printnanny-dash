@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { WidgetCategory } from "@/types";
+import { SystemdUnitStatus, WidgetCategory, type UiStickyAlert } from "@/types";
 import type { WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
@@ -17,6 +17,7 @@ import {
   type NatsResponse,
 } from "@/types";
 import { handleError } from "@/utils";
+import { useEventStore } from "./events";
 
 const DEFAULT_NATS_TIMEOUT = 6000;
 
@@ -25,14 +26,16 @@ export const useWidgetStore = defineStore({
   state: () => ({
     enabledServices: {},
     serviceStatus: {},
-    items: {
-      octoprint: {
+    items: [
+      {
         name: "OctoPrint",
         href: "/octoprint/",
         service: "octoprint.service",
         logo: ocotoprintLogo,
         description: "The snappy web interface for your 3D Printer",
         category: WidgetCategory.PrinterManagement,
+        status: SystemdUnitStatus.Unknown,
+        enabled: false,
         menuItems: [
           { name: "Documentation", href: "https://docs.octoprint.org" },
           { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
@@ -40,39 +43,45 @@ export const useWidgetStore = defineStore({
           { name: "Discord", href: "https://discord.octoprint.org/" },
         ],
       } as WidgetItem,
-      mainsail: {
+      {
         name: "Mainsail",
         href: "/mainsail/",
         service: "mainsail.service",
         logo: mainsailLogo,
         category: WidgetCategory.PrinterManagement,
+        enabled: false,
+        status: SystemdUnitStatus.Unknown,
         description:
           "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
         menuItems: [],
       } as WidgetItem,
 
-      printnannyVision: {
+      {
         name: "PrintNanny Vision",
         href: "/vision/",
         service: "printnanny-vision.service",
         logo: printNannyLogo,
         category: WidgetCategory.Apps,
+        enabled: false,
+        status: SystemdUnitStatus.Unknown,
         description:
           "The privacy-first defect and failure detection system. No internet connection required.",
         menuItems: [],
       } as WidgetItem,
 
-      syncthing: {
+      {
         name: "Syncthing",
         href: "/syncthing/",
         logo: syncThingLogo,
         category: WidgetCategory.Apps,
+        status: SystemdUnitStatus.Unknown,
+        enabled: false,
         description:
           "Sync files between two or more computers. Like having a private Dropbox.",
         service: "syncthing.service",
         menuItems: [],
-      },
-    },
+      } as WidgetItem,
+    ],
   }),
 
   getters: {
@@ -122,11 +131,20 @@ export const useWidgetStore = defineStore({
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
         this.$patch({ serviceStatus: res.data });
+        // update item.enabled values
+        this.items.map((el) => {
+          if (el.service in res.data) {
+            el.enabled = true;
+          }
+        });
         return res;
       }
     },
 
-    async showStatus(item: WidgetItem): Promise<NatsResponse | undefined> {
+    async loadStatus(
+      item: WidgetItem,
+      idx: number
+    ): Promise<NatsResponse | undefined> {
       const natsStore = useNatsStore();
       if (natsStore.natsConnection === undefined) {
         console.warn("showStatus called before NATS connection initialized");
@@ -153,9 +171,159 @@ export const useWidgetStore = defineStore({
       if (resMsg) {
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
-        console.log("Status:", res);
-        this.$patch({ enabledServices: res.data });
-        return res;
+        console.debug(`${item.name} status:`, res);
+        const activeState = res.data["ActiveState"];
+        switch (activeState) {
+          case "active":
+            item.status = SystemdUnitStatus.Active;
+            break;
+          case "inactive":
+            item.status = SystemdUnitStatus.Inactive;
+            break;
+          default:
+            item.status = SystemdUnitStatus.Unknown;
+        }
+        this.items[idx] = item;
+      }
+    },
+
+    async startService(item: WidgetItem) {
+      const natsStore = useNatsStore();
+      if (natsStore.natsConnection === undefined) {
+        console.warn("startService called before NATS connection initialized");
+        return;
+      }
+      const natsClient = toRaw(natsStore.natsConnection);
+      const req = {
+        service: item.service,
+        command: SystemctlCommand.Start,
+        subject: NatsSubjectPattern.SystemctlCommand,
+      } as NatsRequest;
+      const requestCodec = JSONCodec<NatsRequest>();
+      console.log(`Starting ${item.service}`);
+      const resMsg = await natsClient
+        ?.request(req.subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          handleError(`Error starting ${item.service}`, e);
+        });
+
+      if (resMsg) {
+        const eventStore = useEventStore();
+        const successAlert: UiStickyAlert = {
+          message: `${item.service} will start automatically.`,
+          header: `Enabled ${item.service}`,
+          actions: [],
+        };
+        eventStore.pushAlert(successAlert);
+      }
+    },
+    async stopService(item: WidgetItem) {
+      const natsStore = useNatsStore();
+      if (natsStore.natsConnection === undefined) {
+        console.warn("stopService called before NATS connection initialized");
+        return;
+      }
+      const natsClient = toRaw(natsStore.natsConnection);
+      const req = {
+        service: item.service,
+        command: SystemctlCommand.Stop,
+        subject: NatsSubjectPattern.SystemctlCommand,
+      } as NatsRequest;
+      const requestCodec = JSONCodec<NatsRequest>();
+      console.log(`Stopping ${item.service}`);
+      const resMsg = await natsClient
+        ?.request(req.subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          handleError(`Error stopping ${item.service}`, e);
+        });
+
+      if (resMsg) {
+        const eventStore = useEventStore();
+        const successAlert: UiStickyAlert = {
+          message: `${item.service} will no longer start automatically.`,
+          header: `Disabled ${item.service}`,
+          actions: [],
+        };
+        eventStore.pushAlert(successAlert);
+      }
+    },
+    async enableService(item: WidgetItem) {
+      const natsStore = useNatsStore();
+
+      if (natsStore.natsConnection === undefined) {
+        console.warn("enableService called before NATS connection initialized");
+        return;
+      }
+      const natsClient = toRaw(natsStore.natsConnection);
+      const req = {
+        service: item.service,
+        command: SystemctlCommand.Enable,
+        subject: NatsSubjectPattern.SystemctlCommand,
+      } as NatsRequest;
+      const requestCodec = JSONCodec<NatsRequest>();
+
+      console.log(`Enabling ${item.service}`);
+      const resMsg = await natsClient
+        ?.request(req.subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          handleError(`Error enabling ${item.service}`, e);
+        });
+
+      if (resMsg) {
+        const responseCodec = JSONCodec<NatsResponse>();
+        const res = responseCodec.decode(resMsg.data);
+        console.debug(`Successfully enabled ${item.service}`, res);
+
+        const idx = this.items.findIndex((el) => el.service === item.service);
+
+        await this.startService(item);
+        await this.loadEnabledServices();
+        await this.loadStatus(item, idx);
+      }
+    },
+
+    async disableService(item: WidgetItem) {
+      const natsStore = useNatsStore();
+
+      if (natsStore.natsConnection === undefined) {
+        console.warn(
+          "disableService called before NATS connection initialized"
+        );
+        return;
+      }
+      const natsClient = toRaw(natsStore.natsConnection);
+
+      const req = {
+        service: item.service,
+        command: SystemctlCommand.Disable,
+        subject: NatsSubjectPattern.SystemctlCommand,
+      } as NatsRequest;
+      const requestCodec = JSONCodec<NatsRequest>();
+
+      console.log(`Enabling ${item.service}`);
+      const resMsg = await natsClient
+        ?.request(req.subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          handleError(`Error disabling ${item.service}`, e);
+        });
+
+      if (resMsg) {
+        const responseCodec = JSONCodec<NatsResponse>();
+        const res = responseCodec.decode(resMsg.data);
+        console.log(`Successfully enabled ${item.service}`, res);
+        const idx = this.items.findIndex((el) => el.service === item.service);
+
+        await this.stopService(item);
+        await this.loadEnabledServices();
+        await this.loadStatus(item, idx);
       }
     },
   },
