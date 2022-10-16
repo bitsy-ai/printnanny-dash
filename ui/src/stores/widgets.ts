@@ -212,7 +212,7 @@ export const useWidgetStore = defineStore({
         const eventStore = useEventStore();
         const successAlert: UiStickyAlert = {
           message: `${item.service} will start automatically.`,
-          header: `Success! Enabled ${item.service}`,
+          header: `Enabled ${item.service}`,
           actions: [],
 
         }
@@ -247,7 +247,7 @@ export const useWidgetStore = defineStore({
         const eventStore = useEventStore();
         const successAlert: UiStickyAlert = {
           message: `${item.service} will no longer start automatically.`,
-          header: `Success! Disabled ${item.service}`,
+          header: `Disabled ${item.service}`,
           actions: [],
 
         }
