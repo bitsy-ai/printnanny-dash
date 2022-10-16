@@ -55,7 +55,9 @@
       </div>
       <!-- printnanny services -->
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
-        <h2 class="text-xl font-bold text-gray-900 prose">PrintNanny Services</h2>
+        <h2 class="text-xl font-bold text-gray-900 prose">
+          PrintNanny Services
+        </h2>
         <div
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
@@ -65,11 +67,7 @@
             :item="item"
           />
         </div>
-
-
-        
       </div>
-
 
       <!-- other apps -->
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">

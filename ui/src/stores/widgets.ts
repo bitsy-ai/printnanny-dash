@@ -88,8 +88,7 @@ export const useWidgetStore = defineStore({
         category: WidgetCategory.PrintNannyApps,
         enabled: false,
         status: SystemdUnitStatus.Unknown,
-        description:
-          "Update PrintNanny OS to the latest build.",
+        description: "Update PrintNanny OS to the latest build.",
         menuItems: [],
       } as WidgetItem,
       {
@@ -122,7 +121,7 @@ export const useWidgetStore = defineStore({
       return Object.values(state.items).filter(
         (x) => x.category === WidgetCategory.OtherApps
       );
-    }
+    },
   },
 
   actions: {

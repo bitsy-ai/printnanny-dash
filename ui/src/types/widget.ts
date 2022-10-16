@@ -4,7 +4,6 @@ export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
   PrintNannyApps = "PrintNannyApps",
   OtherApps = "OtherApps",
-
 }
 
 export interface WidgetMenuItem {
