@@ -2,7 +2,8 @@ import type { SystemdUnitStatus } from "./events";
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
-  Apps = "Apps",
+  PrintNannyApps = "PrintNannyApps",
+  OtherApps = "OtherApps",
 }
 
 export interface WidgetMenuItem {

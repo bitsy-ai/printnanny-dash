@@ -53,17 +53,34 @@
           </div>
         </div>
       </div>
+      <!-- printnanny services -->
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
-        <h2 class="text-xl font-bold text-gray-900 prose">Apps</h2>
+        <h2 class="text-xl font-bold text-gray-900 prose">
+          PrintNanny Services
+        </h2>
         <div
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
           <WidgetElement
-            v-for="item in widgets.appItems"
+            v-for="item in widgets.printNannyAppItems"
             :key="item.name"
             :item="item"
           />
-          <!-- repetier coming soon -->
+        </div>
+      </div>
+
+      <!-- other apps -->
+      <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
+        <h2 class="text-xl font-bold text-gray-900 prose">Other Services</h2>
+        <div
+          class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
+        >
+          <WidgetElement
+            v-for="item in widgets.otherAppItems"
+            :key="item.name"
+            :item="item"
+          />
+          <!-- zapier coming soon -->
           <div
             class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
           >
@@ -74,7 +91,7 @@
               <img
                 class="mb-3 w-24 h-24 rounded-full shadow-lg p-4"
                 src="@/assets/logos/zapier/zapier.png"
-                alt="Repetier"
+                alt="Zapier"
               />
               <h5 class="mb-1 text-xl font-medium text-gray-900">Zapier</h5>
               <span class="text-sm text-gray-500 text-center"

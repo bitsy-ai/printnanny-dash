@@ -61,19 +61,41 @@ export const useWidgetStore = defineStore({
         href: "/vision/",
         service: "printnanny-vision.service",
         logo: printNannyLogo,
-        category: WidgetCategory.Apps,
+        category: WidgetCategory.PrintNannyApps,
         enabled: false,
         status: SystemdUnitStatus.Unknown,
         description:
           "The privacy-first defect and failure detection system. No internet connection required.",
         menuItems: [],
       } as WidgetItem,
-
+      {
+        name: "PrintNanny Cloud",
+        href: "https://printnanny.ai/devices",
+        service: "printnanny-cloud.service",
+        logo: printNannyLogo,
+        category: WidgetCategory.PrintNannyApps,
+        enabled: false,
+        status: SystemdUnitStatus.Unknown,
+        description:
+          "Get email notifications, view camera feed from anywhere, and sync settings with PrintNanny Cloud.",
+        menuItems: [],
+      } as WidgetItem,
+      {
+        name: "OS Updates",
+        href: "/update/",
+        service: "swupdate.service",
+        logo: printNannyLogo,
+        category: WidgetCategory.PrintNannyApps,
+        enabled: false,
+        status: SystemdUnitStatus.Unknown,
+        description: "Update PrintNanny OS to the latest build.",
+        menuItems: [],
+      } as WidgetItem,
       {
         name: "Syncthing",
         href: "/syncthing/",
         logo: syncThingLogo,
-        category: WidgetCategory.Apps,
+        category: WidgetCategory.OtherApps,
         status: SystemdUnitStatus.Unknown,
         enabled: false,
         description:
@@ -90,9 +112,14 @@ export const useWidgetStore = defineStore({
         (x) => x.category === WidgetCategory.PrinterManagement
       );
     },
-    appItems(state): Array<WidgetItem> {
+    printNannyAppItems(state): Array<WidgetItem> {
       return Object.values(state.items).filter(
-        (x) => x.category === WidgetCategory.Apps
+        (x) => x.category === WidgetCategory.PrintNannyApps
+      );
+    },
+    otherAppItems(state): Array<WidgetItem> {
+      return Object.values(state.items).filter(
+        (x) => x.category === WidgetCategory.OtherApps
       );
     },
   },
