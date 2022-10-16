@@ -81,7 +81,7 @@ export const useWidgetStore = defineStore({
         service: "syncthing.service",
         menuItems: [],
       } as WidgetItem,
-    ]
+    ],
   }),
 
   getters: {
@@ -132,16 +132,19 @@ export const useWidgetStore = defineStore({
         console.log("Enabled services:", res);
         this.$patch({ serviceStatus: res.data });
         // update item.enabled values
-        this.items.map(el => {
+        this.items.map((el) => {
           if (el.service in res.data) {
-            el.enabled = true
+            el.enabled = true;
           }
-        })
+        });
         return res;
       }
     },
 
-    async loadStatus(item: WidgetItem, idx: number): Promise<NatsResponse | undefined> {
+    async loadStatus(
+      item: WidgetItem,
+      idx: number
+    ): Promise<NatsResponse | undefined> {
       const natsStore = useNatsStore();
       if (natsStore.natsConnection === undefined) {
         console.warn("showStatus called before NATS connection initialized");
@@ -180,16 +183,14 @@ export const useWidgetStore = defineStore({
           default:
             item.status = SystemdUnitStatus.Unknown;
         }
-        this.items[idx] = item
+        this.items[idx] = item;
       }
     },
 
     async startService(item: WidgetItem) {
       const natsStore = useNatsStore();
       if (natsStore.natsConnection === undefined) {
-        console.warn(
-          "startService called before NATS connection initialized"
-        );
+        console.warn("startService called before NATS connection initialized");
         return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
@@ -199,7 +200,7 @@ export const useWidgetStore = defineStore({
         subject: NatsSubjectPattern.SystemctlCommand,
       } as NatsRequest;
       const requestCodec = JSONCodec<NatsRequest>();
-      console.log(`Starting ${item.service}`)
+      console.log(`Starting ${item.service}`);
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
           timeout: DEFAULT_NATS_TIMEOUT,
@@ -214,17 +215,14 @@ export const useWidgetStore = defineStore({
           message: `${item.service} will start automatically.`,
           header: `Enabled ${item.service}`,
           actions: [],
-
-        }
+        };
         eventStore.pushAlert(successAlert);
       }
     },
     async stopService(item: WidgetItem) {
       const natsStore = useNatsStore();
       if (natsStore.natsConnection === undefined) {
-        console.warn(
-          "stopService called before NATS connection initialized"
-        );
+        console.warn("stopService called before NATS connection initialized");
         return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
@@ -234,7 +232,7 @@ export const useWidgetStore = defineStore({
         subject: NatsSubjectPattern.SystemctlCommand,
       } as NatsRequest;
       const requestCodec = JSONCodec<NatsRequest>();
-      console.log(`Stopping ${item.service}`)
+      console.log(`Stopping ${item.service}`);
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
           timeout: DEFAULT_NATS_TIMEOUT,
@@ -249,8 +247,7 @@ export const useWidgetStore = defineStore({
           message: `${item.service} will no longer start automatically.`,
           header: `Disabled ${item.service}`,
           actions: [],
-
-        }
+        };
         eventStore.pushAlert(successAlert);
       }
     },
@@ -258,9 +255,7 @@ export const useWidgetStore = defineStore({
       const natsStore = useNatsStore();
 
       if (natsStore.natsConnection === undefined) {
-        console.warn(
-          "enableService called before NATS connection initialized"
-        );
+        console.warn("enableService called before NATS connection initialized");
         return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
@@ -271,7 +266,7 @@ export const useWidgetStore = defineStore({
       } as NatsRequest;
       const requestCodec = JSONCodec<NatsRequest>();
 
-      console.log(`Enabling ${item.service}`)
+      console.log(`Enabling ${item.service}`);
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
           timeout: DEFAULT_NATS_TIMEOUT,
@@ -284,8 +279,12 @@ export const useWidgetStore = defineStore({
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.debug(`Successfully enabled ${item.service}`, res);
-        await this.startService(item)
+
+        const idx = this.items.findIndex((el) => el.service === item.service);
+
+        await this.startService(item);
         await this.loadEnabledServices();
+        await this.loadStatus(item, idx);
       }
     },
 
@@ -307,7 +306,7 @@ export const useWidgetStore = defineStore({
       } as NatsRequest;
       const requestCodec = JSONCodec<NatsRequest>();
 
-      console.log(`Enabling ${item.service}`)
+      console.log(`Enabling ${item.service}`);
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
           timeout: DEFAULT_NATS_TIMEOUT,
@@ -320,11 +319,13 @@ export const useWidgetStore = defineStore({
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.log(`Successfully enabled ${item.service}`, res);
+        const idx = this.items.findIndex((el) => el.service === item.service);
+
         await this.stopService(item);
         await this.loadEnabledServices();
-
+        await this.loadStatus(item, idx);
       }
-    }
+    },
   },
 });
 

@@ -31,14 +31,8 @@
                 src="@/assets/logos/repetier/repetier.png"
                 alt="Repetier"
               />
-              <h5
-                class="mb-1 text-xl font-medium text-gray-900"
-              >
-                Repetier
-              </h5>
-              <span class="text-sm text-gray-500"
-                >Coming soon!</span
-              >
+              <h5 class="mb-1 text-xl font-medium text-gray-900">Repetier</h5>
+              <span class="text-sm text-gray-500">Coming soon!</span>
               <span class="text-sm text-gray-500 text-center"
                 >Reply to the Github Issue to get updates.</span
               >
@@ -82,11 +76,7 @@
                 src="@/assets/logos/zapier/zapier.png"
                 alt="Repetier"
               />
-              <h5
-                class="mb-1 text-xl font-medium text-gray-900"
-              >
-                Zapier
-              </h5>
+              <h5 class="mb-1 text-xl font-medium text-gray-900">Zapier</h5>
               <span class="text-sm text-gray-500 text-center"
                 >Coming soon!</span
               >

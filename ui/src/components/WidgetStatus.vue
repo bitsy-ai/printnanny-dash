@@ -42,9 +42,8 @@
 }
 </style>
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import type { PropType } from "vue";
-import type { WidgetItem, SystemctlCommandResponse } from "@/types";
+import type { WidgetItem } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
 import { SystemdUnitStatus } from "@/types";
 import { useWidgetStore } from "@/stores/widgets";
@@ -56,9 +55,6 @@ const props = defineProps({
   },
 });
 const store = useWidgetStore();
-const idx = store.items.find(el => el.service === props.item.service)
-store.loadStatus(props.item, props.idx);
-
-
-
+const idx = store.items.findIndex((el) => el.service === props.item.service);
+store.loadStatus(props.item, idx);
 </script>
