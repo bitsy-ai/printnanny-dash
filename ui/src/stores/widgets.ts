@@ -153,7 +153,7 @@ export const useWidgetStore = defineStore({
       if (resMsg) {
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
-        console.log("Status:", res);
+        console.debug(`${item.name} status:`, res);
         this.$patch({ enabledServices: res.data });
         return res;
       }

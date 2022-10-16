@@ -22,10 +22,10 @@
         v-else-if="status == SystemdUnitStatus.Inactive"
       >
         <div
-          class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+          class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
           aria-hidden="true"
         ></div>
-        <span class="text-grey-600">Error</span>
+        <span class="text-grey-600">Inactive</span>
       </div>
     </Transition>
   </div>
@@ -63,10 +63,11 @@ async function refreshStatus() {
   const res: SystemctlCommandResponse | undefined = await store.showStatus(
     props.item
   );
+  // console.log("SystemctlCommandResponse", res)
   if (res === undefined) {
     status.value = SystemdUnitStatus.Unknown;
   } else {
-    const state = res.data.get("ActiveState");
+    const state = res.data["ActiveState"];
     switch (state) {
       case "active":
         status.value = SystemdUnitStatus.Active;
@@ -78,9 +79,8 @@ async function refreshStatus() {
         status.value = SystemdUnitStatus.Unknown;
     }
   }
-  status.value = SystemdUnitStatus.Unknown;
 }
 window.setInterval(async () => {
-  refreshStatus;
+  await refreshStatus();
 }, 3000);
 </script>

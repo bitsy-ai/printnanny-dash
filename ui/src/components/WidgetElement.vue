@@ -49,7 +49,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, toRaw } from "vue";
+import { computed, toRaw, ref, watch } from "vue";
 import type { PropType } from "vue";
 import { Switch } from "@headlessui/vue";
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
@@ -67,11 +67,16 @@ const props = defineProps({
   },
 });
 
-const enabled = computed(() => {
-  const enabledServices = toRaw(store.enabledServices);
-  if (store.enabledServices) {
-    return props.item.service in enabledServices;
+const enabled = ref(false);
+
+watch(enabled, (newState, oldState) => {
+  console.log(`Switch toggled from ${oldState} to ${newState}`)
+})
+
+store.$subscribe((mutation, state) => {
+  if (state.enabledServices && props.item.service in state.enabledServices) {
+    enabled.value = true
   }
-  return false;
-});
+})
+
 </script>
