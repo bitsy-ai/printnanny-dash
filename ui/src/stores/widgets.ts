@@ -40,6 +40,7 @@ export const useWidgetStore = defineStore({
           { name: "Documentation", href: "https://docs.octoprint.org" },
           { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
           { name: "/r/octoprint", href: "https://www.reddit.com/r/octoprint/" },
+          { name: "OctoPrint Community", href: "https://community.octoprint.org/" },
           { name: "Discord", href: "https://discord.octoprint.org/" },
         ],
       } as WidgetItem,
@@ -53,7 +54,12 @@ export const useWidgetStore = defineStore({
         status: SystemdUnitStatus.Unknown,
         description:
           "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
-        menuItems: [],
+        menuItems: [
+          { name: "Documentation", href: "https://docs.mainsail.xyz/" },
+          { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
+          { name: "Discord", href: "https://discord.gg/skWTwTD" },
+          { name: "Github Issues", href: "https://github.com/mainsail-crew/mainsail/issues" }
+        ],
       } as WidgetItem,
 
       {
@@ -89,7 +95,9 @@ export const useWidgetStore = defineStore({
         enabled: false,
         status: SystemdUnitStatus.Unknown,
         description: "Update PrintNanny OS to the latest build.",
-        menuItems: [],
+        menuItems: [
+          { name: "How to Update PrintNanny OS", href: "https://docs.printnanny.ai/docs/update-printnanny-os/" }
+        ],
       } as WidgetItem,
       {
         name: "Syncthing",
@@ -101,7 +109,11 @@ export const useWidgetStore = defineStore({
         description:
           "Sync files between two or more computers. Like having a private Dropbox.",
         service: "syncthing.service",
-        menuItems: [],
+        menuItems: [
+          { name: "Quick Start", href: "https://docs.printnanny.ai/docs/quick-start/configure-file-sync/" },
+          { name: "Syncthing Docs", href: "https://docs.syncthing.net/" },
+          { name: "Commmunity Forum", href: "https://forum.syncthing.net/" }
+        ],
       } as WidgetItem,
     ],
   }),
