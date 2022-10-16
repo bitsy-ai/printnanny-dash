@@ -1,18 +1,18 @@
 <template>
   <div
-    class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+    class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
   >
     <div class="flex px-4 pt-4 grid grid-cols-2">
       <!-- toggle-->
 
       <Switch
-        v-model="enabled"
-        :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
+        v-model="item.enabled"
+        :class="item.enabled ? 'bg-blue-600' : 'bg-gray-200'"
         class="relative inline-flex h-6 w-11 items-center rounded-full"
       >
         <span class="sr-only">Enable {{ item.name }}</span>
         <span
-          :class="enabled ? 'translate-x-6' : 'translate-x-1'"
+          :class="item.enabled ? 'translate-x-6' : 'translate-x-1'"
           class="inline-block h-4 w-4 transform rounded-full bg-white transition"
         />
       </Switch>
@@ -25,10 +25,10 @@
         :src="item.logo"
         :alt="item.name"
       />
-      <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+      <h5 class="mb-1 text-xl font-medium text-gray-900">
         {{ item.name }}
       </h5>
-      <span class="text-sm text-gray-500 dark:text-gray-400 text-center">{{
+      <span class="text-sm text-gray-500 text-center">{{
         item.description
       }}</span>
 
@@ -36,7 +36,7 @@
         <a
           :href="item.href"
           target="_blank"
-          class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
         >
           <ArrowUpRightIcon
             class="w-4 h-4 text-sm font-medium mr-1 text-white-600"
@@ -67,16 +67,18 @@ const props = defineProps({
   },
 });
 
-const enabled = ref(false);
-
-watch(enabled, (newState, oldState) => {
-  console.log(`Switch toggled from ${oldState} to ${newState}`)
-})
-
-store.$subscribe((mutation, state) => {
-  if (state.enabledServices && props.item.service in state.enabledServices) {
-    enabled.value = true
+store.$subscribe(async (mutation, state) => {
+  console.log("mutation", mutation)
+  if (mutation.events.target && mutation.events.target.service === props.item.service){
+    const enabled = mutation.events.newValue;
+    if (enabled === true){
+      await store.enableService(props.item);
+    } else if (enabled === false){
+      await store.disableService(props.item);
+    }
   }
 })
+
+
 
 </script>

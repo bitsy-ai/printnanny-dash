@@ -1,3 +1,5 @@
+import type { SystemdUnitStatus } from "./events";
+
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
   Apps = "Apps",
@@ -9,6 +11,7 @@ export interface WidgetMenuItem {
 }
 
 export interface WidgetItem {
+  enabled: boolean;
   name: string;
   href: string;
   logo: string;
@@ -16,4 +19,5 @@ export interface WidgetItem {
   menuItems: Array<WidgetMenuItem>;
   service: string;
   category: WidgetCategory;
+  status: SystemdUnitStatus;
 }

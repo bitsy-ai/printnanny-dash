@@ -6,10 +6,10 @@
       mode="out-in"
       :duration="{ enter: 800, leave: 500 }"
     >
-      <TextSpinner v-if="status == SystemdUnitStatus.Unknown" />
+      <TextSpinner v-if="item.status == SystemdUnitStatus.Unknown" />
       <div
         class="flex items-center space-x-3 font-medium text-gray-600"
-        v-else-if="status == SystemdUnitStatus.Active"
+        v-else-if="item.status == SystemdUnitStatus.Active"
       >
         <div
           class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
@@ -19,7 +19,7 @@
       </div>
       <div
         class="flex items-center space-x-3 font-medium text-gray-600"
-        v-else-if="status == SystemdUnitStatus.Inactive"
+        v-else-if="item.status == SystemdUnitStatus.Inactive"
       >
         <div
           class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
@@ -42,7 +42,7 @@
 }
 </style>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { PropType } from "vue";
 import type { WidgetItem, SystemctlCommandResponse } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
@@ -56,31 +56,9 @@ const props = defineProps({
   },
 });
 const store = useWidgetStore();
+const idx = store.items.find(el => el.service === props.item.service)
+store.loadStatus(props.item, props.idx);
 
-const status = ref(SystemdUnitStatus.Unknown);
 
-async function refreshStatus() {
-  const res: SystemctlCommandResponse | undefined = await store.showStatus(
-    props.item
-  );
-  // console.log("SystemctlCommandResponse", res)
-  if (res === undefined) {
-    status.value = SystemdUnitStatus.Unknown;
-  } else {
-    const state = res.data["ActiveState"];
-    switch (state) {
-      case "active":
-        status.value = SystemdUnitStatus.Active;
-        break;
-      case "inactive":
-        status.value = SystemdUnitStatus.Inactive;
-        break;
-      default:
-        status.value = SystemdUnitStatus.Unknown;
-    }
-  }
-}
-window.setInterval(async () => {
-  await refreshStatus();
-}, 3000);
+
 </script>

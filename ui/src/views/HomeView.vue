@@ -20,7 +20,7 @@
           />
           <!-- repetier coming soon -->
           <div
-            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
           >
             <div class="flex justify-end px-4 pt-4">
               <div class="h-4"></div>
@@ -32,14 +32,14 @@
                 alt="Repetier"
               />
               <h5
-                class="mb-1 text-xl font-medium text-gray-900 dark:text-white"
+                class="mb-1 text-xl font-medium text-gray-900"
               >
                 Repetier
               </h5>
-              <span class="text-sm text-gray-500 dark:text-gray-400 text-center"
+              <span class="text-sm text-gray-500"
                 >Coming soon!</span
               >
-              <span class="text-sm text-gray-500 dark:text-gray-400 text-center"
+              <span class="text-sm text-gray-500 text-center"
                 >Reply to the Github Issue to get updates.</span
               >
 
@@ -47,7 +47,7 @@
                 <a
                   href="https://github.com/bitsy-ai/printnanny-os/issues/32"
                   target="_blank"
-                  class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-gray-900 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
+                  class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-gray-900 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
                 >
                   <ArrowUpRightIcon
                     class="w-4 h-4 text-sm font-medium mr-1 text-white-600"
@@ -71,7 +71,7 @@
           />
           <!-- repetier coming soon -->
           <div
-            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
           >
             <div class="flex justify-end px-4 pt-4">
               <div class="h-4"></div>
@@ -83,14 +83,14 @@
                 alt="Repetier"
               />
               <h5
-                class="mb-1 text-xl font-medium text-gray-900 dark:text-white"
+                class="mb-1 text-xl font-medium text-gray-900"
               >
                 Zapier
               </h5>
-              <span class="text-sm text-gray-500 dark:text-gray-400 text-center"
+              <span class="text-sm text-gray-500 text-center"
                 >Coming soon!</span
               >
-              <span class="text-sm text-gray-500 dark:text-gray-400 text-center"
+              <span class="text-sm text-gray-500 text-center"
                 >Reply to the Github Issue to get updates.</span
               >
 
@@ -98,7 +98,7 @@
                 <a
                   href="https://github.com/bitsy-ai/printnanny-os/issues/100"
                   target="_blank"
-                  class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-gray-900 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
+                  class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-gray-900 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
                 >
                   <ArrowUpRightIcon
                     class="w-4 h-4 text-sm font-medium mr-1 text-white-600"

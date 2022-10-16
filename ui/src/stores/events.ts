@@ -13,6 +13,7 @@ import {
   type UiStickyAlert,
   type MediaCommandRequest,
   MediaCommand,
+  type WidgetItem,
 } from "@/types";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
