@@ -2,11 +2,11 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
 import { JSONCodec, type Subscription } from "nats.ws";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-
 import {
   ConnectionStatus,
   NatsSubjectPattern,
   SystemctlCommand,
+  VideoSrcType,
   type QcDataframeRow,
   type UiStickyAlert,
   type SystemctlCommandRequest,
@@ -17,19 +17,44 @@ import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
 import { useAlertStore } from "./alerts";
+import VideoPaused from "@/assets/video-paused.svg";
 
 // returns true if num truthy elements / total elements >= threshold
 function atLeast(arr: Array<boolean>, threshold: number): boolean {
   return arr.filter((el) => el === true).length / arr.length >= threshold;
 }
 
+export const VIDEO_STREAMS: Array<VideoStream> = [
+  {
+    src: "/dev/video0",
+    src_type: VideoSrcType.Device,
+    cover: VideoPaused,
+    name: "Camera: /dev/video0",
+    description: "",
+  },
+  {
+    src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
+    src_type: VideoSrcType.Uri,
+    cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_1.png",
+    name: "Demo Video #1",
+    description: "",
+  },
+  {
+    src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
+    src_type: VideoSrcType.Uri,
+    cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_2.png",
+    name: "Demo Video #2",
+    description: "",
+  },
+];
+
 export const useEventStore = defineStore({
   id: "events",
   state: () => ({
     df: [] as Array<QcDataframeRow>,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
-    videoStreams: [] as Array<VideoStream>,
-    selectedVideoStream: 0
+    videoStreams: VIDEO_STREAMS,
+    selectedVideoStream: 0,
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -53,7 +78,6 @@ export const useEventStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
-
     async connect(): Promise<void> {
       const natsStore = useNatsStore();
       const janusStore = useJanusStore();
@@ -68,21 +92,20 @@ export const useEventStore = defineStore({
       }
     },
 
-    async publishNatsRequest(request: MediaCommandRequest) {
-      const natsStore = useNatsStore();
-      const natsClient = toRaw(natsStore.natsConnection);
-      const jsonCodec = JSONCodec<MediaCommandRequest>();
-      const subject = NatsSubjectPattern.MediaCommand;
+    // async publishNatsRequest(request: MediaCommandRequest) {
+    //   const natsStore = useNatsStore();
+    //   const natsClient = toRaw(natsStore.natsConnection);
+    //   const jsonCodec = JSONCodec<MediaCommandRequest>();
+    //   const subject = NatsSubjectPattern.MediaCommand;
 
-      console.log("Publishing NATS request:", request);
-      const res = await natsClient
-        ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
-        .catch((e) => handleError("Command Failed", e));
-      console.log(`NATS response on subject: ${subject}`, res);
-    },
+    //   console.log("Publishing NATS request:", request);
+    //   const res = await natsClient
+    //     ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
+    //     .catch((e) => handleError("Command Failed", e));
+    //   console.log(`NATS response on subject: ${subject}`, res);
+    // },
 
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
-
       const alertStore = useAlertStore();
 
       if (df.length < 10) {
@@ -194,7 +217,6 @@ export const useEventStore = defineStore({
       })(sub);
     },
 
-
     async startStreams() {
       this.$patch({
         status: ConnectionStatus.ConnectionStreamLoading,
@@ -206,46 +228,41 @@ export const useEventStore = defineStore({
       const cmdRequest: SystemctlCommandRequest = {
         subject: NatsSubjectPattern.SystemctlCommand,
         service: "printnanny-vision.servie",
-        command: SystemctlCommand.Restart
-      }
+        command: SystemctlCommand.Restart,
+      };
       const natsRequest: PiConfigRequest = {
         subject: NatsSubjectPattern.Config,
         json: JSON.stringify({
-          "vision": {
-            "video_src": selectedStream.src,
-            "video_src_type": selectedStream.src_type
-          }
+          vision: {
+            video_src: selectedStream.src,
+            video_src_type: selectedStream.src_type,
+          },
         }),
         post_save: [cmdRequest],
-        pre_save: []
-
+        pre_save: [],
       };
-      await this.publishNatsRequest(natsRequest);
+      // await this.publishNatsRequest(natsRequest);
 
       // start janus stream
 
-
       this.$patch({ status: ConnectionStatus.ConnectionStreamReady });
-
-
     },
 
     async reset() {
       const janusStore = useJanusStore();
 
-      if (this.selectedStream !== undefined) {
-        const natsRequest: MediaCommandRequest = {
-          subject: NatsSubjectPattern.SystemctlCommand,
-          janus_stream: toRaw(this.selectedStream),
-          command: MediaCommand.Stop,
-          service: "printnanny-vision.service",
-        };
-        await this.publishNatsRequest(natsRequest);
-      }
+      // if (this.selectedStream !== undefined) {
+      //   const natsRequest: MediaCommandRequest = {
+      //     subject: NatsSubjectPattern.SystemctlCommand,
+      //     janus_stream: toRaw(this.selectedStream),
+      //     command: MediaCommand.Stop,
+      //     service: "printnanny-vision.service",
+      //   };
+      //   await this.publishNatsRequest(natsRequest);
+      // }
       janusStore.stopAllStreams();
       this.$reset();
       this.connect();
     },
   },
 });
-

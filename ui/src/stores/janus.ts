@@ -9,8 +9,9 @@ const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+  }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -135,7 +136,8 @@ export const useJanusStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${janusStreamingPluginHandle.name
+            `${
+              janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -243,7 +245,9 @@ export const useJanusStore = defineStore({
     },
     async startJanusStream() {
       if (this.selectedStream == undefined) {
-        console.warn("startJanusStream() was called, but no stream is selected");
+        console.warn(
+          "startJanusStream() was called, but no stream is selected"
+        );
         return;
       }
 
@@ -265,7 +269,7 @@ export const useJanusStore = defineStore({
       });
       console.log(`start ${id} response sent with status ${status}`);
     },
-  }
+  },
 });
 
 if (import.meta.hot) {

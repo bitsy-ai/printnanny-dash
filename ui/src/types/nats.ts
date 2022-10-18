@@ -1,10 +1,8 @@
-
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
   SystemctlCommand = "pi.command.systemctl",
   Config = "pi.config",
 }
-
 
 export enum SystemdUnitStatus {
   Active = "active",
@@ -37,7 +35,6 @@ export interface SystemctlCommandRequest {
   command: SystemctlCommand;
 }
 
-
 export enum ResponseStatus {
   Ok = "ok",
   Error = "error",
@@ -53,9 +50,9 @@ export interface SystemctlCommandResponse {
 
 export interface PiConfigRequest {
   subject: string;
-  json: string; // 
-  pre_save: Array<SystemctlCommandRequest>,
-  post_save: Array<SystemctlCommandRequest>
+  json: string; //
+  pre_save: Array<SystemctlCommandRequest>;
+  post_save: Array<SystemctlCommandRequest>;
 }
 
 export interface PiConfigResponse {
@@ -63,8 +60,8 @@ export interface PiConfigResponse {
   status: ResponseStatus;
   request?: PiConfigRequest;
   detail: string;
-  pre_save: Array<SystemctlCommandResponse>,
-  post_save: Array<SystemctlCommandResponse>
+  pre_save: Array<SystemctlCommandResponse>;
+  post_save: Array<SystemctlCommandResponse>;
 }
 
 export type NatsRequest = SystemctlCommandRequest | PiConfigRequest;

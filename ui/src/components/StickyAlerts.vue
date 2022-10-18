@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import { useEventStore } from "@/stores/events";
+import { useAlertStore } from "@/stores/alerts";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import SimpleAlert from "./SimpleAlert.vue";
 
-const store = useEventStore();
+const store = useAlertStore();
 </script>

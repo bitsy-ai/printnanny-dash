@@ -1,7 +1,6 @@
-
-enum VideoSrcType {
+export enum VideoSrcType {
   Device = "device",
-  Uri = "uri"
+  Uri = "uri",
 }
 
 export interface VideoStream {
