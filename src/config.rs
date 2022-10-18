@@ -11,13 +11,19 @@ pub const DEFAULT_PRINTNANNY_DASH_CONFIG_PATH: &str = "/etc/printnanny/printnann
 pub struct PrintNannyDashConfig {
     pub host: String,
     pub port: i32,
+    pub workers: usize,
 }
 
 impl Default for PrintNannyDashConfig {
     fn default() -> Self {
         let host = "127.0.0.1".into();
         let port = 8084;
-        PrintNannyDashConfig { host, port }
+        let workers = 2;
+        PrintNannyDashConfig {
+            host,
+            port,
+            workers,
+        }
     }
 }
 
