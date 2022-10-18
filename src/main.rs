@@ -1,6 +1,7 @@
 use actix_web::{App, HttpServer};
 use actix_web_static_files::ResourceFiles;
 use anyhow::Result;
+use git_version::git_version;
 use log::warn;
 
 use printnanny_dash::config;
