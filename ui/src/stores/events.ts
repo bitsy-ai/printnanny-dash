@@ -55,6 +55,7 @@ export const useEventStore = defineStore({
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
     videoStreams: VIDEO_STREAMS,
     selectedVideoStream: 0,
+    playingVideoStream: undefined as undefined | number,
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -91,19 +92,6 @@ export const useEventStore = defineStore({
         this.$patch({ status: ConnectionStatus.ConnectionError });
       }
     },
-
-    // async publishNatsRequest(request: MediaCommandRequest) {
-    //   const natsStore = useNatsStore();
-    //   const natsClient = toRaw(natsStore.natsConnection);
-    //   const jsonCodec = JSONCodec<MediaCommandRequest>();
-    //   const subject = NatsSubjectPattern.MediaCommand;
-
-    //   console.log("Publishing NATS request:", request);
-    //   const res = await natsClient
-    //     ?.request(subject, jsonCodec.encode(request), { timeout: 5000 })
-    //     .catch((e) => handleError("Command Failed", e));
-    //   console.log(`NATS response on subject: ${subject}`, res);
-    // },
 
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       const alertStore = useAlertStore();
@@ -222,6 +210,10 @@ export const useEventStore = defineStore({
         status: ConnectionStatus.ConnectionStreamLoading,
       });
 
+      const natsStore = useNatsStore();
+      const natsClient = toRaw(natsStore.natsConnection);
+      const jsonCodec = JSONCodec<PiConfigRequest>();
+
       // apply any video stream configuration changes
 
       const selectedStream = this.videoStreams[this.selectedVideoStream];
@@ -241,15 +233,19 @@ export const useEventStore = defineStore({
         post_save: [cmdRequest],
         pre_save: [],
       };
-      // await this.publishNatsRequest(natsRequest);
-
-      // start janus stream
-
+      console.log("Publishing NATS request:", natsRequest);
+      const res = await natsClient
+        ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
+          timeout: 8000,
+        })
+        .catch((e) => handleError("Command Failed", e));
+      console.log(`NATS response:`, res);
       this.$patch({ status: ConnectionStatus.ConnectionStreamReady });
     },
 
     async reset() {
       const janusStore = useJanusStore();
+      this.$patch({ playingVideoStream: undefined });
 
       // if (this.selectedStream !== undefined) {
       //   const natsRequest: MediaCommandRequest = {
@@ -263,6 +259,15 @@ export const useEventStore = defineStore({
       janusStore.stopAllStreams();
       this.$reset();
       this.connect();
+    },
+
+    async toggleVideoPlayer() {
+      // if selected stream is playing stream, stop video
+      if (this.selectedVideoStream == this.playingVideoStream) {
+        this.$reset();
+      }
+      this.$patch({ playingVideoStream: this.selectedVideoStream });
+      await this.startStreams();
     },
   },
 });
