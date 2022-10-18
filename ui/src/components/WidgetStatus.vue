@@ -27,6 +27,16 @@
         ></div>
         <span class="text-grey-600">Inactive</span>
       </div>
+      <div
+        class="flex items-center space-x-3 font-medium text-gray-600"
+        v-else-if="item.status == SystemdUnitStatus.Error"
+      >
+        <div
+          class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+          aria-hidden="true"
+        ></div>
+        <span class="text-grey-600">Error</span>
+      </div>
     </Transition>
   </div>
 </template>

@@ -1,5 +1,4 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { SystemdUnitStatus, WidgetCategory, type UiStickyAlert } from "@/types";
 import type { WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
@@ -12,12 +11,17 @@ import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
 import { useNatsStore } from "./nats";
 import {
   NatsSubjectPattern,
-  type NatsRequest,
   SystemctlCommand,
+  SystemdUnitStatus,
+  WidgetCategory,
+  type NatsRequest,
   type NatsResponse,
+  type SystemctlCommandResponse,
+  type SystemctlCommandRequest,
+  type UiStickyAlert,
 } from "@/types";
 import { handleError } from "@/utils";
-import { useEventStore } from "./events";
+import { useAlertStore } from "./alerts";
 
 const DEFAULT_NATS_TIMEOUT = 6000;
 
@@ -40,7 +44,10 @@ export const useWidgetStore = defineStore({
           { name: "Documentation", href: "https://docs.octoprint.org" },
           { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
           { name: "/r/octoprint", href: "https://www.reddit.com/r/octoprint/" },
-          { name: "OctoPrint Community", href: "https://community.octoprint.org/" },
+          {
+            name: "OctoPrint Community",
+            href: "https://community.octoprint.org/",
+          },
           { name: "Discord", href: "https://discord.octoprint.org/" },
         ],
       } as WidgetItem,
@@ -58,7 +65,10 @@ export const useWidgetStore = defineStore({
           { name: "Documentation", href: "https://docs.mainsail.xyz/" },
           { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
           { name: "Discord", href: "https://discord.gg/skWTwTD" },
-          { name: "Github Issues", href: "https://github.com/mainsail-crew/mainsail/issues" }
+          {
+            name: "Github Issues",
+            href: "https://github.com/mainsail-crew/mainsail/issues",
+          },
         ],
       } as WidgetItem,
 
@@ -96,7 +106,10 @@ export const useWidgetStore = defineStore({
         status: SystemdUnitStatus.Unknown,
         description: "Update PrintNanny OS to the latest build.",
         menuItems: [
-          { name: "How to Update PrintNanny OS", href: "https://docs.printnanny.ai/docs/update-printnanny-os/" }
+          {
+            name: "How to Update PrintNanny OS",
+            href: "https://docs.printnanny.ai/docs/update-printnanny-os/",
+          },
         ],
       } as WidgetItem,
       {
@@ -110,9 +123,12 @@ export const useWidgetStore = defineStore({
           "Sync files between two or more computers. Like having a private Dropbox.",
         service: "syncthing.service",
         menuItems: [
-          { name: "Quick Start", href: "https://docs.printnanny.ai/docs/quick-start/configure-file-sync/" },
+          {
+            name: "Quick Start",
+            href: "https://docs.printnanny.ai/docs/quick-start/configure-file-sync/",
+          },
           { name: "Syncthing Docs", href: "https://docs.syncthing.net/" },
-          { name: "Commmunity Forum", href: "https://forum.syncthing.net/" }
+          { name: "Commmunity Forum", href: "https://forum.syncthing.net/" },
         ],
       } as WidgetItem,
     ],
@@ -152,9 +168,9 @@ export const useWidgetStore = defineStore({
         service: "",
         command: SystemctlCommand.ListEnabled,
         subject: NatsSubjectPattern.SystemctlCommand,
-      } as NatsRequest;
+      } as SystemctlCommandRequest;
 
-      const requestCodec = JSONCodec<NatsRequest>();
+      const requestCodec = JSONCodec<SystemctlCommandRequest>();
 
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
@@ -166,7 +182,7 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const responseCodec = JSONCodec<NatsResponse>();
+        const responseCodec = JSONCodec<SystemctlCommandResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
         this.$patch({ serviceStatus: res.data });
@@ -190,13 +206,13 @@ export const useWidgetStore = defineStore({
         return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
-      const requestCodec = JSONCodec<NatsRequest>();
+      const requestCodec = JSONCodec<SystemctlCommandRequest>();
 
       const req = {
         service: item.service,
         command: SystemctlCommand.Status,
         subject: NatsSubjectPattern.SystemctlCommand,
-      } as NatsRequest;
+      } as SystemctlCommandRequest;
 
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
@@ -208,7 +224,7 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const responseCodec = JSONCodec<NatsResponse>();
+        const responseCodec = JSONCodec<SystemctlCommandResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.debug(`${item.name} status:`, res);
         const activeState = res.data["ActiveState"];
@@ -228,6 +244,7 @@ export const useWidgetStore = defineStore({
 
     async startService(item: WidgetItem) {
       const natsStore = useNatsStore();
+      const alertStore = useAlertStore();
       if (natsStore.natsConnection === undefined) {
         console.warn("startService called before NATS connection initialized");
         return;
@@ -249,17 +266,18 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const eventStore = useEventStore();
         const successAlert: UiStickyAlert = {
           message: `${item.service} will start automatically.`,
           header: `Enabled ${item.service}`,
           actions: [],
         };
-        eventStore.pushAlert(successAlert);
+        alertStore.pushAlert(successAlert);
       }
     },
     async stopService(item: WidgetItem) {
       const natsStore = useNatsStore();
+      const alertStore = useAlertStore();
+
       if (natsStore.natsConnection === undefined) {
         console.warn("stopService called before NATS connection initialized");
         return;
@@ -281,13 +299,12 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const eventStore = useEventStore();
         const successAlert: UiStickyAlert = {
           message: `${item.service} will no longer start automatically.`,
           header: `Disabled ${item.service}`,
           actions: [],
         };
-        eventStore.pushAlert(successAlert);
+        alertStore.pushAlert(successAlert);
       }
     },
     async enableService(item: WidgetItem) {

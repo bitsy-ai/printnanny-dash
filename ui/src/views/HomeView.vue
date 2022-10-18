@@ -126,10 +126,26 @@ import WidgetElement from "@/components/WidgetElement.vue";
 
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import { useWidgetStore } from "@/stores/widgets";
+import { useNatsStore } from "@/stores/nats";
+import { ConnectionStatus, SystemdUnitStatus } from "@/types";
 
 const widgets = useWidgetStore();
+const nats = useNatsStore();
 
-widgets.loadEnabledServices();
+nats.$subscribe((mutation: any, _state: any) => {
+  if (
+    mutation.payload.natsConnection &&
+    mutation.payload.natsConnection !== undefined
+  ) {
+    widgets.loadEnabledServices();
+  } else if (mutation.payload.status == ConnectionStatus.ConnectionError) {
+    const items = widgets.items.map((i) => {
+      i.status = SystemdUnitStatus.Error;
+      return i;
+    });
+    widgets.$patch({ items });
+  }
+});
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";

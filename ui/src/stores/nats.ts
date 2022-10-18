@@ -3,6 +3,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import type { NatsConnection } from "nats.ws";
 import { connect } from "nats.ws";
 import { handleError } from "@/utils";
+import { ConnectionStatus } from "@/types";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
@@ -18,10 +19,13 @@ export const useNatsStore = defineStore({
 
   state: () => ({
     natsConnection: undefined as NatsConnection | undefined,
+    status: ConnectionStatus.ConnectionNotStarted,
   }),
 
   actions: {
     async connect(): Promise<boolean> {
+      this.$patch({ status: ConnectionStatus.ConnectionLoading });
+
       // create nats connection if not initialized
       if (this.natsConnection === undefined) {
         const servers = [getNatsURI()];
@@ -38,9 +42,13 @@ export const useNatsStore = defineStore({
         );
         if (natsConnection) {
           console.log(`Initialized NATs connection to ${servers}`);
-          this.$patch({ natsConnection });
+          this.$patch({
+            natsConnection,
+            status: ConnectionStatus.ConnectionReady,
+          });
           return true;
         }
+        this.$patch({ status: ConnectionStatus.ConnectionError });
         return false;
       } else {
         return true;
