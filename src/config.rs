@@ -7,17 +7,23 @@ use serde::{Deserialize, Serialize};
 
 pub const DEFAULT_PRINTNANNY_DASH_CONFIG_PATH: &str = "/etc/printnanny/printnanny-dash.toml";
 
-#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct PrintNannyDashConfig {
     pub host: String,
     pub port: i32,
+    pub workers: usize,
 }
 
 impl Default for PrintNannyDashConfig {
     fn default() -> Self {
         let host = "127.0.0.1".into();
         let port = 8084;
-        PrintNannyDashConfig { host, port }
+        let workers = 2;
+        PrintNannyDashConfig {
+            host,
+            port,
+            workers,
+        }
     }
 }
 
@@ -45,7 +51,7 @@ impl PrintNannyDashConfig {
     }
 
     pub fn server_addreess(&self) -> String {
-        format!("{}:{}", self.host, self.port).to_string()
+        format!("{}:{}", self.host, self.port)
     }
 
     /// Extract a `Config` from `provider`, panicking if extraction fails.
