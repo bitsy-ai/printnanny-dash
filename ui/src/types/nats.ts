@@ -8,14 +8,13 @@ export enum SystemdUnitStatus {
   Active = "active",
   Inactive = "inactive",
   Unknown = "unknown",
+  Error = "error"
 }
 
 export enum ConnectionStatus {
   ConnectionNotStarted,
   ConnectionLoading,
   ConnectionReady,
-  ConnectionStreamLoading,
-  ConnectionStreamReady,
   ConnectionError,
 }
 

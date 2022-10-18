@@ -79,19 +79,19 @@ export const useEventStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
-    async connect(): Promise<void> {
-      const natsStore = useNatsStore();
-      const janusStore = useJanusStore();
+    // async connect(): Promise<void> {
+    //   const natsStore = useNatsStore();
+    //   const janusStore = useJanusStore();
 
-      this.$patch({ status: ConnectionStatus.ConnectionLoading });
-      const natsOk = await natsStore.connect();
-      const janusOk = await janusStore.connectJanus();
-      if (natsOk && janusOk) {
-        this.$patch({ status: ConnectionStatus.ConnectionReady });
-      } else {
-        this.$patch({ status: ConnectionStatus.ConnectionError });
-      }
-    },
+    //   this.$patch({ status: ConnectionStatus.ConnectionLoading });
+    //   const natsOk = await natsStore.connect();
+    //   const janusOk = await janusStore.connectJanus();
+    //   if (natsOk && janusOk) {
+    //     this.$patch({ status: ConnectionStatus.ConnectionReady });
+    //   } else {
+    //     this.$patch({ status: ConnectionStatus.ConnectionError });
+    //   }
+    // },
 
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       const alertStore = useAlertStore();

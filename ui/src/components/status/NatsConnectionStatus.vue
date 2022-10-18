@@ -48,10 +48,10 @@
 </style>
 <script setup lang="ts">
 import { ConnectionStatus } from "@/types";
-import { useEventStore } from "@/stores/events";
+import { useNatsStore } from "@/stores/nats";
 import TextSpinner from "@/components/TextSpinner.vue";
 
 const hostname = window.location.hostname;
-const store = useEventStore();
+const store = useNatsStore();
 store.connect();
 </script>
