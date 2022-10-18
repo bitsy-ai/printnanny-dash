@@ -256,28 +256,17 @@ export const useVideoStore = defineStore({
     async reset() {
       const janusStore = useJanusStore();
       this.$patch({ playingVideoStream: undefined });
-
-      // if (this.selectedStream !== undefined) {
-      //   const natsRequest: MediaCommandRequest = {
-      //     subject: NatsSubjectPattern.SystemctlCommand,
-      //     janus_stream: toRaw(this.selectedStream),
-      //     command: MediaCommand.Stop,
-      //     service: "printnanny-vision.service",
-      //   };
-      //   await this.publishNatsRequest(natsRequest);
-      // }
       janusStore.stopAllStreams();
       this.$reset();
-      this.connect();
     },
 
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
       if (this.selectedVideoStream == this.playingVideoStream) {
-        this.$reset();
+        return this.$reset();
       }
       this.$patch({ playingVideoStream: this.selectedVideoStream });
-      await this.startStreams();
+      await this.startStream();
     },
   },
 });

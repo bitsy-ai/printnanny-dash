@@ -22,7 +22,7 @@ function selectStream(idx: number) {
 }
 
 async function startStream(){
-  await store.startStream().catch((e) => handleError("Failed to start stream", e))
+  await store.toggleVideoPlayer().catch((e) => handleError("Failed to start stream", e))
 }
 
 </script>
