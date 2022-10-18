@@ -1,25 +1,27 @@
 use actix_web::{App, HttpServer};
 use actix_web_static_files::ResourceFiles;
 use anyhow::Result;
+use git_version::git_version;
 use log::warn;
 
 use printnanny_dash::config;
 
 include!(concat!(env!("OUT_DIR"), "/generated.rs"));
+const GIT_VERSION: &str = git_version!();
 
 #[actix_web::main]
 async fn main() -> Result<()> {
     env_logger::init();
 
     let config = config::PrintNannyDashConfig::new()?;
-    let server_address = config.server_addreess();
-    warn!("Starting server on {}", server_address);
+    warn!("Starting server on {}:{}", &config.host, &config.port);
+    warn!("Version: {}", GIT_VERSION);
     HttpServer::new(move || {
         let generated = generate();
         App::new().service(ResourceFiles::new("/", generated))
     })
     .workers(config.workers)
-    .bind(&server_address)?
+    .bind((config.host, config.port))?
     .run()
     .await?;
     Ok(())
