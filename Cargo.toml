@@ -13,6 +13,7 @@ actix = "0.13"
 actix-web = "4"
 actix-web-static-files = "4.0"
 figment = { version = "0.10", features = ["env", "json", "toml"] }
+git-version = "0.3.5"               # Compile the git version (tag name, or hash otherwise) and dirty state into your program.
 static-files = "0.2.1"
 env_logger = "0.9"              # A logging implementation for `log` which is configured via an environment variable. 
 log = "0.4"                  # A lightweight logging facade for Rust                # Additional utilities for working with Tokio. 

@@ -6,6 +6,7 @@ use log::warn;
 use printnanny_dash::config;
 
 include!(concat!(env!("OUT_DIR"), "/generated.rs"));
+const GIT_VERSION: &str = git_version!();
 
 #[actix_web::main]
 async fn main() -> Result<()> {
@@ -13,6 +14,7 @@ async fn main() -> Result<()> {
 
     let config = config::PrintNannyDashConfig::new()?;
     warn!("Starting server on {}:{}", &config.host, &config.port);
+    warn!("Version: {}", GIT_VERSION);
     HttpServer::new(move || {
         let generated = generate();
         App::new().service(ResourceFiles::new("/", generated))
