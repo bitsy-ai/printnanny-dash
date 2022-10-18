@@ -7,8 +7,9 @@ import { ConnectionStatus } from "@/types";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
@@ -18,7 +19,7 @@ export const useNatsStore = defineStore({
 
   state: () => ({
     natsConnection: undefined as NatsConnection | undefined,
-    status: ConnectionStatus.ConnectionNotStarted
+    status: ConnectionStatus.ConnectionNotStarted,
   }),
 
   actions: {
@@ -41,10 +42,13 @@ export const useNatsStore = defineStore({
         );
         if (natsConnection) {
           console.log(`Initialized NATs connection to ${servers}`);
-          this.$patch({ natsConnection, status: ConnectionStatus.ConnectionReady });
+          this.$patch({
+            natsConnection,
+            status: ConnectionStatus.ConnectionReady,
+          });
           return true;
         }
-        this.$patch({ status: ConnectionStatus.ConnectionError })
+        this.$patch({ status: ConnectionStatus.ConnectionError });
         return false;
       } else {
         return true;

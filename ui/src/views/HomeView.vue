@@ -132,17 +132,20 @@ import { ConnectionStatus, SystemdUnitStatus } from "@/types";
 const widgets = useWidgetStore();
 const nats = useNatsStore();
 
-nats.$subscribe((mutation: any, state: any) => {
-  if (mutation.payload.natsConnection && mutation.payload.natsConnection !== undefined){
+nats.$subscribe((mutation: any, _state: any) => {
+  if (
+    mutation.payload.natsConnection &&
+    mutation.payload.natsConnection !== undefined
+  ) {
     widgets.loadEnabledServices();
-  } else if (mutation.payload.status == ConnectionStatus.ConnectionError){
-    const items = widgets.items.map(i =>{
+  } else if (mutation.payload.status == ConnectionStatus.ConnectionError) {
+    const items = widgets.items.map((i) => {
       i.status = SystemdUnitStatus.Error;
-      return i
+      return i;
     });
-    widgets.$patch({ items })
+    widgets.$patch({ items });
   }
-})
+});
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";

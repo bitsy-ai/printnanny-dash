@@ -8,7 +8,7 @@ export enum SystemdUnitStatus {
   Active = "active",
   Inactive = "inactive",
   Unknown = "unknown",
-  Error = "error"
+  Error = "error",
 }
 
 export enum ConnectionStatus {

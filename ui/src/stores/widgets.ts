@@ -18,7 +18,7 @@ import {
   type NatsResponse,
   type SystemctlCommandResponse,
   type SystemctlCommandRequest,
-  type UiStickyAlert
+  type UiStickyAlert,
 } from "@/types";
 import { handleError } from "@/utils";
 import { useAlertStore } from "./alerts";
@@ -309,7 +309,6 @@ export const useWidgetStore = defineStore({
     },
     async enableService(item: WidgetItem) {
       const natsStore = useNatsStore();
-      const alertStore = useAlertStore();
 
       if (natsStore.natsConnection === undefined) {
         console.warn("enableService called before NATS connection initialized");

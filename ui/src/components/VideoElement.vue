@@ -1,18 +1,7 @@
 <script setup lang="ts">
 import { useVideoStore, VIDEO_STREAMS } from "@/stores/video";
-import { ConnectionStatus } from "@/types";
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-  ListboxLabel,
-} from "@headlessui/vue";
-import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
-import TextSpinner from "@/components/TextSpinner.vue";
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
-
 
 const store = useVideoStore();
 store.subscribeQcDataframes();
@@ -21,10 +10,11 @@ function selectStream(idx: number) {
   store.$patch({ selectedVideoStream: idx });
 }
 
-async function startStream(){
-  await store.toggleVideoPlayer().catch((e) => handleError("Failed to start stream", e))
+async function startStream() {
+  await store
+    .toggleVideoPlayer()
+    .catch((e) => handleError("Failed to start stream", e));
 }
-
 </script>
 
 <template>
@@ -62,7 +52,7 @@ async function startStream(){
         aria-placeholder="Video stream is loading"
         poster="@/assets/video-paused.svg"
       />
-      
+
       <VideoStatus />
     </div>
   </div>
