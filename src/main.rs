@@ -12,14 +12,13 @@ async fn main() -> Result<()> {
     env_logger::init();
 
     let config = config::PrintNannyDashConfig::new()?;
-    let server_address = config.server_addreess();
-    warn!("Starting server on {}", server_address);
+    warn!("Starting server on {}:{}", &config.host, &config.port);
     HttpServer::new(move || {
         let generated = generate();
         App::new().service(ResourceFiles::new("/", generated))
     })
     .workers(config.workers)
-    .bind(&server_address)?
+    .bind((config.host, config.port))?
     .run()
     .await?;
     Ok(())
