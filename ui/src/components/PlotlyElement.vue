@@ -154,7 +154,7 @@ store.$subscribe(() => {
       opacity: 0.3,
     },
     mode: "lines+markers",
-    name: "Defect: Layer Warping",
+    name: "Defect: Adhesion",
   } as Plotly.PlotData;
 
   const spaghettiPlot = {
@@ -167,7 +167,7 @@ store.$subscribe(() => {
       opacity: 0.3,
     },
     mode: "lines+markers",
-    name: "Defect: Spaghetti/Adhesion",
+    name: "Defect: Spaghetti",
   } as Plotly.PlotData;
 
   const plots = [nozzlePlot, printPlot, raftPlot, adhesionPlot, spaghettiPlot];

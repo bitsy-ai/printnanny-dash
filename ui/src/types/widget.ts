@@ -1,4 +1,4 @@
-import type { SystemdUnitStatus } from "./events";
+import type { SystemdUnitStatus } from "./nats";
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
