@@ -132,11 +132,15 @@ import { ConnectionStatus, SystemdUnitStatus } from "@/types";
 const widgets = useWidgetStore();
 const nats = useNatsStore();
 
-nats.$subscribe((mutation: any, _state: any) => {
+widgets.loadEnabledServices();
+
+nats.$subscribe((mutation: any, state: any) => {
+  console.log("mutation, state", mutation, state);
   if (
     mutation.payload.natsConnection &&
     mutation.payload.natsConnection !== undefined
   ) {
+    console.log("loading widgets")
     widgets.loadEnabledServices();
   } else if (mutation.payload.status == ConnectionStatus.ConnectionError) {
     const items = widgets.items.map((i) => {
