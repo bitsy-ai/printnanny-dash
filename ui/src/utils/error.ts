@@ -1,4 +1,3 @@
-import { useEventStore } from "@/stores/events";
 import { useAlertStore } from "@/stores/alerts";
 import type { UiStickyAlert, AlertAction } from "@/types";
 
@@ -40,7 +39,7 @@ function alertMessage(header: string, message: string) {
     actions,
     error: undefined,
   };
-  const store = useEventStore();
+  const store = useAlertStore();
   store.pushAlert(alert);
 }
 

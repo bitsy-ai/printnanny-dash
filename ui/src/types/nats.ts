@@ -1,7 +1,7 @@
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
   SystemctlCommand = "pi.command.systemctl",
-  Config = "pi.config",
+  Config = "pi.command.config",
 }
 
 export enum SystemdUnitStatus {

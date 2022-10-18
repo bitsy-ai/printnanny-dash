@@ -4,9 +4,9 @@
 <script setup lang="ts">
 import * as Plotly from "plotly.js-dist-min";
 import { v4 as uuidv4 } from "uuid";
-import { useEventStore } from "@/stores/events";
+import { useVideoStore } from "@/stores/video";
 import { onMounted } from "vue";
-const store = useEventStore();
+const store = useVideoStore();
 
 const props = defineProps({
   plotId: {

@@ -48,8 +48,8 @@ export const VIDEO_STREAMS: Array<VideoStream> = [
   },
 ];
 
-export const useEventStore = defineStore({
-  id: "events",
+export const useVideoStore = defineStore({
+  id: "videos",
   state: () => ({
     df: [] as Array<QcDataframeRow>,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
@@ -205,9 +205,9 @@ export const useEventStore = defineStore({
       })(sub);
     },
 
-    async startStreams() {
+    async startStream() {
       this.$patch({
-        status: ConnectionStatus.ConnectionStreamLoading,
+        status: ConnectionStatus.ConnectionLoading
       });
 
       const natsStore = useNatsStore();
@@ -240,7 +240,7 @@ export const useEventStore = defineStore({
         })
         .catch((e) => handleError("Command Failed", e));
       console.log(`NATS response:`, res);
-      this.$patch({ status: ConnectionStatus.ConnectionStreamReady });
+      // this.$patch({ status: ConnectionStatus.ConnectionStreamReady });
     },
 
     async reset() {

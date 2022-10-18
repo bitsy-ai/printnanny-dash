@@ -1,5 +1,4 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { SystemdUnitStatus, WidgetCategory, type UiStickyAlert } from "@/types";
 import type { WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
@@ -12,12 +11,17 @@ import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
 import { useNatsStore } from "./nats";
 import {
   NatsSubjectPattern,
-  type NatsRequest,
   SystemctlCommand,
+  SystemdUnitStatus,
+  WidgetCategory,
+  type NatsRequest,
   type NatsResponse,
+  type SystemctlCommandResponse,
+  type SystemctlCommandRequest,
+  type UiStickyAlert
 } from "@/types";
 import { handleError } from "@/utils";
-import { useEventStore } from "./events";
+import { useAlertStore } from "./alerts";
 
 const DEFAULT_NATS_TIMEOUT = 6000;
 
@@ -164,9 +168,9 @@ export const useWidgetStore = defineStore({
         service: "",
         command: SystemctlCommand.ListEnabled,
         subject: NatsSubjectPattern.SystemctlCommand,
-      } as NatsRequest;
+      } as SystemctlCommandRequest;
 
-      const requestCodec = JSONCodec<NatsRequest>();
+      const requestCodec = JSONCodec<SystemctlCommandRequest>();
 
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
@@ -178,7 +182,7 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const responseCodec = JSONCodec<NatsResponse>();
+        const responseCodec = JSONCodec<SystemctlCommandResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
         this.$patch({ serviceStatus: res.data });
@@ -202,13 +206,13 @@ export const useWidgetStore = defineStore({
         return;
       }
       const natsClient = toRaw(natsStore.natsConnection);
-      const requestCodec = JSONCodec<NatsRequest>();
+      const requestCodec = JSONCodec<SystemctlCommandRequest>();
 
       const req = {
         service: item.service,
         command: SystemctlCommand.Status,
         subject: NatsSubjectPattern.SystemctlCommand,
-      } as NatsRequest;
+      } as SystemctlCommandRequest;
 
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
@@ -220,7 +224,7 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const responseCodec = JSONCodec<NatsResponse>();
+        const responseCodec = JSONCodec<SystemctlCommandResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.debug(`${item.name} status:`, res);
         const activeState = res.data["ActiveState"];
@@ -240,6 +244,7 @@ export const useWidgetStore = defineStore({
 
     async startService(item: WidgetItem) {
       const natsStore = useNatsStore();
+      const alertStore = useAlertStore();
       if (natsStore.natsConnection === undefined) {
         console.warn("startService called before NATS connection initialized");
         return;
@@ -261,17 +266,18 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const eventStore = useEventStore();
         const successAlert: UiStickyAlert = {
           message: `${item.service} will start automatically.`,
           header: `Enabled ${item.service}`,
           actions: [],
         };
-        eventStore.pushAlert(successAlert);
+        alertStore.pushAlert(successAlert);
       }
     },
     async stopService(item: WidgetItem) {
       const natsStore = useNatsStore();
+      const alertStore = useAlertStore();
+
       if (natsStore.natsConnection === undefined) {
         console.warn("stopService called before NATS connection initialized");
         return;
@@ -293,17 +299,17 @@ export const useWidgetStore = defineStore({
         });
 
       if (resMsg) {
-        const eventStore = useEventStore();
         const successAlert: UiStickyAlert = {
           message: `${item.service} will no longer start automatically.`,
           header: `Disabled ${item.service}`,
           actions: [],
         };
-        eventStore.pushAlert(successAlert);
+        alertStore.pushAlert(successAlert);
       }
     },
     async enableService(item: WidgetItem) {
       const natsStore = useNatsStore();
+      const alertStore = useAlertStore();
 
       if (natsStore.natsConnection === undefined) {
         console.warn("enableService called before NATS connection initialized");
