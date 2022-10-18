@@ -135,7 +135,7 @@ const nats = useNatsStore();
 nats.$subscribe((mutation: any, state: any) => {
   if (mutation.payload.natsConnection && mutation.payload.natsConnection !== undefined){
     widgets.loadEnabledServices();
-  } else if (mutation.status == ConnectionStatus.ConnectionError){
+  } else if (mutation.payload.status == ConnectionStatus.ConnectionError){
     const items = widgets.items.map(i =>{
       i.status = SystemdUnitStatus.Error;
       return i
