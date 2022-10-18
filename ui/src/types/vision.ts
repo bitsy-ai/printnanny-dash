@@ -9,6 +9,7 @@ export interface VideoStream {
   cover: string;
   name: string;
   description: string;
+  udp_port: number;
 }
 
 export interface QcDataframeRow {

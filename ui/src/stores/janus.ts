@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { type JanusStream, ConnectionStatus } from "@/types";
+import { type JanusStream, ConnectionStatus, type VideoStream, type JanusMedia } from "@/types";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
@@ -28,6 +28,17 @@ export const useJanusStore = defineStore({
   }),
 
   actions: {
+    selectJanusStreamByPort(stream: VideoStream) {
+      const janusStream = this.streamList.find((el: JanusStream) => {
+        const ports = el.media.map((m: JanusMedia) => m.port);
+        return ports.includes(stream.udp_port);
+      });
+      if (janusStream === undefined) {
+        throw Error("Stream not found in janus.plugin.streaming.jcfg")
+      }
+      this.$patch({ selectedStream: janusStream });
+
+    },
     stopAllStreams() {
       const videoEl = document.getElementById(
         "janus-video"

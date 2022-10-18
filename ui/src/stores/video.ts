@@ -31,6 +31,7 @@ export const VIDEO_STREAMS: Array<VideoStream> = [
     cover: VideoPaused,
     name: "Camera: /dev/video0",
     description: "",
+    udp_port: 20002
   },
   {
     src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
@@ -38,6 +39,8 @@ export const VIDEO_STREAMS: Array<VideoStream> = [
     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_1.png",
     name: "Demo Video #1",
     description: "",
+    udp_port: 20001
+
   },
   {
     src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
@@ -45,6 +48,7 @@ export const VIDEO_STREAMS: Array<VideoStream> = [
     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_2.png",
     name: "Demo Video #2",
     description: "",
+    udp_port: 20001
   },
 ];
 
@@ -211,12 +215,16 @@ export const useVideoStore = defineStore({
       });
 
       const natsStore = useNatsStore();
+      const janusStore = useJanusStore();
+
+      const selectedStream = this.videoStreams[this.selectedVideoStream];
+      await janusStore.connectJanus();
+      janusStore.selectJanusStreamByPort(selectedStream);
+
       const natsClient = toRaw(natsStore.natsConnection);
       const jsonCodec = JSONCodec<PiConfigRequest>();
 
       // apply any video stream configuration changes
-
-      const selectedStream = this.videoStreams[this.selectedVideoStream];
       const cmdRequest: SystemctlCommandRequest = {
         subject: NatsSubjectPattern.SystemctlCommand,
         service: "printnanny-vision.servie",
@@ -228,19 +236,21 @@ export const useVideoStore = defineStore({
           vision: {
             video_src: selectedStream.src,
             video_src_type: selectedStream.src_type,
+            udp_port: selectedStream.udp_port
           },
         }),
         post_save: [cmdRequest],
         pre_save: [],
       };
-      console.log("Publishing NATS request:", natsRequest);
+      console.debug("Publishing NATS request:", natsRequest);
       const res = await natsClient
         ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
           timeout: 8000,
         })
         .catch((e) => handleError("Command Failed", e));
-      console.log(`NATS response:`, res);
-      // this.$patch({ status: ConnectionStatus.ConnectionStreamReady });
+      console.debug(`NATS response:`, res);
+      janusStore.startJanusStream();
+
     },
 
     async reset() {

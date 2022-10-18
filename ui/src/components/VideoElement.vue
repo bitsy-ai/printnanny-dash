@@ -11,6 +11,7 @@ import {
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import TextSpinner from "@/components/TextSpinner.vue";
 import VideoStatus from "@/components/status/VideoStatus.vue";
+import { handleError } from "@/utils";
 
 
 const store = useVideoStore();
@@ -18,6 +19,10 @@ store.subscribeQcDataframes();
 
 function selectStream(idx: number) {
   store.$patch({ selectedVideoStream: idx });
+}
+
+async function startStream(){
+  await store.startStream().catch((e) => handleError("Failed to start stream", e))
 }
 
 </script>
@@ -50,7 +55,7 @@ function selectStream(idx: number) {
       </h3>
 
       <video
-        @click="store.startStream()"
+        @click="startStream"
         id="janus-video"
         muted
         class="cursor-pointer aspect-video rounded-md h-80 mx-auto my-4 border-1 border-dashed border-gray-200 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg"
