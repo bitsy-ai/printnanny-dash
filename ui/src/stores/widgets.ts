@@ -226,7 +226,7 @@ export const useWidgetStore = defineStore({
       if (resMsg) {
         const responseCodec = JSONCodec<SystemctlCommandResponse>();
         const res = responseCodec.decode(resMsg.data);
-        console.debug(`${item.name} status:`, res);
+        console.log(`${item.name} status:`, res);
         const activeState = res.data["ActiveState"];
         switch (activeState) {
           case "active":
