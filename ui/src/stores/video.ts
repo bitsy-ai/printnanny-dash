@@ -219,7 +219,6 @@ export const useVideoStore = defineStore({
       const selectedStream = this.videoStreams[this.selectedVideoStream];
       console.log("Attempting to start stream: ", selectedStream);
 
-
       await janusStore.connectJanus();
       janusStore.selectJanusStreamByPort(selectedStream);
 
@@ -254,11 +253,10 @@ export const useVideoStore = defineStore({
       janusStore.startJanusStream();
     },
 
-
     async stopStream() {
       this.$patch({
         status: ConnectionStatus.ConnectionClosing,
-        playingVideoStream: undefined
+        playingVideoStream: undefined,
       });
 
       console.log("Attempting to stop all active streams");
@@ -273,7 +271,6 @@ export const useVideoStore = defineStore({
         subject: NatsSubjectPattern.SystemctlCommand,
         service: "printnanny-vision.service",
         command: SystemctlCommand.Stop,
-
       };
       const jsonCodec = JSONCodec<SystemctlCommandRequest>();
 
@@ -286,10 +283,7 @@ export const useVideoStore = defineStore({
       this.$patch({
         status: ConnectionStatus.ConnectionNotStarted,
       });
-
     },
-
-
 
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
@@ -300,7 +294,6 @@ export const useVideoStore = defineStore({
         this.$patch({ playingVideoStream: selectedVideoStream });
         await this.startStream();
       }
-
     },
   },
 });

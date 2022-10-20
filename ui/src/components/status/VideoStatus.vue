@@ -30,7 +30,7 @@
           >Click video player ☝️ to start the selected stream</span
         >
       </div>
-  
+
       <div
         class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
         v-else-if="store.status == ConnectionStatus.ConnectionReady"

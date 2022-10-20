@@ -15,8 +15,9 @@ const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+  }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -104,7 +105,7 @@ export const useJanusStore = defineStore({
       console.log("Fetched detailed stream info", streamList);
 
       this.$patch({
-        streamList
+        streamList,
       });
 
       janusStreamingPluginHandle.once(Janode.EVENT.HANDLE_DETACHED, () => {
@@ -149,7 +150,8 @@ export const useJanusStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${janusStreamingPluginHandle.name
+            `${
+              janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -159,7 +161,7 @@ export const useJanusStore = defineStore({
         janusWsConnection,
         janusSession,
         janusStreamingPluginHandle,
-      })
+      });
       if (streamList.length > 0 && this.selectedStream == undefined) {
         console.log("Setting selected stream to:", streamList[0]);
         this.$patch({ selectedStream: streamList[0] });
@@ -262,9 +264,9 @@ export const useJanusStore = defineStore({
 
       videoEl.srcObject = mediaStream;
       console.log("Setting videoEl mediastream", videoEl, mediaStream);
-      videoStore.$patch({ status: ConnectionStatus.ConnectionReady })
+      videoStore.$patch({ status: ConnectionStatus.ConnectionReady });
       videoEl.play().catch((e: any) => {
-        console.error("Error setting video player.play()", e)
+        console.error("Error setting video player.play()", e);
       });
     },
     async startJanusStream() {
