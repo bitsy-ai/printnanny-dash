@@ -9,14 +9,14 @@ import {
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
+import { useVideoStore } from "./video";
 
 const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -152,8 +152,7 @@ export const useJanusStore = defineStore({
         StreamingPlugin.EVENT.STREAMING_STATUS,
         (evtdata: any) => {
           console.log(
-            `${
-              janusStreamingPluginHandle.name
+            `${janusStreamingPluginHandle.name
             } streaming handle event status ${JSON.stringify(evtdata)}`
           );
         }
@@ -218,12 +217,12 @@ export const useJanusStore = defineStore({
           this.closePC();
         }
       };
+
       pc.ontrack = (event) => {
         console.log("pc.ontrack", event);
 
         event.track.onunmute = (evt) => {
           console.log("track.onunmute", evt);
-          /* TODO set srcObject in this callback */
         };
         event.track.onmute = (evt) => {
           console.log("track.onmute", evt);
@@ -252,11 +251,15 @@ export const useJanusStore = defineStore({
       const videoEl = document.getElementById(
         "janus-video"
       ) as HTMLVideoElement;
+
       if (videoEl == null) {
         console.warn("Failed to get #janus-video element");
       }
+      const videoStore = useVideoStore();
+
       videoEl.srcObject = mediaStream;
       console.log("Setting videoEl mediastream", videoEl, mediaStream);
+      videoStore.$patch({ status: ConnectionStatus.ConnectionReady })
       videoEl.play();
     },
     async startJanusStream() {

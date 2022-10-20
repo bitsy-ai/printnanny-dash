@@ -17,7 +17,7 @@
         v-else-if="store.status == ConnectionStatus.ConnectionNotStarted"
       >
         <div
-          class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+          class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
           aria-hidden="true"
         ></div>
         <span class="text-grey-600"
