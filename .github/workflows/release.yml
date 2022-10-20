@@ -82,6 +82,7 @@ jobs:
           cd ui && npm install && npm run build
       - run: tools/ci/build.bash $(which cross) ${{ matrix.target }} RELEASE
       - run: |
+          chmod +x target/${{ matrix.target }}/release/${{ env.BIN }}
           tar -zcvf ${{ env.TAR }}-${{ matrix.target }}.tar.gz --directory=target/${{ matrix.target }}/release ${{ env.BIN }}
           sha256sum ${{ env.TAR }}-${{ matrix.target }}.tar.gz > ${{ env.TAR }}-${{ matrix.target }}.tar.gz.sha256
       - name: Release
