@@ -14,16 +14,23 @@
       </div>
       <div
         class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
+        v-else-if="store.status == ConnectionStatus.ConnectionClosing"
+      >
+        <TextSpinner text="Stopping video stream" />
+      </div>
+      <div
+        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
         v-else-if="store.status == ConnectionStatus.ConnectionNotStarted"
       >
         <div
-          class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+          class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
           aria-hidden="true"
         ></div>
         <span class="text-grey-600"
           >Click video player ☝️ to start the selected stream</span
         >
       </div>
+
       <div
         class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
         v-else-if="store.status == ConnectionStatus.ConnectionReady"

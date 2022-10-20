@@ -16,6 +16,7 @@ export enum ConnectionStatus {
   ConnectionLoading,
   ConnectionReady,
   ConnectionError,
+  ConnectionClosing,
 }
 
 export enum SystemctlCommand {

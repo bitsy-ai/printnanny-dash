@@ -1,6 +1,7 @@
 export enum VideoSrcType {
-  Device = "device",
-  Uri = "uri",
+  Device = "Device",
+  Uri = "Uri",
+  File = "File",
 }
 
 export interface VideoStream {
@@ -29,5 +30,7 @@ export interface QcDataframeRow {
   spaghetti__count: number;
   spaghetti__std: number;
   detection_scores: number;
-  ts: number;
+  rt: number;
+  rt___max: number;
+  rt__min: number;
 }

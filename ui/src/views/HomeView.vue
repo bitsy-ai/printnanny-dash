@@ -140,7 +140,7 @@ nats.$subscribe((mutation: any, state: any) => {
     mutation.payload.natsConnection &&
     mutation.payload.natsConnection !== undefined
   ) {
-    console.log("loading widgets")
+    console.log("loading widgets");
     widgets.loadEnabledServices();
   } else if (mutation.payload.status == ConnectionStatus.ConnectionError) {
     const items = widgets.items.map((i) => {
