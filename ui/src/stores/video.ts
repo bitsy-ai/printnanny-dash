@@ -217,6 +217,9 @@ export const useVideoStore = defineStore({
       const janusStore = useJanusStore();
 
       const selectedStream = this.videoStreams[this.selectedVideoStream];
+      console.log("Attempting to start stream: ", selectedStream);
+
+
       await janusStore.connectJanus();
       janusStore.selectJanusStreamByPort(selectedStream);
 
@@ -251,20 +254,53 @@ export const useVideoStore = defineStore({
       janusStore.startJanusStream();
     },
 
-    async reset() {
+
+    async stopStream() {
+      this.$patch({
+        status: ConnectionStatus.ConnectionClosing,
+        playingVideoStream: undefined
+      });
+
+      console.log("Attempting to stop all active streams");
+      const natsStore = useNatsStore();
       const janusStore = useJanusStore();
-      this.$patch({ playingVideoStream: undefined });
-      janusStore.stopAllStreams();
-      this.$reset();
+      await janusStore.stopAllStreams().catch((e: any) => {
+        console.error("Error hanging up Janus connection:", e);
+      });
+      const natsClient = toRaw(natsStore.natsConnection);
+
+      const natsRequest: SystemctlCommandRequest = {
+        subject: NatsSubjectPattern.SystemctlCommand,
+        service: "printnanny-vision.service",
+        command: SystemctlCommand.Stop,
+
+      };
+      const jsonCodec = JSONCodec<SystemctlCommandRequest>();
+
+      const res = await natsClient
+        ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
+          timeout: 8000,
+        })
+        .catch((e) => handleError("Command Failed", e));
+      console.debug(`NATS response:`, res);
+      this.$patch({
+        status: ConnectionStatus.ConnectionNotStarted,
+      });
+
     },
+
+
 
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
       if (this.selectedVideoStream == this.playingVideoStream) {
-        return this.$reset();
+        return this.stopStream();
+      } else {
+        const selectedVideoStream = toRaw(this.selectedVideoStream);
+        this.$patch({ playingVideoStream: selectedVideoStream });
+        await this.startStream();
       }
-      this.$patch({ playingVideoStream: this.selectedVideoStream });
-      await this.startStream();
+
     },
   },
 });

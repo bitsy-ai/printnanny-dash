@@ -14,6 +14,12 @@
       </div>
       <div
         class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
+        v-else-if="store.status == ConnectionStatus.ConnectionClosing"
+      >
+        <TextSpinner text="Stopping video stream" />
+      </div>
+      <div
+        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
         v-else-if="store.status == ConnectionStatus.ConnectionNotStarted"
       >
         <div
@@ -24,6 +30,7 @@
           >Click video player ☝️ to start the selected stream</span
         >
       </div>
+  
       <div
         class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
         v-else-if="store.status == ConnectionStatus.ConnectionReady"

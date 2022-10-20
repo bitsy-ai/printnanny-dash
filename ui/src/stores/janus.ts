@@ -44,7 +44,7 @@ export const useJanusStore = defineStore({
       }
       this.$patch({ selectedStream: janusStream });
     },
-    stopAllStreams() {
+    async stopAllStreams() {
       const videoEl = document.getElementById(
         "janus-video"
       ) as HTMLVideoElement;
@@ -58,7 +58,7 @@ export const useJanusStore = defineStore({
           .forEach((stream) => stream.stop());
         videoEl.srcObject = null;
       }
-      // await eventsStore.publish_command(req);
+      this.$reset();
     },
     async connectJanus(): Promise<boolean> {
       const janusUri = getJanusUri();
@@ -104,10 +104,7 @@ export const useJanusStore = defineStore({
       console.log("Fetched detailed stream info", streamList);
 
       this.$patch({
-        streamList,
-        janusWsConnection,
-        janusSession,
-        janusStreamingPluginHandle,
+        streamList
       });
 
       janusStreamingPluginHandle.once(Janode.EVENT.HANDLE_DETACHED, () => {
@@ -157,6 +154,12 @@ export const useJanusStore = defineStore({
           );
         }
       );
+
+      this.$patch({
+        janusWsConnection,
+        janusSession,
+        janusStreamingPluginHandle,
+      })
       if (streamList.length > 0 && this.selectedStream == undefined) {
         console.log("Setting selected stream to:", streamList[0]);
         this.$patch({ selectedStream: streamList[0] });
@@ -260,7 +263,9 @@ export const useJanusStore = defineStore({
       videoEl.srcObject = mediaStream;
       console.log("Setting videoEl mediastream", videoEl, mediaStream);
       videoStore.$patch({ status: ConnectionStatus.ConnectionReady })
-      videoEl.play();
+      videoEl.play().catch((e: any) => {
+        console.error("Error setting video player.play()", e)
+      });
     },
     async startJanusStream() {
       if (this.selectedStream == undefined) {
