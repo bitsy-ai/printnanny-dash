@@ -7,9 +7,12 @@ Wants=network-online.target
 Type=simple
 SyslogIdentifier=printnanny-vision
 RuntimeDirectory=printnanny
-ExecStart=/bin/bash -c "echo 'Starting fake printnanny-vision.service'; while true; do echo 'fake printnanny-vision.service running' && sleep 30; done"
+Environment=RUST_LOG=info
+Environment=GST_PLUGIN_PATH=/home/leigh/projects/printnanny-gst-plugin/target/debug
+ExecStart=/home/leigh/.cargo/bin/cargo run --manifest-path=/home/leigh/projects/printnanny-gst-plugin/Cargo.toml --bin=printnanny-gst-pipeline -- -vv --config=/home/leigh/projects/printnanny-cli/env/Local.toml
 Restart=on-failure
 RestartSec=30
+User=leigh
 
 [Install]
 WantedBy=multi-user.target

@@ -62,7 +62,7 @@ export const useVideoStore = defineStore({
   }),
   getters: {
     meter_x(state): Array<number> {
-      return state.df.map((el) => el.ts);
+      return state.df.map((el) => el.rt);
     },
     meter_y_nozzle_mean(state): Array<number> {
       return state.df.map((el) => el.nozzle__mean);
@@ -226,7 +226,7 @@ export const useVideoStore = defineStore({
       // apply any video stream configuration changes
       const cmdRequest: SystemctlCommandRequest = {
         subject: NatsSubjectPattern.SystemctlCommand,
-        service: "printnanny-vision.servie",
+        service: "printnanny-vision.service",
         command: SystemctlCommand.Restart,
       };
       const natsRequest: PiConfigRequest = {
