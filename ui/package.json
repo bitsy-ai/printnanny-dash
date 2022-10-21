@@ -28,7 +28,8 @@
     "uuid": "^9.0.0",
     "vee-validate": "^4.7.0",
     "vue": "^3.2.38",
-    "vue-router": "^4.1.5"
+    "vue-router": "^4.1.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

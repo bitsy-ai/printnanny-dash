@@ -11,7 +11,7 @@
           PrintNanny Cloud
         </h2>
         <div
-          class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
+          class="rounded-lg border-4 border-dashed border-gray-200"
         >
           <CloudAccountSettings />
         </div>

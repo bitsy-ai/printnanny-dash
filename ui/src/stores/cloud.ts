@@ -6,6 +6,7 @@ import { ApiConfig } from "@/utils/api";
 import type { UiStickyAlert, AlertAction } from "@/types";
 import { useRouter } from "vue-router";
 import { useAlertStore } from "./alerts";
+import { handleError } from "@/utils";
 
 const accountsApi = api.AccountsApiFactory(ApiConfig);
 
@@ -22,6 +23,13 @@ export const useCloudStore = defineStore({
     isAuthenticated: (state) => state.user !== undefined,
   },
   actions: {
+    async twoFactorStage1(email: String): Promise<boolean> {
+      const req = { email } as api.EmailAuthRequest;
+      const res = await accountsApi.accounts2faAuthEmailCreate(req).catch((e) => handleError("Error", e));
+      console.log("accounts2faAuthEmailCreate response: ", res);
+      return res !== undefined && res.status == 200
+    },
+
     async fetchUser() {
       const userData = await accountsApi.accountsUserRetrieve().catch((e) => {
         console.warn(e);

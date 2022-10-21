@@ -124,12 +124,8 @@ import NatsConnectionStatus from "@/components/status/NatsConnectionStatus.vue";
 import StickyAlerts from "./components/StickyAlerts.vue";
 import FooterNav from "@/components/FooterNav.vue";
 import routes from "@/router/routes";
-import { useCloudStore } from "@/stores/cloud";
 
 const router = useRouter();
-
-const cloudStore = useCloudStore();
-cloudStore.fetchUser();
 
 const externalLinks = [
   { name: "Update System", href: "/update/" },
