@@ -2,12 +2,10 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import * as api from "printnanny-api-client";
 
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import { ApiConfig } from "@/utils/api";
 import type { UiStickyAlert, AlertAction } from "@/types";
 import { useRouter } from "vue-router";
 import { useAlertStore } from "./alerts";
 import { handleError } from "@/utils";
-
 
 export const useCloudStore = defineStore({
   id: "cloud",
@@ -20,7 +18,7 @@ export const useCloudStore = defineStore({
     token: undefined as string | undefined,
     apiConfig: new api.Configuration({
       basePath: import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL,
-    })
+    }),
   }),
   getters: {
     isAuthenticated: (state) => state.user !== undefined,
@@ -30,22 +28,26 @@ export const useCloudStore = defineStore({
       const accountsApi = api.AccountsApiFactory(this.apiConfig);
 
       const req = { email } as api.EmailAuthRequest;
-      const res = await accountsApi.accounts2faAuthEmailCreate(req).catch((e) => handleError("Error", e));
+      const res = await accountsApi
+        .accounts2faAuthEmailCreate(req)
+        .catch((e) => handleError("Error", e));
       console.debug("accounts2faAuthEmailCreate response: ", res);
-      return res !== undefined && res.status == 200
+      return res !== undefined && res.status == 200;
     },
 
     async twoFactorStage2(email: String, token: String): Promise<boolean> {
       const accountsApi = api.AccountsApiFactory(this.apiConfig);
 
       const req = { email, token } as api.CallbackTokenAuthRequest;
-      const res = await accountsApi.accounts2faAuthTokenCreate(req).catch((e) => {
-        if (e.response.status === 400) {
-          handleError("Incorrect code", e)
-        } else {
-          handleError("Error", e)
-        }
-      });
+      const res = await accountsApi
+        .accounts2faAuthTokenCreate(req)
+        .catch((e) => {
+          if (e.response.status === 400) {
+            handleError("Incorrect code", e);
+          } else {
+            handleError("Error", e);
+          }
+        });
       console.debug("accounts2faAuthTokenCreate response: ", res);
       const ok = res !== undefined && res.status === 200;
       if (ok) {
@@ -53,16 +55,14 @@ export const useCloudStore = defineStore({
         const apiConfig = new api.Configuration({
           basePath: import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL,
           baseOptions: {
-            headers:
-              { Authorization: `Bearer ${token}` }
-          }
+            headers: { Authorization: `Bearer ${token}` },
+          },
         });
 
-        this.$patch({ token, apiConfig })
+        this.$patch({ token, apiConfig });
       }
-      return ok
+      return ok;
     },
-
 
     async fetchUser() {
       const accountsApi = api.AccountsApiFactory(this.apiConfig);
@@ -78,14 +78,13 @@ export const useCloudStore = defineStore({
         return userData.data;
       } else {
         const alertStore = useAlertStore();
-        const router = useRouter();
 
         const actions = [
           {
             color: "red",
             text: "Connect Account",
             routeName: "Settings",
-            onClick: () => { },
+            onClick: () => {},
           },
         ] as Array<AlertAction>;
         const alert = {
