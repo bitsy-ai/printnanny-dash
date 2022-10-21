@@ -3,7 +3,6 @@ import * as api from "printnanny-api-client";
 
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert, AlertAction } from "@/types";
-import { useRouter } from "vue-router";
 import { useAlertStore } from "./alerts";
 import { handleError } from "@/utils";
 
@@ -84,7 +83,7 @@ export const useCloudStore = defineStore({
             color: "red",
             text: "Connect Account",
             routeName: "Settings",
-            onClick: () => {},
+            onClick: () => { },
           },
         ] as Array<AlertAction>;
         const alert = {
