@@ -40,8 +40,8 @@ export const useCloudStore = defineStore({
           {
             color: "red",
             text: "Connect Account",
-            routeName: "settings",
-            onClick: () => {},
+            routeName: "Settings",
+            onClick: () => { },
           },
         ] as Array<AlertAction>;
         const alert = {

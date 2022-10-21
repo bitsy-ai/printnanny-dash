@@ -65,7 +65,20 @@
               <BellIcon class="h-6 w-6" aria-hidden="true" />
             </button>
             -->
+            <router-link 
+              :to="{name: 'Settings'}"
+              :class="[
+                  router.currentRoute.value.name == 'Settings'
+                    ? 'border-indigo-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                  'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium mr-4',
+                ]"
+            >
+              <Cog6ToothIcon class="h-6 w-6" />
+            </router-link>
+
             <NatsConnectionStatus />
+
           </div>
         </div>
       </div>
@@ -105,6 +118,7 @@ import {
   XMarkIcon,
   ArrowUpRightIcon,
 } from "@heroicons/vue/24/outline";
+import {   Cog6ToothIcon } from "@heroicons/vue/24/solid";
 import { useRouter, RouterLink, RouterView } from "vue-router";
 import NatsConnectionStatus from "@/components/status/NatsConnectionStatus.vue";
 import StickyAlerts from "./components/StickyAlerts.vue";
@@ -128,11 +142,13 @@ const externalLinks = [
 
 const navigation = computed(() =>
   routes.map((r) => {
-    return {
-      name: r.name,
-      href: r.path,
-      current: router.currentRoute.value.name == r.name,
-    };
-  })
+    if (r.navbar){
+      return {
+        name: r.name,
+        href: r.path,
+        current: router.currentRoute.value.name == r.name,
+      };
+    }
+  }).filter(el => el !== undefined)
 );
 </script>

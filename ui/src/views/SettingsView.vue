@@ -10,5 +10,5 @@
 </template>
 
 <script setup lang="ts">
-const pageTitle = "Settings";
+const pageTitle = "⚙️ Settings";
 </script>
