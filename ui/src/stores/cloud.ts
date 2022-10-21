@@ -8,7 +8,6 @@ import { useRouter } from "vue-router";
 import { useAlertStore } from "./alerts";
 import { handleError } from "@/utils";
 
-const accountsApi = api.AccountsApiFactory(ApiConfig);
 
 export const useCloudStore = defineStore({
   id: "cloud",
@@ -18,19 +17,56 @@ export const useCloudStore = defineStore({
   },
   state: () => ({
     user: undefined as api.User | undefined,
+    token: undefined as string | undefined,
+    apiConfig: new api.Configuration({
+      basePath: import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL,
+    })
   }),
   getters: {
     isAuthenticated: (state) => state.user !== undefined,
   },
   actions: {
     async twoFactorStage1(email: String): Promise<boolean> {
+      const accountsApi = api.AccountsApiFactory(this.apiConfig);
+
       const req = { email } as api.EmailAuthRequest;
       const res = await accountsApi.accounts2faAuthEmailCreate(req).catch((e) => handleError("Error", e));
-      console.log("accounts2faAuthEmailCreate response: ", res);
+      console.debug("accounts2faAuthEmailCreate response: ", res);
       return res !== undefined && res.status == 200
     },
 
+    async twoFactorStage2(email: String, token: String): Promise<boolean> {
+      const accountsApi = api.AccountsApiFactory(this.apiConfig);
+
+      const req = { email, token } as api.CallbackTokenAuthRequest;
+      const res = await accountsApi.accounts2faAuthTokenCreate(req).catch((e) => {
+        if (e.response.status === 400) {
+          handleError("Incorrect code", e)
+        } else {
+          handleError("Error", e)
+        }
+      });
+      console.debug("accounts2faAuthTokenCreate response: ", res);
+      const ok = res !== undefined && res.status === 200;
+      if (ok) {
+        const token = res.data.token;
+        const apiConfig = new api.Configuration({
+          basePath: import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL,
+          baseOptions: {
+            headers:
+              { Authorization: `Bearer ${token}` }
+          }
+        });
+
+        this.$patch({ token, apiConfig })
+      }
+      return ok
+    },
+
+
     async fetchUser() {
+      const accountsApi = api.AccountsApiFactory(this.apiConfig);
+
       const userData = await accountsApi.accountsUserRetrieve().catch((e) => {
         console.warn(e);
       });
