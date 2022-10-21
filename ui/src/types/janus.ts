@@ -10,15 +10,11 @@ export interface JanusMedia {
   type: string;
 }
 
-export interface JanusStreamMetadata {
-  path: string;
-}
 export interface JanusStream {
   description: string;
   enabled: boolean;
   id: number;
   media: Array<JanusMedia>;
-  metadata: JanusStreamMetadata;
   name: string;
   type: string;
   viewers: number;
