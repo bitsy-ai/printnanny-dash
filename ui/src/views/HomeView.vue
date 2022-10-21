@@ -127,12 +127,16 @@ import WidgetElement from "@/components/WidgetElement.vue";
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import { useWidgetStore } from "@/stores/widgets";
 import { useNatsStore } from "@/stores/nats";
+import { useCloudStore } from "@/stores/cloud";
+
 import { ConnectionStatus, SystemdUnitStatus } from "@/types";
 
 const widgets = useWidgetStore();
 const nats = useNatsStore();
+const cloud = useCloudStore();
 
 widgets.loadEnabledServices();
+cloud.fetchUser();
 
 nats.$subscribe((mutation: any, state: any) => {
   console.log("mutation, state", mutation, state);
