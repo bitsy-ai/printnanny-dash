@@ -4,6 +4,7 @@ export interface AlertAction {
   color: string;
   text: string;
   onClick: () => void;
+  routeName?: string;
 }
 
 export interface UiStickyAlert {

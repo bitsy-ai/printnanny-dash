@@ -14,7 +14,10 @@
         :message="alert.message"
         :actions="alert.actions"
       >
-        <template v-if="alert.error" #icon>
+        <template v-if="alert.icon" #icon>
+          <component :is="alert.icon" class="h-6 w-6 text-red-400" />
+        </template>
+        <template v-else-if="alert.error" #icon>
           <ExclamationTriangleIcon class="h-6 w-6 text-red-400" />
         </template>
       </SimpleAlert>

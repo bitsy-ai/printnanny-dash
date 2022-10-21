@@ -1,8 +1,11 @@
 import * as api from "printnanny-api-client";
 
-console.log("Configuring PrintNanny Cloud api url: ", import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL);
+console.log(
+  "Configuring PrintNanny Cloud api url: ",
+  import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL
+);
 const ApiConfig = new api.Configuration({
-  basePath: import.meta.env.VITE_PRINTNANNY_API_URL,
+  basePath: import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL,
   baseOptions: {
     xsrfCookieName: "csrftoken",
     xsrfHeaderName: "X-CSRFTOKEN",
@@ -10,4 +13,4 @@ const ApiConfig = new api.Configuration({
   },
 });
 
-export { ApiConfig }
+export { ApiConfig };
