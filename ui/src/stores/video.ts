@@ -10,7 +10,7 @@ import {
   type QcDataframeRow,
   type UiStickyAlert,
   type SystemctlCommandRequest,
-  type PiConfigRequest,
+  type GstPipelineConfigRequest,
   type VideoStream,
 } from "@/types";
 import { handleError } from "@/utils";
@@ -223,7 +223,7 @@ export const useVideoStore = defineStore({
       janusStore.selectJanusStreamByPort(selectedStream);
 
       const natsClient = toRaw(natsStore.natsConnection);
-      const jsonCodec = JSONCodec<PiConfigRequest>();
+      const jsonCodec = JSONCodec<GstPipelineConfigRequest>();
 
       // apply any video stream configuration changes
       const cmdRequest: SystemctlCommandRequest = {
@@ -231,14 +231,12 @@ export const useVideoStore = defineStore({
         service: "printnanny-vision.service",
         command: SystemctlCommand.Restart,
       };
-      const natsRequest: PiConfigRequest = {
+      const natsRequest: GstPipelineConfigRequest = {
         subject: NatsSubjectPattern.Config,
         json: JSON.stringify({
-          vision: {
-            video_src: selectedStream.src,
-            video_src_type: selectedStream.src_type,
-            udp_port: selectedStream.udp_port,
-          },
+          video_src: selectedStream.src,
+          video_src_type: selectedStream.src_type,
+          udp_port: selectedStream.udp_port,
         }),
         post_save: [cmdRequest],
         pre_save: [],
