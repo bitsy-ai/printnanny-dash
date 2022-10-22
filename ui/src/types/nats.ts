@@ -48,21 +48,21 @@ export interface SystemctlCommandResponse {
   data: { [key: string]: any };
 }
 
-export interface PiConfigRequest {
+export interface GstPipelineConfigRequest {
   subject: string;
   json: string; //
   pre_save: Array<SystemctlCommandRequest>;
   post_save: Array<SystemctlCommandRequest>;
 }
 
-export interface PiConfigResponse {
+export interface GstPipelineConfigResponse {
   subject: string;
   status: ResponseStatus;
-  request?: PiConfigRequest;
+  request?: GstPipelineConfigRequest;
   detail: string;
   pre_save: Array<SystemctlCommandResponse>;
   post_save: Array<SystemctlCommandResponse>;
 }
 
-export type NatsRequest = SystemctlCommandRequest | PiConfigRequest;
-export type NatsResponse = SystemctlCommandResponse | PiConfigResponse;
+export type NatsRequest = SystemctlCommandRequest | GstPipelineConfigRequest;
+export type NatsResponse = SystemctlCommandResponse | GstPipelineConfigResponse;
