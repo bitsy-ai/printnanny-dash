@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import * as api from "printnanny-api-client";
+import posthog from "posthog-js";
 
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert, AlertAction } from "@/types";
@@ -74,6 +75,10 @@ export const useCloudStore = defineStore({
         this.$patch({
           user: userData.data,
         });
+        posthog.identify(
+          `${userData.data.id}` // distinct_id for user
+        );
+        posthog.people.set({ email: userData.data.email });
         return userData.data;
       } else {
         const alertStore = useAlertStore();
@@ -83,7 +88,7 @@ export const useCloudStore = defineStore({
             color: "red",
             text: "Connect Account",
             routeName: "Settings",
-            onClick: () => { },
+            onClick: () => {},
           },
         ] as Array<AlertAction>;
         const alert = {
