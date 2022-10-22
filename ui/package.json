@@ -24,6 +24,7 @@
     "pinia": "^2.0.21",
     "pinia-plugin-persistedstate": "^2.3.0",
     "plotly.js-dist-min": "^2.15.0",
+    "posthog-js": "^1.33.0",
     "printnanny-api-client": "^0.108.0",
     "uuid": "^9.0.0",
     "vee-validate": "^4.7.0",
