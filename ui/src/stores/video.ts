@@ -236,7 +236,7 @@ export const useVideoStore = defineStore({
         json: JSON.stringify({
           video_src: selectedStream.src,
           video_src_type: selectedStream.src_type,
-          udp_port: selectedStream.udp_port,
+          video_udp_port: selectedStream.udp_port,
         }),
         post_save: [cmdRequest],
         pre_save: [],
