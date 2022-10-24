@@ -82,20 +82,6 @@ export const useVideoStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
-    // async connect(): Promise<void> {
-    //   const natsStore = useNatsStore();
-    //   const janusStore = useJanusStore();
-
-    //   this.$patch({ status: ConnectionStatus.ConnectionLoading });
-    //   const natsOk = await natsStore.connect();
-    //   const janusOk = await janusStore.connectJanus();
-    //   if (natsOk && janusOk) {
-    //     this.$patch({ status: ConnectionStatus.ConnectionReady });
-    //   } else {
-    //     this.$patch({ status: ConnectionStatus.ConnectionError });
-    //   }
-    // },
-
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       const alertStore = useAlertStore();
 
@@ -107,23 +93,23 @@ export const useVideoStore = defineStore({
       }
       const nozzleDetected = atLeast(
         df.map((el) => el.nozzle__count > 0),
-        0.3
+        0.1
       );
       const printDetected = atLeast(
         df.map((el) => el.print__count > 0),
-        0.4
+        0.1
       );
       const raftDetected = atLeast(
         df.map((el) => el.raft__count > 0),
-        0.3
+        0.1
       );
       const adhesionFailureDetected = atLeast(
         df.map((el) => el.adhesion__count > 0),
-        0.15
+        0.1
       );
       const spaghettiFailureDetected = atLeast(
         df.map((el) => el.spaghetti__count > 0),
-        0.15
+        0.1
       );
       if (!nozzleDetected) {
         const alert: UiStickyAlert = {
@@ -152,7 +138,8 @@ export const useVideoStore = defineStore({
           header: "Calibration: Raft",
           icon: ExclamationTriangleIcon,
           color: "indigo",
-          message: "Calibration needed to improve raft detection.",
+          message:
+            "Calibration needed to improve raft detection. Ignore this message if you are not printing with a raft.",
           actions: [],
         };
         alertStore.pushAlert(alert);
@@ -163,7 +150,7 @@ export const useVideoStore = defineStore({
           header: "Failure: Bed Adhesion",
           icon: ExclamationTriangleIcon,
           color: "red",
-          message: "Critical failures detected. Pausing 3D print job.",
+          message: "Critical failures detected..",
           actions: [],
         };
         alertStore.pushAlert(alert);
@@ -173,7 +160,7 @@ export const useVideoStore = defineStore({
           header: "Failure: Spaghetti",
           icon: ExclamationTriangleIcon,
           color: "red",
-          message: "Critical failures detected. Pausing 3D print job.",
+          message: "Critical failures detected.",
           actions: [],
         };
         alertStore.pushAlert(alert);
@@ -226,31 +213,28 @@ export const useVideoStore = defineStore({
       const jsonCodec = JSONCodec<GstPipelineConfigRequest>();
 
       // apply any video stream configuration changes
-      //   const cmdRequest: SystemctlCommandRequest = {
-      //     subject: NatsSubjectPattern.SystemctlCommand,
-      //     service: "printnanny-vision.service",
-      //     command: SystemctlCommand.Restart,
-      //   };
-      //   const natsRequest: GstPipelineConfigRequest = {
-      //     subject: NatsSubjectPattern.Config,
-      //     json: JSON.stringify({
-      //       video_src: selectedStream.src,
-      //       video_src_type: selectedStream.src_type,
-      //       video_udp_port: selectedStream.udp_port,
-      //     }),
-      //     post_save: [cmdRequest],
-      //     pre_save: [],
-      //   };
-      //   console.debug("Publishing NATS request:", natsRequest);
-      //   const res = await natsClient
-      //     ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
-      //       timeout: 8000,
-      //     })
-      //     .catch((e) => handleError("Command Failed", e));
-      //   console.debug(`NATS response:`, res);
+      const cmdRequest: SystemctlCommandRequest = {
+        subject: NatsSubjectPattern.SystemctlCommand,
+        service: "printnanny-vision.service",
+        command: SystemctlCommand.Restart,
+      };
+      const natsRequest: GstPipelineConfigRequest = {
+        subject: NatsSubjectPattern.Config,
+        json: JSON.stringify({
+          video_src: selectedStream.src,
+          video_src_type: selectedStream.src_type,
+        }),
+        post_save: [cmdRequest],
+        pre_save: [],
+      };
+      console.debug("Publishing NATS request:", natsRequest);
+      const res = await natsClient
+        ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
+          timeout: 8000,
+        })
+        .catch((e) => handleError("Command Failed", e));
+      console.debug(`NATS response:`, res);
       janusStore.startJanusStream();
-      // },
-
     },
     async stopStream() {
       this.$patch({
