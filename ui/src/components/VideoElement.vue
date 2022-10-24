@@ -48,6 +48,7 @@ async function startStream() {
         @click="startStream"
         id="janus-video"
         muted
+        controls
         class="cursor-pointer aspect-video rounded-md h-80 mx-auto my-4 border-1 border-dashed border-gray-200 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg"
         aria-placeholder="Video stream is loading"
         poster="@/assets/video-paused.svg"

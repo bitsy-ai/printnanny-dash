@@ -28,6 +28,7 @@
     "printnanny-api-client": "^0.108.0",
     "uuid": "^9.0.0",
     "vee-validate": "^4.7.0",
+    "video-stream-merger": "^4.0.1",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5",
     "yup": "^0.32.11"

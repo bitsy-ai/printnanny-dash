@@ -1,5 +1,7 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
+import { VideoStreamMerger } from 'video-stream-merger'
+
 import {
   type JanusStream,
   ConnectionStatus,
@@ -11,13 +13,13 @@ import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
 import { useVideoStore } from "./video";
 
+
 const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -36,13 +38,14 @@ export const useJanusStore = defineStore({
 
   actions: {
     selectJanusStreamByPort(stream: VideoStream) {
-      const janusStream = this.streamList.find((el: JanusStream) => {
-        const ports = el.media.map((m: JanusMedia) => m.port);
-        return ports.includes(stream.udp_port);
-      });
-      if (janusStream === undefined) {
-        throw Error("Stream not found in janus.plugin.streaming.jcfg");
-      }
+      const janusStream = this.streamList[0];
+      // const janusStream = this.streamList.find((el: JanusStream) => {
+      //   const ports = el.media.map((m: JanusMedia) => m.port);
+      //   return ports.includes(stream.udp_port);
+      // });
+      // if (janusStream === undefined) {
+      //   throw Error("Stream not found in janus.plugin.streaming.jcfg");
+      // }
       this.$patch({ selectedStream: janusStream });
     },
     async stopAllStreams() {
@@ -128,6 +131,11 @@ export const useJanusStore = defineStore({
       janusStreamingPluginHandle.on(
         Janode.EVENT.HANDLE_DETACHED,
         (evtdata: any) => console.log("detached event", evtdata)
+      );
+
+      janusStreamingPluginHandle.on(
+        Janode.EVENT.HANDLE_MEDIA,
+        (evtdata: any) => console.log("media event", evtdata)
       );
 
       janusWsConnection.on(Janode.EVENT.CONNECTION_CLOSED, () => {
@@ -221,6 +229,11 @@ export const useJanusStore = defineStore({
         }
       };
 
+      const merger = new VideoStreamMerger({ fps: 15 });
+      merger.start()
+      this.setVideoElement(merger.result);
+
+
       pc.ontrack = (event) => {
         console.log("pc.ontrack", event);
 
@@ -234,8 +247,37 @@ export const useJanusStore = defineStore({
           console.log("track.onended", evt);
         };
 
-        const remoteStream = event.streams[0];
-        this.setVideoElement(remoteStream);
+        const videoStream = new MediaStream([event.track]);
+
+        // const overlayStream = event.streams[1];
+        let opts = {
+          x: 0, // position of the topleft corner
+          y: 0,
+          width: merger.width,
+          height: merger.height,
+          muted: true, // we don't want sound from the screen (if there is any)
+          index: 0
+        };
+        const streamIdx = parseInt(event.transceiver.mid?.replace("v", "") || "0");
+        if (event.transceiver.mid !== undefined) {
+          opts.index = parseInt(event.transceiver.mid?.replace("v", "") as string);
+        }
+        console.log("Merging stream with opts:", opts, event);
+        merger.addStream(videoStream, opts);
+
+        // const streamOpts = {
+        //   x: 0, // position of the topleft corner
+        //   y: 0,
+        //   width: merger.width,
+        //   height: merger.height,
+        //   mute: true, // we don't want sound from the screen (if there is any),
+        //   index: parseInt(event.track.id.replace("janusv", "")),
+        //   draw: null,
+        //   audioEffect: null
+        // };
+        // console.log("Adding stream with opts", event.streams[0], streamOpts)
+        // merger.addStream(event.streams[0], streamOpts);
+
       };
 
       this.$patch({ janusPeerConnection: pc });
