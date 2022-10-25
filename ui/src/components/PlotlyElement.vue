@@ -16,7 +16,7 @@ const props = defineProps({
 });
 
 const plotlyLayout = {
-  title: "PrintNanny Observations",
+  title: "PrintNanny Vision",
   margin: {
     l: 50,
     r: 50,

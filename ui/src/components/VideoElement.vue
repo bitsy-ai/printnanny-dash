@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useVideoStore, VIDEO_STREAMS } from "@/stores/video";
+import { onBeforeRouteLeave } from 'vue-router'
+
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
 
@@ -15,6 +17,10 @@ async function startStream() {
     .toggleVideoPlayer()
     .catch((e) => handleError("Failed to start stream", e));
 }
+
+onBeforeRouteLeave((to, from) => {
+  return store.stopStream()
+})
 </script>
 
 <template>

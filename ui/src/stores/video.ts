@@ -55,6 +55,7 @@ export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
     df: [] as Array<QcDataframeRow>,
+    natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
     videoStreams: VIDEO_STREAMS,
     selectedVideoStream: 0,
@@ -183,6 +184,7 @@ export const useVideoStore = defineStore({
 
       // this subscription listens for all Pi events (scoped to NATs account/org)
       const sub = natsClient.subscribe(NatsSubjectPattern.DataframeRow);
+      this.$patch({ natsSubscription: sub });
       (async (sub: Subscription) => {
         console.log(`Subscribed to ${sub.getSubject()} events...`);
         for await (const msg of sub) {
@@ -263,8 +265,14 @@ export const useVideoStore = defineStore({
         })
         .catch((e) => handleError("Command Failed", e));
       console.debug(`NATS response:`, res);
+      console.log("Draining NATS subscription")
+      if (this.natsSubscription !== undefined) {
+        const sub = toRaw(this.natsSubscription);
+        await sub.drain();
+      }
       this.$patch({
         status: ConnectionStatus.ConnectionNotStarted,
+        df: []
       });
     },
     async toggleVideoPlayer() {
