@@ -2,7 +2,7 @@ export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
   SystemctlCommand = "pi.command.systemctl",
   GstPipelineConfig = "pi.command.gst_pipeline_config",
-  ConnectCloudAccount = "pi.command.connect_cloud_connect",
+  ConnectCloudAccount = "pi.command.connect_cloud_account",
 }
 
 export enum SystemdUnitStatus {
