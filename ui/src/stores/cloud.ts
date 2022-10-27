@@ -6,6 +6,7 @@ import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert, AlertAction } from "@/types";
 import { useAlertStore } from "./alerts";
 import { handleError } from "@/utils";
+import { useNatsStore } from "./nats";
 
 export const useCloudStore = defineStore({
   id: "cloud",
@@ -35,7 +36,7 @@ export const useCloudStore = defineStore({
       return res !== undefined && res.status == 200;
     },
 
-    async twoFactorStage2(email: String, token: String): Promise<boolean> {
+    async twoFactorStage2(email: string, token: string): Promise<boolean> {
       const accountsApi = api.AccountsApiFactory(this.apiConfig);
 
       const req = { email, token } as api.CallbackTokenAuthRequest;
@@ -59,7 +60,14 @@ export const useCloudStore = defineStore({
           },
         });
 
+        console.log(`Success! Authenticated as ${email}`);
         this.$patch({ token, apiConfig });
+        const natsStore = useNatsStore();
+        await natsStore.connectCloudAccount(
+          email,
+          token,
+          import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL
+        );
       }
       return ok;
     },

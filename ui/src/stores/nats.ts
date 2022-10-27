@@ -1,9 +1,13 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
+import { toRaw } from "vue";
 
-import type { NatsConnection } from "nats.ws";
-import { connect } from "nats.ws";
+import { connect, JSONCodec, type NatsConnection } from "nats.ws";
 import { handleError } from "@/utils";
-import { ConnectionStatus } from "@/types";
+import {
+  ConnectionStatus,
+  NatsSubjectPattern,
+  type ConnectCloudAccountRequest,
+} from "@/types";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
@@ -53,6 +57,33 @@ export const useNatsStore = defineStore({
       } else {
         return true;
       }
+    },
+    async connectCloudAccount(
+      email: string,
+      api_token: string,
+      api_uri: string
+    ) {
+      const req: ConnectCloudAccountRequest = {
+        subject: NatsSubjectPattern.ConnectCloudAccount,
+        email,
+        api_token,
+        api_uri,
+      };
+
+      const natsClient = toRaw(this.natsConnection);
+      const jsonCodec = JSONCodec<ConnectCloudAccountRequest>();
+
+      console.debug("Publishing NATS ConnectCloudAccountRequest:", req);
+      const res = await natsClient
+        ?.request(req.subject, jsonCodec.encode(req), {
+          timeout: 8000,
+        })
+        .catch((e) => handleError("Failed to sync with PrintNanny Cloud", e));
+
+      console.log(
+        "Success! Synced with PrintNanny Cloud. ConnectCloudAccountResponse:",
+        res
+      );
     },
   },
 });

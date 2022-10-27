@@ -221,7 +221,7 @@ export const useVideoStore = defineStore({
         command: SystemctlCommand.Restart,
       };
       const natsRequest: GstPipelineConfigRequest = {
-        subject: NatsSubjectPattern.Config,
+        subject: NatsSubjectPattern.GstPipelineConfig,
         json: JSON.stringify({
           video_src: selectedStream.src,
           video_src_type: selectedStream.src_type,
@@ -265,14 +265,14 @@ export const useVideoStore = defineStore({
         })
         .catch((e) => handleError("Command Failed", e));
       console.debug(`NATS response:`, res);
-      console.log("Draining NATS subscription")
+      console.log("Draining NATS subscription");
       if (this.natsSubscription !== undefined) {
         const sub = toRaw(this.natsSubscription);
         await sub.drain();
       }
       this.$patch({
         status: ConnectionStatus.ConnectionNotStarted,
-        df: []
+        df: [],
       });
     },
     async toggleVideoPlayer() {
