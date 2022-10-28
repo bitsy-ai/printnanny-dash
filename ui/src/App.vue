@@ -150,4 +150,12 @@ const navigation = computed(
       })
       .filter((el: any) => el !== undefined) as Array<NavItem>
 );
+
+// only enable tidio in production
+const tidioScript = import.meta.env.VITE_TIDIO_SCRIPT_URI;
+if (tidioScript !== undefined) {
+  const el = document.createElement("script");
+  el.setAttribute("src", tidioScript);
+  document.body.appendChild(el);
+}
 </script>
