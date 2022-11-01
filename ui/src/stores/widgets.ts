@@ -108,7 +108,7 @@ export const useWidgetStore = defineStore({
         menuItems: [
           {
             name: "How to Update PrintNanny OS",
-            href: "https://docs.printnanny.ai/docs/update-printnanny-os/",
+            href: "https://printnanny.ai/docs/docs/update-printnanny-os/",
           },
         ],
       } as WidgetItem,
@@ -125,7 +125,7 @@ export const useWidgetStore = defineStore({
         menuItems: [
           {
             name: "Quick Start",
-            href: "https://docs.printnanny.ai/docs/quick-start/configure-file-sync/",
+            href: "https://printnanny.ai/docs/docs/quick-start/configure-file-sync/",
           },
           { name: "Syncthing Docs", href: "https://docs.syncthing.net/" },
           { name: "Commmunity Forum", href: "https://forum.syncthing.net/" },

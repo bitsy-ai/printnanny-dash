@@ -19,11 +19,11 @@ const footerNavigation = {
   intro: [
     {
       name: "Install Guide",
-      href: "https://docs.printnanny.ai/docs/category/quick-start/",
+      href: "https://printnanny.ai/docs/docs/category/quick-start/",
     },
     {
       name: "Required Hardware",
-      href: "https://docs.printnanny.ai/docs/quick-start/hardware/",
+      href: "https://printnanny.ai/docs/docs/quick-start/hardware/",
     },
   ],
   documentation: [
@@ -31,7 +31,7 @@ const footerNavigation = {
     { name: "CLI Docs", href: import.meta.env.VITE_PRINTNANNY_CLI_DOCS_URL },
     {
       name: "Release History",
-      href: "https://docs.printnanny.ai/docs/release-history/",
+      href: "https://printnanny.ai/docs/docs/release-history/",
     },
     { name: "API Status", href: "/health" },
   ],
