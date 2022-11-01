@@ -132,7 +132,7 @@ const externalLinks = [
   { name: "PrintNanny Cloud", href: "https://printnanny.ai" },
   {
     name: "Documentation",
-    href: "https://docs.printnanny.ai/docs/category/quick-start/",
+    href: "https://printnanny.ai/docs/docs/category/quick-start/",
   },
 ];
 
