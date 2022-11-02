@@ -54,7 +54,7 @@ export const useWidgetStore = defineStore({
       {
         name: "Mainsail",
         href: "/mainsail/",
-        service: "mainsail.service",
+        service: "mainsail.target",
         logo: mainsailLogo,
         category: WidgetCategory.PrinterManagement,
         enabled: false,
@@ -87,7 +87,7 @@ export const useWidgetStore = defineStore({
       {
         name: "PrintNanny Cloud",
         href: "https://printnanny.ai/devices",
-        service: "printnanny-cloud.service",
+        service: "printnanny-cloud.target",
         logo: printNannyLogo,
         category: WidgetCategory.PrintNannyApps,
         enabled: false,
