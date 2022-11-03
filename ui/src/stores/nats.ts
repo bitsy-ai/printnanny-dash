@@ -75,7 +75,7 @@ export const useNatsStore = defineStore({
       console.debug("Publishing NATS ConnectCloudAccountRequest:", req);
       const res = await natsClient
         ?.request(req.subject, jsonCodec.encode(req), {
-          timeout: 60000, // 60 seconds
+          timeout: 120000, // 120 seconds
         })
         .catch((e) => handleError("Failed to sync with PrintNanny Cloud", e));
 
