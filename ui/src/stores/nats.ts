@@ -11,9 +11,8 @@ import {
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
@@ -76,7 +75,7 @@ export const useNatsStore = defineStore({
       console.debug("Publishing NATS ConnectCloudAccountRequest:", req);
       const res = await natsClient
         ?.request(req.subject, jsonCodec.encode(req), {
-          timeout: 8000,
+          timeout: 60000, // 60 seconds
         })
         .catch((e) => handleError("Failed to sync with PrintNanny Cloud", e));
 
