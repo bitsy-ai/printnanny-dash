@@ -11,8 +11,9 @@ import {
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
