@@ -11,7 +11,7 @@ struct VersionData {
     printnanny_version: String,
 }
 
-#[get("/api/pi/version")]
+#[get("/printnanny/api/pi/version")]
 pub async fn get_version_data() -> impl Responder {
     let issue_content = fs::read_to_string("/etc/issue")
         .map(|data| data.trim().to_string())
