@@ -21,7 +21,8 @@ export default defineComponent({
     }
   },
   created() {
-    window.fetch('/api/pi/version')
+    const basePath = import.meta.env.VITE_BASE_URL;
+    window.fetch(`${basePath}api/pi/version`)
     .then(response => response.json())
     .then(data => {
       this.issue = data.issue
