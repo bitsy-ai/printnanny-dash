@@ -1,12 +1,12 @@
 <template>
-  <h3 class="text-lg font-bold text-gray-900 prose">PrintNanny Build Information (<span class="font-mono">/etc/issue</span>)</h3>
-  <pre class="mb-4 mx-4 bg-slate-200 p-2">{{ issue }}</pre>
+  <h3 class="text-lg font-bold text-gray-900 prose p-4">PrintNanny Build Information (<span class="font-mono">/etc/issue</span>)</h3>
+  <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{ issue }}</pre>
 
-  <h3 class="text-lg font-bold text-gray-900 prose">PrintNanny OS Version (<span class="font-mono">/etc/os_release</span>)</h3>
-  <pre class="mb-4 mx-4 bg-slate-200 p-2">{{ os_release }}</pre>
+  <h3 class="text-lg font-bold text-gray-900 prose p-4">PrintNanny OS Version (<span class="font-mono">/etc/os-release</span>)</h3>
+  <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{ os_release }}</pre>
 
-  <h3 class="text-lg font-bold text-gray-900 prose">PrintNanny CLI Version (<span class="font-mono">printnanny --version</span>)</h3>
-  <pre class="mb-4 mx-4 bg-slate-200 p-2">{{ printnanny_version }}</pre>
+  <h3 class="text-lg font-bold text-gray-900 prose p-4">PrintNanny CLI Version (<span class="font-mono">printnanny --version</span>)</h3>
+  <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{ printnanny_version }}</pre>
 </template>
 
 <script lang="ts">
