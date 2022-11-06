@@ -107,10 +107,12 @@ import { Field, Form, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { useCloudStore } from "@/stores/cloud";
 import TextSpinner from "@/components/TextSpinner.vue";
+import { useRouter } from "vue-router";
 
 const formStage = ref(1);
 const formEmail = ref("");
 const formLoading = ref(false);
+const router = useRouter();
 
 const cloud = useCloudStore();
 
@@ -126,7 +128,10 @@ async function submitStage2(values: any) {
   formLoading.value = true;
   const res = await cloud.twoFactorStage2(values.email, values.token);
   if (res) {
-    await cloud.fetchUser();
+    user = await cloud.fetchUser();
+    if (user !== undefined){
+      router.push({name: "Home"})
+    }
   }
 
   formLoading.value = false;
