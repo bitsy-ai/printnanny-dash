@@ -26,8 +26,8 @@
       :validation-schema="formSchema1"
       class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 mx-auto"
     >
-      <h2 class="text-xl font-bold text-gray-900 prose mb-4">
-        Connect Account
+      <h2 class="font-bold text-gray-900 prose text-gray-900 mb-4">
+        Log in with PrintNanny Cloud
       </h2>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -107,10 +107,12 @@ import { Field, Form, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { useCloudStore } from "@/stores/cloud";
 import TextSpinner from "@/components/TextSpinner.vue";
+import { useRouter } from "vue-router";
 
 const formStage = ref(1);
 const formEmail = ref("");
 const formLoading = ref(false);
+const router = useRouter();
 
 const cloud = useCloudStore();
 
@@ -126,7 +128,10 @@ async function submitStage2(values: any) {
   formLoading.value = true;
   const res = await cloud.twoFactorStage2(values.email, values.token);
   if (res) {
-    await cloud.fetchUser();
+    const user = await cloud.fetchUser();
+    if (user !== undefined) {
+      router.push({ name: "Home" });
+    }
   }
 
   formLoading.value = false;

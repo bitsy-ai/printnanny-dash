@@ -1,18 +1,14 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import * as api from "printnanny-api-client";
-import posthog from "posthog-js";
-
-import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import type { UiStickyAlert, AlertAction } from "@/types";
-import { useAlertStore } from "./alerts";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
+import { posthogIdentify } from "@/utils/posthog";
 
 export const useCloudStore = defineStore({
   id: "cloud",
   // persist option provided by: https://github.com/prazdevs/pinia-plugin-persistedstate
   persist: {
-    storage: sessionStorage,
+    storage: localStorage, // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
   },
   state: () => ({
     user: undefined as api.User | undefined,
@@ -83,29 +79,8 @@ export const useCloudStore = defineStore({
         this.$patch({
           user: userData.data,
         });
-        posthog.identify(
-          `${userData.data.id}` // distinct_id for user
-        );
-        posthog.people.set({ email: userData.data.email });
+        posthogIdentify(userData.data);
         return userData.data;
-      } else {
-        const alertStore = useAlertStore();
-
-        const actions = [
-          {
-            color: "red",
-            text: "Connect Account",
-            routeName: "Settings",
-            onClick: () => {},
-          },
-        ] as Array<AlertAction>;
-        const alert = {
-          header: "PrintNanny Cloud - Account Not Linked",
-          message: `Connect PrintNanny Cloud acccount to access ${window.location.host} from anywhere.`,
-          actions: actions,
-          icon: ExclamationTriangleIcon,
-        } as UiStickyAlert;
-        alertStore.pushAlert(alert);
       }
     },
   },
