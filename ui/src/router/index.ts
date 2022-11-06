@@ -17,6 +17,8 @@ router.afterEach((_to, _from) => {
 router.beforeEach(async (to, _from) => {
   const cloud = useCloudStore();
   await cloud.fetchUser();
+
+  // redirect unauthenticated users
   if (
     // make sure the user is authenticated before proceeding to dashboard
     !cloud.isAuthenticated &&
@@ -25,6 +27,11 @@ router.beforeEach(async (to, _from) => {
   ) {
     // redirect to login
     return { name: "login" };
+  }
+
+  // redirect authenticated users home
+  if (cloud.isAuthenticated && to.name == "login") {
+    return { name: "Home" }
   }
 });
 
