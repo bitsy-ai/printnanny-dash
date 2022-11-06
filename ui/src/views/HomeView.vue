@@ -126,7 +126,6 @@ import WidgetElement from "@/components/WidgetElement.vue";
 
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import { useWidgetStore } from "@/stores/widgets";
-import { useNatsStore } from "@/stores/nats";
 import { useCloudStore } from "@/stores/cloud";
 
 const widgets = useWidgetStore();

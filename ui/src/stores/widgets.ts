@@ -237,8 +237,8 @@ export const useWidgetStore = defineStore({
             item.status = SystemdUnitStatus.Unknown;
         }
         this.items[idx] = item;
+        return res;
       }
-      return resMsg;
     },
 
     async startService(item: WidgetItem) {
@@ -339,7 +339,7 @@ export const useWidgetStore = defineStore({
 
         await this.startService(item);
         await this.loadEnabledServices(natsClient);
-        await this.loadStatus(item, idx);
+        await this.loadStatus(item, idx, natsClient);
       }
     },
 
@@ -378,7 +378,7 @@ export const useWidgetStore = defineStore({
 
         await this.stopService(item);
         await this.loadEnabledServices(natsClient);
-        await this.loadStatus(item, idx);
+        await this.loadStatus(item, idx, natsClient);
       }
     },
   },
