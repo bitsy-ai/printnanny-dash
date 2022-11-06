@@ -129,10 +129,7 @@ import { useWidgetStore } from "@/stores/widgets";
 import { useNatsStore } from "@/stores/nats";
 import { useCloudStore } from "@/stores/cloud";
 
-import { ConnectionStatus, SystemdUnitStatus } from "@/types";
-
 const widgets = useWidgetStore();
-const nats = useNatsStore();
 const cloud = useCloudStore();
 
 cloud.fetchUser();

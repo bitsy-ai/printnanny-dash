@@ -12,8 +12,9 @@ import { useWidgetStore } from "./widgets";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
@@ -31,8 +32,8 @@ export const useNatsStore = defineStore({
       const widgets = useWidgetStore();
       return await Promise.all([
         widgets.loadEnabledServices(natsConnection),
-        widgets.loadStatuses(natsConnection)
-      ])
+        widgets.loadStatuses(natsConnection),
+      ]);
     },
     async connect(): Promise<boolean> {
       this.$patch({ status: ConnectionStatus.ConnectionLoading });

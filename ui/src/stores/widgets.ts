@@ -153,7 +153,9 @@ export const useWidgetStore = defineStore({
   },
 
   actions: {
-    async loadEnabledServices(natsClient: NatsConnection): Promise<NatsResponse | undefined> {
+    async loadEnabledServices(
+      natsClient: NatsConnection
+    ): Promise<NatsResponse | undefined> {
       const req = {
         service: "",
         command: SystemctlCommand.ListEnabled,
@@ -186,20 +188,19 @@ export const useWidgetStore = defineStore({
       }
     },
 
-    async loadStatuses(natsClient: NatsConnection): Promise<(NatsResponse | undefined)[]> {
-      return Promise.all(this.items.map(this.loadStatus))
+    async loadStatuses(
+      natsClient: NatsConnection
+    ): Promise<(NatsResponse | undefined)[]> {
+      return Promise.all(
+        this.items.map((item, idx) => this.loadStatus(item, idx, natsClient))
+      );
     },
 
     async loadStatus(
       item: WidgetItem,
-      idx: number
+      idx: number,
+      natsClient: NatsConnection
     ): Promise<NatsResponse | undefined> {
-      const natsStore = useNatsStore();
-      if (natsStore.natsConnection === undefined) {
-        console.warn("showStatus called before NATS connection initialized");
-        return;
-      }
-      const natsClient = toRaw(natsStore.natsConnection);
       const requestCodec = JSONCodec<SystemctlCommandRequest>();
 
       const req = {
@@ -230,11 +231,14 @@ export const useWidgetStore = defineStore({
             item.status = SystemdUnitStatus.Inactive;
             break;
           default:
-            console.warn(`${item.service} is in an unknown state: ${item.status}`)
+            console.warn(
+              `${item.service} is in an unknown state: ${item.status}`
+            );
             item.status = SystemdUnitStatus.Unknown;
         }
         this.items[idx] = item;
       }
+      return resMsg;
     },
 
     async startService(item: WidgetItem) {
