@@ -6,7 +6,7 @@ const TopBarRoutes = [
     path: "/",
     name: "Home",
     components: {
-      default: () => import("../views/HomeView.vue"),
+      default: () => import("@/views/HomeView.vue"),
       TopNav: TopNav,
     },
   },
@@ -14,7 +14,7 @@ const TopBarRoutes = [
     path: "/vision",
     name: "PrintNanny Vision",
     components: {
-      default: () => import("../views/VideoView.vue"),
+      default: () => import("@/views/VideoView.vue"),
       TopNav: TopNav,
     },
   },
@@ -25,14 +25,14 @@ const AllRoutes = [
     path: "/login",
     name: "login",
     components: {
-      default: () => import("../views/LoginView.vue"),
+      default: () => import("@/views/LoginView.vue"),
     },
   },
   {
     path: "/settings",
     name: "Settings",
     components: {
-      default: () => import("../views/SettingsView.vue"),
+      default: () => import("@/views/SettingsView.vue"),
       TopNav: TopNav,
     },
   },

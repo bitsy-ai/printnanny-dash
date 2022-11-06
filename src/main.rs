@@ -20,9 +20,9 @@ async fn main() -> Result<()> {
     warn!("Version: {}", GIT_VERSION);
     HttpServer::new(move || {
         let generated = generate();
-        App::new().
-            service(get_version_data::get_version_data).
-            service(ResourceFiles::new("/*", generated).resolve_not_found_to_root())
+        App::new()
+            .service(get_version_data::get_version_data)
+            .service(ResourceFiles::new("/*", generated).resolve_not_found_to_root())
     })
     .workers(config.workers)
     .bind((config.host, config.port))?
