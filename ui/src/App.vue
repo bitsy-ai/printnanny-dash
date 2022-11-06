@@ -1,11 +1,10 @@
 <template>
   <div class="h-full">
     <StickyAlerts />
-    <router-view class="view left-sidebar" name="TopNav">
-    </router-view>
+    <router-view class="view left-sidebar" name="TopNav"> </router-view>
     <router-view class="view main-content"></router-view>
     <router-view class="view right-sidebar" name="FooterNav">
-        <FooterNav />
+      <FooterNav />
     </router-view>
   </div>
 </template>

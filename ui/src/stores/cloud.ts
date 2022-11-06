@@ -1,10 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import * as api from "printnanny-api-client";
 import posthog from "posthog-js";
-
-import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import type { UiStickyAlert, AlertAction } from "@/types";
-import { useAlertStore } from "./alerts";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 
@@ -12,7 +8,7 @@ export const useCloudStore = defineStore({
   id: "cloud",
   // persist option provided by: https://github.com/prazdevs/pinia-plugin-persistedstate
   persist: {
-    storage: localStorage // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
+    storage: localStorage, // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
   },
   state: () => ({
     user: undefined as api.User | undefined,
