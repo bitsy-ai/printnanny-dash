@@ -31,7 +31,7 @@ router.beforeEach(async (to, _from) => {
 
   // redirect authenticated users home
   if (cloud.isAuthenticated && to.name == "login") {
-    return { name: "Home" }
+    return { name: "Home" };
   }
 });
 
