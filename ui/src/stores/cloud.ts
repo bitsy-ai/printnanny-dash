@@ -79,7 +79,7 @@ export const useCloudStore = defineStore({
         this.$patch({
           user: userData.data,
         });
-        posthogIdentify(userData.data)
+        posthogIdentify(userData.data);
         return userData.data;
       }
     },

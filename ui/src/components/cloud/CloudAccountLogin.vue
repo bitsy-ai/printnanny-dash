@@ -129,8 +129,8 @@ async function submitStage2(values: any) {
   const res = await cloud.twoFactorStage2(values.email, values.token);
   if (res) {
     const user = await cloud.fetchUser();
-    if (user !== undefined){
-      router.push({name: "Home"});
+    if (user !== undefined) {
+      router.push({ name: "Home" });
     }
   }
 
