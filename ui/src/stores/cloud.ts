@@ -88,24 +88,6 @@ export const useCloudStore = defineStore({
         );
         posthog.people.set({ email: userData.data.email });
         return userData.data;
-      } else {
-        const alertStore = useAlertStore();
-
-        const actions = [
-          {
-            color: "red",
-            text: "Connect Account",
-            routeName: "Settings",
-            onClick: () => { },
-          },
-        ] as Array<AlertAction>;
-        const alert = {
-          header: "PrintNanny Cloud - Account Not Linked",
-          message: `Connect PrintNanny Cloud acccount to access ${window.location.host} from anywhere.`,
-          actions: actions,
-          icon: ExclamationTriangleIcon,
-        } as UiStickyAlert;
-        alertStore.pushAlert(alert);
       }
     },
   },

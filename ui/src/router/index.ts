@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import routes from "./routes";
 import posthog from "posthog-js";
+import { useCloudStore } from "@/stores/cloud";
+import { AllRoutes } from "./routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: AllRoutes
 });
 
 router.afterEach((_to, _from) => {
@@ -12,5 +13,19 @@ router.afterEach((_to, _from) => {
   // send $pageview event
   posthog.capture("$pageview");
 });
+
+router.beforeEach(async (to, _from) => {
+  const cloud = useCloudStore();
+  await cloud.fetchUser();
+  if (
+    // make sure the user is authenticated before proceeding to dashboard
+    !cloud.isAuthenticated &&
+    // ❗️ Avoid an infinite redirect
+    to.name !== "login"
+  ) {
+    // redirect to login
+    return { name: "login" };
+  }
+})
 
 export default router;
