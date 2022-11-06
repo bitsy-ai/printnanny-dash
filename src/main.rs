@@ -22,7 +22,7 @@ async fn main() -> Result<()> {
         let generated = generate();
         App::new()
             .service(get_version_data::get_version_data)
-            .service(ResourceFiles::new("/printnanny/ui/*", generated).resolve_not_found_to_root())
+            .service(ResourceFiles::new("/*", generated))
     })
     .workers(config.workers)
     .bind((config.host, config.port))?

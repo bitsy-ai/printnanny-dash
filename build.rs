@@ -2,6 +2,7 @@ use static_files::NpmBuild;
 
 fn main() -> std::io::Result<()> {
     NpmBuild::new("./ui")
+        .change_detection()
         .install()
         .expect("Failed to run npm install")
         .run("build")

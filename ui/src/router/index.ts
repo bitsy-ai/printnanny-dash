@@ -4,7 +4,7 @@ import { useCloudStore } from "@/stores/cloud";
 import { AllRoutes } from "./routes";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_BASE_UI_URL),
+  history: createWebHistory('/'),
   routes: AllRoutes,
 });
 
