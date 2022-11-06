@@ -1,8 +1,8 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import * as api from "printnanny-api-client";
-import posthog from "posthog-js";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
+import { posthogIdentify } from "@/utils/posthog";
 
 export const useCloudStore = defineStore({
   id: "cloud",
@@ -79,10 +79,7 @@ export const useCloudStore = defineStore({
         this.$patch({
           user: userData.data,
         });
-        posthog.identify(
-          `${userData.data.id}` // distinct_id for user
-        );
-        posthog.people.set({ email: userData.data.email });
+        posthogIdentify(userData.data)
         return userData.data;
       }
     },

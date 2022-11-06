@@ -4,7 +4,7 @@ const TopBarRoutes = [
   {
     path: "/",
     name: "Home",
-    component: {
+    components: {
       default: () => import("../views/HomeView.vue"),
       TopNav: TopNav,
     },
@@ -12,7 +12,7 @@ const TopBarRoutes = [
   {
     path: "/vision",
     name: "PrintNanny Vision",
-    component: {
+    components: {
       default: () => import("../views/VideoView.vue"),
       TopNav: TopNav,
     },
@@ -30,7 +30,7 @@ const AllRoutes = [
   {
     path: "/settings",
     name: "Settings",
-    component: {
+    components: {
       default: () => import("../views/SettingsView.vue"),
       TopNav: TopNav,
     },
