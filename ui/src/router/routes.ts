@@ -1,4 +1,5 @@
 import TopNav from "@/components/nav/TopNav.vue";
+import type { RouteRecordRaw } from "vue-router";
 
 const TopBarRoutes = [
   {
@@ -35,6 +36,6 @@ const AllRoutes = [
       TopNav: TopNav,
     },
   },
-].concat(TopBarRoutes);
+].concat(TopBarRoutes) as RouteRecordRaw[];
 
 export { AllRoutes, TopBarRoutes };
