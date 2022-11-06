@@ -17,14 +17,14 @@ pub async fn get_version_data() -> impl Responder {
         .map(|data| data.trim().to_string())
         .unwrap_or_else(|err| {
             error!("could not open /etc/issue: {:?}", err);
-            return "could not load /etc/issue".to_string();
+            "could not load /etc/issue".to_string()
         });
 
     let os_release_content = fs::read_to_string("/etc/os-release")
         .map(|data| data.trim().to_string())
         .unwrap_or_else(|err| {
             error!("could not open /etc/os-release: {:?}", err);
-            return "could not load /etc/os-release".to_string();
+            "could not load /etc/os-release".to_string()
         });
 
     let printnanny_version_output = Command::new("printnanny")
@@ -33,14 +33,14 @@ pub async fn get_version_data() -> impl Responder {
         .map(|output| String::from_utf8(output.stdout))
         .unwrap_or_else(|err| {
             error!("could not invoke printnanny --version: {:?}", err);
-            return Ok("could not invoke printnanny --version".to_string());
+            Ok("could not invoke printnanny --version".to_string())
         })
         .unwrap_or_else(|err| {
             error!(
                 "bytes returned by printnanny --version were not UTF-8: {:?}",
                 err
             );
-            return "could not decode printnanny version output as UTF-8".to_string();
+            "could not decode printnanny version output as UTF-8".to_string()
         });
 
     web::Json(VersionData {
