@@ -2,7 +2,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import type { WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
-import { JSONCodec } from "nats.ws";
+import { JSONCodec, type NatsConnection } from "nats.ws";
 
 import ocotoprintLogo from "@/assets/logos/octoprint/octoprint_logo_rgb_250px.png";
 import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
@@ -153,17 +153,7 @@ export const useWidgetStore = defineStore({
   },
 
   actions: {
-    async loadEnabledServices(): Promise<NatsResponse | undefined> {
-      const natsStore = useNatsStore();
-
-      if (natsStore.natsConnection === undefined) {
-        console.warn(
-          "loadEnabledServices called before NATS connection initialized"
-        );
-        return;
-      }
-      const natsClient = toRaw(natsStore.natsConnection);
-
+    async loadEnabledServices(natsClient: NatsConnection): Promise<NatsResponse | undefined> {
       const req = {
         service: "",
         command: SystemctlCommand.ListEnabled,
@@ -194,6 +184,10 @@ export const useWidgetStore = defineStore({
         });
         return res;
       }
+    },
+
+    async loadStatuses(natsClient: NatsConnection): Promise<(NatsResponse | undefined)[]> {
+      return Promise.all(this.items.map(this.loadStatus))
     },
 
     async loadStatus(
@@ -236,6 +230,7 @@ export const useWidgetStore = defineStore({
             item.status = SystemdUnitStatus.Inactive;
             break;
           default:
+            console.warn(`${item.service} is in an unknown state: ${item.status}`)
             item.status = SystemdUnitStatus.Unknown;
         }
         this.items[idx] = item;
@@ -339,7 +334,7 @@ export const useWidgetStore = defineStore({
         const idx = this.items.findIndex((el) => el.service === item.service);
 
         await this.startService(item);
-        await this.loadEnabledServices();
+        await this.loadEnabledServices(natsClient);
         await this.loadStatus(item, idx);
       }
     },
@@ -378,7 +373,7 @@ export const useWidgetStore = defineStore({
         const idx = this.items.findIndex((el) => el.service === item.service);
 
         await this.stopService(item);
-        await this.loadEnabledServices();
+        await this.loadEnabledServices(natsClient);
         await this.loadStatus(item, idx);
       }
     },

@@ -8,12 +8,12 @@ import {
   NatsSubjectPattern,
   type ConnectCloudAccountRequest,
 } from "@/types";
+import { useWidgetStore } from "./widgets";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
@@ -27,6 +27,13 @@ export const useNatsStore = defineStore({
   }),
 
   actions: {
+    async onConnected(natsConnection: NatsConnection) {
+      const widgets = useWidgetStore();
+      return await Promise.all([
+        widgets.loadEnabledServices(natsConnection),
+        widgets.loadStatuses(natsConnection)
+      ])
+    },
     async connect(): Promise<boolean> {
       this.$patch({ status: ConnectionStatus.ConnectionLoading });
 
@@ -50,6 +57,7 @@ export const useNatsStore = defineStore({
             natsConnection,
             status: ConnectionStatus.ConnectionReady,
           });
+          await this.onConnected(natsConnection);
           return true;
         }
         this.$patch({ status: ConnectionStatus.ConnectionError });

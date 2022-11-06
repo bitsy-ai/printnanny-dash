@@ -135,25 +135,7 @@ const widgets = useWidgetStore();
 const nats = useNatsStore();
 const cloud = useCloudStore();
 
-widgets.loadEnabledServices();
 cloud.fetchUser();
-
-nats.$subscribe((mutation: any, state: any) => {
-  console.log("mutation, state", mutation, state);
-  if (
-    mutation.payload.natsConnection &&
-    mutation.payload.natsConnection !== undefined
-  ) {
-    console.log("loading widgets");
-    widgets.loadEnabledServices();
-  } else if (mutation.payload.status == ConnectionStatus.ConnectionError) {
-    const items = widgets.items.map((i) => {
-      i.status = SystemdUnitStatus.Error;
-      return i;
-    });
-    widgets.$patch({ items });
-  }
-});
 
 const pageTitle =
   "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";

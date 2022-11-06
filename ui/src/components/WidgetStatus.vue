@@ -56,7 +56,6 @@ import type { PropType } from "vue";
 import type { WidgetItem } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
 import { SystemdUnitStatus } from "@/types";
-import { useWidgetStore } from "@/stores/widgets";
 
 const props = defineProps({
   item: {
@@ -64,7 +63,4 @@ const props = defineProps({
     required: true,
   },
 });
-const store = useWidgetStore();
-const idx = store.items.findIndex((el) => el.service === props.item.service);
-store.loadStatus(props.item, idx);
 </script>
