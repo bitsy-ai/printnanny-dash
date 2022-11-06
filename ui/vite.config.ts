@@ -8,6 +8,10 @@ export default defineConfig(({ _command, mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
     plugins: [vue()],
+    build: {
+      sourcemap: true,
+      manifest: true
+    },
     server: {
       proxy: {
         "/ws": {
