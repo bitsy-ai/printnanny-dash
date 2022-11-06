@@ -57,7 +57,7 @@ import type { WidgetItem } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
 import { SystemdUnitStatus } from "@/types";
 
-const props = defineProps({
+defineProps({
   item: {
     type: Object as PropType<WidgetItem>,
     required: true,

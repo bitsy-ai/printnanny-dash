@@ -8,7 +8,7 @@ use std::process::Command;
 struct VersionData {
     issue: String,
     os_release: String,
-    printnanny_version: String,
+    printnanny_cli_version: String,
 }
 
 #[get("/printnanny/api/pi/version")]
@@ -46,6 +46,6 @@ pub async fn get_version_data() -> impl Responder {
     web::Json(VersionData {
         issue: issue_content,
         os_release: os_release_content,
-        printnanny_version: printnanny_version_output,
+        printnanny_cli_version: printnanny_version_output,
     })
 }

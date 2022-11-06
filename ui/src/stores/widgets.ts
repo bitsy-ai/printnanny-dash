@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import type { WidgetItem } from "@/types";
+import type { DeviceInfo, WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
 import { JSONCodec, type NatsConnection } from "nats.ws";
@@ -30,6 +30,7 @@ export const useWidgetStore = defineStore({
   state: () => ({
     enabledServices: {},
     serviceStatus: {},
+    deviceInfo: undefined as undefined | DeviceInfo,
     items: [
       {
         name: "OctoPrint",
@@ -153,6 +154,22 @@ export const useWidgetStore = defineStore({
   },
 
   actions: {
+    async loadDeviceInfo() {
+      const basePath = import.meta.env.VITE_BASE_API_URL;
+      const res = await window
+        .fetch(`${basePath}pi/version`)
+        .catch((e) => handleError("Failed to load device info", e));
+
+      const deviceInfo = await res?.json().catch((e) => {
+        console.error("Failed to parse JSON from response: ", res);
+        return handleError("Failed to parse json", e);
+      });
+
+      if (deviceInfo !== undefined) {
+        this.$patch({ deviceInfo: deviceInfo as DeviceInfo });
+      }
+    },
+
     async loadEnabledServices(
       natsClient: NatsConnection
     ): Promise<NatsResponse | undefined> {
