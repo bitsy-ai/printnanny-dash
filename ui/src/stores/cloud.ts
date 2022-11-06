@@ -12,7 +12,7 @@ export const useCloudStore = defineStore({
   id: "cloud",
   // persist option provided by: https://github.com/prazdevs/pinia-plugin-persistedstate
   persist: {
-    storage: sessionStorage,
+    storage: localStorage // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
   },
   state: () => ({
     user: undefined as api.User | undefined,
@@ -96,7 +96,7 @@ export const useCloudStore = defineStore({
             color: "red",
             text: "Connect Account",
             routeName: "Settings",
-            onClick: () => {},
+            onClick: () => { },
           },
         ] as Array<AlertAction>;
         const alert = {
