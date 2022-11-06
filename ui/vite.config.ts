@@ -10,15 +10,12 @@ export default defineConfig(({ _command, mode }) => {
     plugins: [vue()],
     build: {
       sourcemap: true,
-      manifest: true
+      manifest: true,
     },
     server: {
       proxy: {
-        "/ws": {
-          target: env.VITE_PRINTNANNY_EDGE_API_URL,
-          changeOrigin: true,
-          secure: false,
-          ws: true,
+        "/printnanny/api/": {
+          target: "http://localhost:8585",
         },
       },
     },

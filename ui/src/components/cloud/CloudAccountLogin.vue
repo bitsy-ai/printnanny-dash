@@ -1,8 +1,8 @@
 <template>
-  <div class="flex w-full p-2">
+  <div class="flex w-full">
     <div
       v-if="cloudStore.user !== undefined"
-      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 mx-auto"
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full md:w-1/2 mx-auto"
     >
       <h2 class="text-xl font-bold text-gray-900 prose mb-4">
         Account Information
@@ -24,7 +24,7 @@
       @submit="submitStage1"
       v-else-if="formStage == 1"
       :validation-schema="formSchema1"
-      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 mx-auto"
+      class="bg-white shadow-md rounded px-8 py-6 w-full md:w-1/2 mx-auto"
     >
       <h2 class="font-bold text-gray-900 prose text-gray-900 mb-4">
         Log in with PrintNanny Cloud

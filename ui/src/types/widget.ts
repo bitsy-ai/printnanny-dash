@@ -22,3 +22,9 @@ export interface WidgetItem {
   category: WidgetCategory;
   status: SystemdUnitStatus;
 }
+
+export interface DeviceInfo {
+  issue: string;
+  os_release: string;
+  printnanny_cli_version: string;
+}
