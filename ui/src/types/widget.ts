@@ -12,7 +12,6 @@ export interface WidgetMenuItem {
 }
 
 export interface WidgetItem {
-  enabled: boolean;
   name: string;
   href: string;
   logo: string;
@@ -21,6 +20,8 @@ export interface WidgetItem {
   service: string;
   category: WidgetCategory;
   status: SystemdUnitStatus;
+  loaded: boolean;
+  enabled?: boolean;
 }
 
 export interface DeviceInfo {

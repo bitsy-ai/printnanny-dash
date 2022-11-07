@@ -29,18 +29,18 @@ export const useWidgetStore = defineStore({
   id: "widgets",
   state: () => ({
     enabledServices: {},
-    serviceStatus: {},
     deviceInfo: undefined as undefined | DeviceInfo,
     items: [
       {
         name: "OctoPrint",
+        loaded: false,
         href: "/octoprint/",
         service: "octoprint.service",
         logo: ocotoprintLogo,
         description: "The snappy web interface for your 3D Printer",
         category: WidgetCategory.PrinterManagement,
         status: SystemdUnitStatus.Unknown,
-        enabled: false,
+        enabled: undefined,
         menuItems: [
           { name: "Documentation", href: "https://docs.octoprint.org" },
           { name: "Plugin Repo", href: "https://plugins.octoprint.org" },
@@ -55,10 +55,11 @@ export const useWidgetStore = defineStore({
       {
         name: "Mainsail",
         href: "/mainsail/",
+        loaded: false,
         service: "mainsail.target",
         logo: mainsailLogo,
         category: WidgetCategory.PrinterManagement,
-        enabled: false,
+        enabled: undefined,
         status: SystemdUnitStatus.Unknown,
         description:
           "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
@@ -75,11 +76,12 @@ export const useWidgetStore = defineStore({
 
       {
         name: "PrintNanny Vision",
+        loaded: false,
         href: "/vision/",
         service: "printnanny-vision.service",
         logo: printNannyLogo,
         category: WidgetCategory.PrintNannyApps,
-        enabled: false,
+        enabled: undefined,
         status: SystemdUnitStatus.Unknown,
         description:
           "The privacy-first defect and failure detection system. No internet connection required.",
@@ -87,11 +89,12 @@ export const useWidgetStore = defineStore({
       } as WidgetItem,
       {
         name: "PrintNanny Cloud",
+        loaded: false,
         href: "https://printnanny.ai/devices",
         service: "printnanny-cloud.target",
         logo: printNannyLogo,
         category: WidgetCategory.PrintNannyApps,
-        enabled: false,
+        enabled: undefined,
         status: SystemdUnitStatus.Unknown,
         description:
           "Get email notifications, view camera feed from anywhere, and sync settings with PrintNanny Cloud.",
@@ -99,11 +102,12 @@ export const useWidgetStore = defineStore({
       } as WidgetItem,
       {
         name: "OS Updates",
+        loaded: false,
         href: "/update/",
         service: "swupdate.service",
         logo: printNannyLogo,
         category: WidgetCategory.PrintNannyApps,
-        enabled: false,
+        enabled: undefined,
         status: SystemdUnitStatus.Unknown,
         description: "Update PrintNanny OS to the latest build.",
         menuItems: [
@@ -119,7 +123,7 @@ export const useWidgetStore = defineStore({
         logo: syncThingLogo,
         category: WidgetCategory.OtherApps,
         status: SystemdUnitStatus.Unknown,
-        enabled: false,
+        enabled: undefined,
         description:
           "Sync files between two or more computers. Like having a private Dropbox.",
         service: "syncthing.service",
@@ -194,11 +198,12 @@ export const useWidgetStore = defineStore({
         const responseCodec = JSONCodec<SystemctlCommandResponse>();
         const res = responseCodec.decode(resMsg.data);
         console.log("Enabled services:", res);
-        this.$patch({ serviceStatus: res.data });
-        // update item.enabled values
+        this.$patch({ enabledServices: res.data });
         this.items.map((el) => {
           if (el.service in res.data) {
             el.enabled = true;
+          } else {
+            el.enabled = false;
           }
         });
         return res;
@@ -242,18 +247,18 @@ export const useWidgetStore = defineStore({
         const activeState = res.data["ActiveState"];
         switch (activeState) {
           case "active":
-            item.status = SystemdUnitStatus.Active;
+            this.items[idx].status = SystemdUnitStatus.Active;
             break;
           case "inactive":
-            item.status = SystemdUnitStatus.Inactive;
+            this.items[idx].status = SystemdUnitStatus.Inactive;
             break;
           default:
             console.warn(
               `${item.service} is in an unknown state: ${item.status}`
             );
-            item.status = SystemdUnitStatus.Unknown;
+            this.items[idx].status = SystemdUnitStatus.Unknown;
         }
-        this.items[idx] = item;
+        this.items[idx].loaded = true;
         return res;
       }
     },
@@ -323,7 +328,7 @@ export const useWidgetStore = defineStore({
         alertStore.pushAlert(successAlert);
       }
     },
-    async enableService(item: WidgetItem) {
+    async enableService(item: WidgetItem, idx: number) {
       const natsStore = useNatsStore();
 
       if (natsStore.natsConnection === undefined) {
@@ -352,15 +357,13 @@ export const useWidgetStore = defineStore({
         const res = responseCodec.decode(resMsg.data);
         console.debug(`Successfully enabled ${item.service}`, res);
 
-        const idx = this.items.findIndex((el) => el.service === item.service);
-
         await this.startService(item);
         await this.loadEnabledServices(natsClient);
         await this.loadStatus(item, idx, natsClient);
       }
     },
 
-    async disableService(item: WidgetItem) {
+    async disableService(item: WidgetItem, idx: number) {
       const natsStore = useNatsStore();
 
       if (natsStore.natsConnection === undefined) {
@@ -378,7 +381,7 @@ export const useWidgetStore = defineStore({
       } as NatsRequest;
       const requestCodec = JSONCodec<NatsRequest>();
 
-      console.log(`Enabling ${item.service}`);
+      console.log(`Disabling ${item.service}`);
       const resMsg = await natsClient
         ?.request(req.subject, requestCodec.encode(req), {
           timeout: DEFAULT_NATS_TIMEOUT,
@@ -390,12 +393,25 @@ export const useWidgetStore = defineStore({
       if (resMsg) {
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
-        console.log(`Successfully enabled ${item.service}`, res);
-        const idx = this.items.findIndex((el) => el.service === item.service);
+        if (res.status == "ok") {
+          console.log(`Successfully disabled ${item.service}`, res);
 
-        await this.stopService(item);
-        await this.loadEnabledServices(natsClient);
-        await this.loadStatus(item, idx, natsClient);
+          await this.stopService(item);
+          await this.loadEnabledServices(natsClient);
+          await this.loadStatus(item, idx, natsClient);
+        } else {
+          const alertStore = useAlertStore();
+          console.error(
+            `Failed to disable ${item.service}, received error:`,
+            res
+          );
+          const alert: UiStickyAlert = {
+            message: res.detail,
+            header: `Failed to disable ${item.service}`,
+            actions: [],
+          };
+          alertStore.pushAlert(alert);
+        }
       }
     },
   },
