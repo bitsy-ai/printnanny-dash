@@ -6,8 +6,9 @@
       <!-- toggle-->
 
       <Switch
-        v-model="store.items[idx].enabled"
-        :class="store.items[idx].enabled ? 'bg-blue-600' : 'bg-gray-200'"
+        v-model="enabled"
+        v-if="storeItemRef.loaded"
+        :class="storeItemRef.enabled ? 'bg-blue-600' : 'bg-gray-200'"
         class="relative inline-flex h-6 w-11 items-center rounded-full"
       >
         <span class="sr-only">Enable {{ item.name }}</span>
@@ -17,7 +18,7 @@
         />
       </Switch>
 
-      <WidgetStatus :item="item" class="justify-self-end" />
+      <WidgetStatus :item="item" class="justify-self-end flex-1 w-full" />
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -49,13 +50,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType} from "vue";
+import { ref } from "vue";
 import { Switch } from "@headlessui/vue";
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import WidgetMenu from "@/components/WidgetMenu.vue";
 import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
 import { useWidgetStore } from "@/stores/widgets";
+import { watch } from 'vue'
+
 
 const store = useWidgetStore();
 
@@ -66,5 +70,29 @@ const props = defineProps({
   },
 });
 
+
 const idx = store.items.findIndex((el) => el.service === props.item.service);
+const storeItemRef = store.items[idx];
+const enabled = ref(undefined);
+
+// watch component refrence, update store state reference when component state changes
+watch(enabled, async (newValue: undefined | boolean, oldValue: undefined | boolean) => {
+  console.log(`${props.item.service}: ${oldValue} -> ${newValue}`)
+  storeItemRef.enabled = newValue;
+  if (oldValue === undefined){ return }
+  if (newValue === true){
+    await store.enableService(storeItemRef, idx);
+  } else if (newValue === false) {
+    await store.disableService(storeItemRef, idx);
+  }
+});
+
+// watch store state reference, update component reference when store state changes
+watch(storeItemRef, async (newValue, oldValue) => {
+  if (newValue.enabled !== undefined){
+    enabled.value = newValue.enabled
+  }
+});
+
+
 </script>
