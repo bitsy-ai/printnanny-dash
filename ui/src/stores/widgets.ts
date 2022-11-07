@@ -411,7 +411,6 @@ export const useWidgetStore = defineStore({
           console.log(`Successfully disabled ${item.service}`, res);
 
           await this.stopService(item);
-          await this.loadEnabledServices(natsClient);
           await this.loadStatus(item, idx, natsClient);
         } else {
           const alertStore = useAlertStore();
