@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="grid w-full justify-self-end">
     <!-- spinner -->
     <Transition
       name="fade"
@@ -8,7 +8,7 @@
     >
       <TextSpinner v-if="item.status == SystemdUnitStatus.Unknown" />
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600"
+        class="flex items-center space-x-3 font-medium text-gray-600 justify-self-end"
         v-else-if="item.status == SystemdUnitStatus.Active"
       >
         <div
@@ -18,7 +18,7 @@
         <span class="text-grey-600">Online</span>
       </div>
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600"
+        class="flex items-center space-x-3 font-medium text-gray-600 justify-self-end"
         v-else-if="item.status == SystemdUnitStatus.Inactive"
       >
         <div
@@ -28,7 +28,7 @@
         <span class="text-grey-600">Inactive</span>
       </div>
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600"
+        class="flex items-center space-x-3 font-medium text-gray-600 justify-self-end"
         v-else-if="item.status == SystemdUnitStatus.Error"
       >
         <div

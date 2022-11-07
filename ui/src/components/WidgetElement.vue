@@ -18,7 +18,7 @@
         />
       </Switch>
 
-      <WidgetStatus :item="item" class="justify-self-end flex-1 w-full" />
+      <WidgetStatus :item="item" />
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
