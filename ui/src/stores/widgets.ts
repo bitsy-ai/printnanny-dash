@@ -355,11 +355,25 @@ export const useWidgetStore = defineStore({
       if (resMsg) {
         const responseCodec = JSONCodec<NatsResponse>();
         const res = responseCodec.decode(resMsg.data);
-        console.debug(`Successfully enabled ${item.service}`, res);
 
-        await this.startService(item);
-        await this.loadEnabledServices(natsClient);
-        await this.loadStatus(item, idx, natsClient);
+        if (res.status == "ok") {
+          console.info(`Successfully enabled ${item.service}`, res);
+
+          await this.startService(item);
+          await this.loadStatus(item, idx, natsClient);
+        } else {
+          const alertStore = useAlertStore();
+          console.error(
+            `Failed to enable ${item.service}, received error:`,
+            res
+          );
+          const alert: UiStickyAlert = {
+            message: res.detail,
+            header: `Failed to enable ${item.service}`,
+            actions: [],
+          };
+          alertStore.pushAlert(alert);
+        }
       }
     },
 
