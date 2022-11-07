@@ -67,18 +67,4 @@ const props = defineProps({
 });
 
 const idx = store.items.findIndex((el) => el.service === props.item.service);
-
-store.$subscribe(async (mutation: any, _state: any) => {
-  if (
-    mutation.events.target &&
-    mutation.events.target.service === props.item.service
-  ) {
-    const enabled = mutation.events.newValue;
-    if (enabled === true) {
-      await store.enableService(props.item);
-    } else if (enabled === false) {
-      await store.disableService(props.item);
-    }
-  }
-});
 </script>
