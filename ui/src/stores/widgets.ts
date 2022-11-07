@@ -401,7 +401,10 @@ export const useWidgetStore = defineStore({
           await this.loadStatus(item, idx, natsClient);
         } else {
           const alertStore = useAlertStore();
-          console.error(`Failed to disable ${item.service}, received error:`, res);
+          console.error(
+            `Failed to disable ${item.service}, received error:`,
+            res
+          );
           const alert: UiStickyAlert = {
             message: res.detail,
             header: `Failed to disable ${item.service}`,
@@ -409,7 +412,6 @@ export const useWidgetStore = defineStore({
           };
           alertStore.pushAlert(alert);
         }
-
       }
     },
   },
