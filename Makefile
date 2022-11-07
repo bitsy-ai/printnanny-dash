@@ -6,6 +6,7 @@ install-fake-services:
 	cp systemd/printnanny-vision.service /etc/systemd/system/printnanny-vision.service
 	cp systemd/syncthing.service /etc/systemd/system/syncthing.service
 	systemctl daemon-reload
+	systemctl enable octoprint.service
 
 uninstall-fake-services:
 	rm /etc/systemd/system/mainsail.service

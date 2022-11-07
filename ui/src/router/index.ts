@@ -4,7 +4,7 @@ import { useCloudStore } from "@/stores/cloud";
 import { AllRoutes } from "./routes";
 
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory(),
   routes: AllRoutes,
 });
 
