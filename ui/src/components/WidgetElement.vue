@@ -6,8 +6,8 @@
       <!-- toggle-->
 
       <Switch
-        v-model="item.enabled"
-        :class="item.enabled ? 'bg-blue-600' : 'bg-gray-200'"
+        v-model="store.items[idx].enabled"
+        :class="store.items[idx].enabled ? 'bg-blue-600' : 'bg-gray-200'"
         class="relative inline-flex h-6 w-11 items-center rounded-full"
       >
         <span class="sr-only">Enable {{ item.name }}</span>
@@ -57,6 +57,8 @@ import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
 import { useWidgetStore } from "@/stores/widgets";
 
+const store = useWidgetStore();
+
 const props = defineProps({
   item: {
     type: Object as PropType<WidgetItem>,
@@ -64,4 +66,5 @@ const props = defineProps({
   },
 });
 
+const idx = store.items.findIndex((el) => el.service === props.item.service);
 </script>
