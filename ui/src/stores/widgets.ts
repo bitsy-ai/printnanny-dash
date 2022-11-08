@@ -126,7 +126,7 @@ export const useWidgetStore = defineStore({
         enabled: undefined,
         description:
           "Sync files between two or more computers. Like having a private Dropbox.",
-        service: "syncthing.service",
+        service: "syncthing@printnanny.service",
         menuItems: [
           {
             name: "Quick Start",
