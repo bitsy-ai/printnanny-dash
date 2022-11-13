@@ -23,7 +23,7 @@ import {
 import { handleError } from "@/utils";
 import { useAlertStore } from "./alerts";
 
-const DEFAULT_NATS_TIMEOUT = 6000;
+const DEFAULT_NATS_TIMEOUT = 12000;
 
 export const useWidgetStore = defineStore({
   id: "widgets",
