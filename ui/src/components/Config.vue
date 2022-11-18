@@ -67,5 +67,10 @@ widgets.loadConfigs().then( () => {
   }
 });
 
-const updateEditor = function() {}
+const updateEditor = function(event: Event) {
+  let idx = (event.target as HTMLSelectElement).selectedIndex
+  if (widgets.configs !== undefined && widgets.configs.length >= idx ) {
+    code.value = widgets.configs[idx].content
+  }
+}
 </script>
