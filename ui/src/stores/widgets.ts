@@ -31,6 +31,7 @@ export const useWidgetStore = defineStore({
     enabledServices: {},
     deviceInfo: undefined as undefined | DeviceInfo,
     configs: undefined as undefined | Array<ConfigFile>,
+    selectedConfig: undefined as undefined | string,
     items: [
       {
         name: "OctoPrint",
@@ -171,7 +172,10 @@ export const useWidgetStore = defineStore({
       });
 
       if (configs !== undefined) {
-        this.$patch({ configs: configs as Array<ConfigFile> });
+        this.$patch({ configs: configs as Array<ConfigFile> })
+        if (this.selectedConfig === undefined) {
+          this.$patch({ selectedConfig: configs[0].filename })
+        }
       }
     },
 
