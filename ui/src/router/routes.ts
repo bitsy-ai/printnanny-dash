@@ -36,6 +36,14 @@ const AllRoutes = [
       TopNav: TopNav,
     },
   },
+  {
+    path: "/config",
+    name: "Config",
+    components: {
+      default: () => import("@/views/ConfigView.vue"),
+      TopNav: TopNav,
+    },
+  },
 ].concat(TopBarRoutes) as RouteRecordRaw[];
 
 export { AllRoutes, TopBarRoutes };

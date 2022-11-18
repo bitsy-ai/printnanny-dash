@@ -29,3 +29,10 @@ export interface DeviceInfo {
   os_release: string;
   printnanny_cli_version: string;
 }
+
+export interface ConfigFile {
+  filename: string
+  path: string
+  content: string
+  syntax: string
+}
