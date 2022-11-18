@@ -13,7 +13,7 @@ struct ConfigFile {
 
 #[get("/printnanny/api/pi/configs")]
 pub async fn get_config_data() -> impl Responder {
-    const FILES: &[(&'static str, &'static str, &'static str)] = &[
+    const FILES: &[(&str, &str, &str)] = &[
         ("PrintNannyConfig.toml", "missing", "toml"),
         (
             "octoprint config",
