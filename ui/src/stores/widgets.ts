@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import type { DeviceInfo, WidgetItem } from "@/types";
+import type { ConfigFile, DeviceInfo, WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
 import { JSONCodec, type NatsConnection } from "nats.ws";
@@ -30,6 +30,8 @@ export const useWidgetStore = defineStore({
   state: () => ({
     enabledServices: {},
     deviceInfo: undefined as undefined | DeviceInfo,
+    configs: undefined as undefined | Array<ConfigFile>,
+    selectedConfig: undefined as undefined | string,
     items: [
       {
         name: "OctoPrint",
@@ -158,6 +160,25 @@ export const useWidgetStore = defineStore({
   },
 
   actions: {
+    async loadConfigs() {
+      const basePath = import.meta.env.VITE_BASE_API_URL;
+      const res = await window
+        .fetch(`${basePath}pi/configs`)
+        .catch((e) => handleError("Failed to load config data", e));
+
+      const configs = await res?.json().catch((e) => {
+        console.error("Failed to parse JSON from response: ", res);
+        return handleError("Failed to parse json", e);
+      });
+
+      if (configs !== undefined) {
+        this.$patch({ configs: configs as Array<ConfigFile> })
+        if (this.selectedConfig === undefined) {
+          this.$patch({ selectedConfig: configs[0].filename })
+        }
+      }
+    },
+
     async loadDeviceInfo() {
       const basePath = import.meta.env.VITE_BASE_API_URL;
       const res = await window
