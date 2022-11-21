@@ -1,7 +1,7 @@
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
   SystemctlCommand = "pi.command.systemctl",
-  GstPipelineConfig = "pi.command.settings.gst_pipeline",
+  GstPipelineSettings = "pi.command.settings.gst_pipeline",
   ConnectCloudAccount = "pi.command.connect_cloud_account",
 }
 
@@ -49,17 +49,17 @@ export interface SystemctlCommandResponse {
   data: { [key: string]: any };
 }
 
-export interface GstPipelineConfigRequest {
+export interface GstPipelineSettingsRequest {
   subject: string;
   json: string; //
   pre_save: Array<SystemctlCommandRequest>;
   post_save: Array<SystemctlCommandRequest>;
 }
 
-export interface GstPipelineConfigResponse {
+export interface GstPipelineSettingsResponse {
   subject: string;
   status: ResponseStatus;
-  request?: GstPipelineConfigRequest;
+  request?: GstPipelineSettingsRequest;
   detail: string;
   pre_save: Array<SystemctlCommandResponse>;
   post_save: Array<SystemctlCommandResponse>;
@@ -81,9 +81,9 @@ export interface ConnectCloudAccountResponse {
 
 export type NatsRequest =
   | SystemctlCommandRequest
-  | GstPipelineConfigRequest
+  | GstPipelineSettingsRequest
   | ConnectCloudAccountRequest;
 export type NatsResponse =
   | SystemctlCommandResponse
-  | GstPipelineConfigResponse
+  | GstPipelineSettingsResponse
   | ConnectCloudAccountResponse;
