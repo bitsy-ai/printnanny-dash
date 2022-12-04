@@ -59,7 +59,6 @@ export const useNatsStore = defineStore({
             natsConnection,
             status: ConnectionStatus.ConnectionReady,
           });
-          await this.onConnected(natsConnection);
           natsConnection
         }
         this.$patch({ status: ConnectionStatus.ConnectionError });

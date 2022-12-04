@@ -1,6 +1,7 @@
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
 
+  SystemdManagerGetUnit = "pi.{pi}.dbus.org.freedesktop.systemd1.Manager.GetUnit",
   SystemdManagerDisableUnits = "pi.{pi}.dbus.org.freedesktop.systemd1.Manager.DisableUnit",
   SystemdManagerEnableUnits = "pi.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
   SettingsLoad = "pi.{pi}.settings.vcs.load",

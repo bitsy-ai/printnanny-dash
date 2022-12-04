@@ -4,7 +4,7 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 
 function handleError(header: string, e: Error | AxiosError) {
-  console.error(e);
+  console.error(header, e);
   let message = e.message || e.toString();
   const actions = [
     {
