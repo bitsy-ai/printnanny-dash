@@ -1,8 +1,12 @@
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
-  SystemctlCommand = "pi.command.systemctl",
-  GstPipelineSettings = "pi.command.settings.gst_pipeline",
-  ConnectCloudAccount = "pi.command.connect_cloud_account",
+
+  SystemdManagerDisableUnits = "pi.{pi}.dbus.org.freedesktop.systemd1.Manager.DisableUnit",
+  SystemdManagerEnableUnits = "pi.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
+  SettingsLoad = "pi.{pi}.settings.vcs.load",
+  SettingsApply = "pi.{pi}.settings.vcs.apply",
+  SettingsRevert = "pi.{pi}.settings.vcs.revert",
+  PrintNannyCloudAuth = "pi.{pi}.settings.printnanny.cloud.auth",
 }
 
 export enum SystemdUnitStatus {
