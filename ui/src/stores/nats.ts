@@ -16,7 +16,6 @@ function getNatsURI() {
   const hostname = window.location.hostname;
   const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
     }`;
-  console.log(`Connecting to NATS server: ${uri}`);
   return uri;
 }
 
@@ -42,6 +41,8 @@ export const useNatsStore = defineStore({
       if (this.natsConnection === undefined && this.status !== ConnectionStatus.ConnectionLoading) {
         this.$patch({ status: ConnectionStatus.ConnectionLoading });
         const servers = [getNatsURI()];
+        console.log(`Connecting to NATS server: ${servers}`);
+
         const connectOptions = {
           servers,
           debug: false,
@@ -59,40 +60,21 @@ export const useNatsStore = defineStore({
             natsConnection,
             status: ConnectionStatus.ConnectionReady,
           });
-          natsConnection
+          return natsConnection
         }
         this.$patch({ status: ConnectionStatus.ConnectionError });
+
       }
       return this.natsConnection
     },
     async getNatsConnection(): Promise<NatsConnection | undefined> {
-      const options = {
-        delay: 200,
-        maxAttempts: 3,
-        initialDelay: 0,
-        minDelay: 0,
-        maxDelay: 0,
-        factor: 0,
-        timeout: 0,
-        jitter: false,
-        handleError: null,
-        handleTimeout: null,
-        beforeAttempt: null,
-        calculateDelay: null
-      };
-      try {
-        const result = await retry(async (context) => {
-          return await this.connect();
-        }, options);
-        return result
-      } catch (err) {
-        console.error(err)
-        // If the max number of attempts was exceeded then `err`
-        // will be the last error that was thrown.
-        //
-        // If error is due to timeout then `err.code` will be the
-        // string `ATTEMPT_TIMEOUT`.
+      while (this.natsConnection === undefined) {
+        await this.connect();
+        console.warn("Establishing NatsConnection...");
+        await new Promise(r => setTimeout(r, 2000));
+
       }
+      return await this.connect();
     },
     async connectCloudAccount(
       email: string,

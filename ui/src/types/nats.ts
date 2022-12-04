@@ -10,6 +10,11 @@ export enum NatsSubjectPattern {
   PrintNannyCloudAuth = "pi.{pi}.settings.printnanny.cloud.auth",
 }
 
+export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {
+  const pi = window.location.hostname;
+  return pattern.replace("{pi}", pi)
+}
+
 export enum SystemdUnitStatus {
   Active = "active",
   Inactive = "inactive",

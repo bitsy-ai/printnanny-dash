@@ -3,11 +3,12 @@ import { JSONCodec, type NatsConnection } from "nats.ws";
 
 import { SystemdManagerGetUnitRequest, SystemdManagerGetUnitReply, SystemdUnit } from '@bitsy-ai/printnanny-asyncapi-models';
 
-import { NatsSubjectPattern, type WidgetItem } from "@/types";
+import { NatsSubjectPattern, renderNatsSubjectPattern, type WidgetItem } from "@/types";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from './nats';
 import { handleError } from "@/utils";
 
+const DEFAULT_NATS_TIMEOUT = 12000;
 
 export const useSystemdServiceStore = (widget: WidgetItem) => {
     const scopedStoreDefinition = defineStore(`systemd1/${widget.service}`, {
@@ -19,13 +20,18 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             async load() {
                 const natsStore = useNatsStore();
                 const natsConnection = await natsStore.getNatsConnection();
+                const subject = renderNatsSubjectPattern(NatsSubjectPattern.SystemdManagerGetUnit)
 
                 const requestCodec = JSONCodec<SystemdManagerGetUnitRequest>();
 
-                const req = { unit_name: this.widget?.service } as SystemdManagerGetUnitRequest
+                const req = { unit_name: this.widget?.service } as SystemdManagerGetUnitRequest;
+                console.log(`Sending request to ${subject}`, req);
                 const resMsg = await natsConnection?.request(
-                    NatsSubjectPattern.SystemdManagerGetUnit,
-                    requestCodec.encode(req)
+                    subject,
+                    requestCodec.encode(req),
+                    {
+                        timeout: DEFAULT_NATS_TIMEOUT,
+                    }
                 ).catch((e) => {
                     const msg = `Error loading ${this.widget?.service}`;
                     handleError(msg, e)
@@ -34,6 +40,8 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
                 if (resMsg) {
                     const resCodec = JSONCodec<SystemdManagerGetUnitReply>();
                     const res = resCodec.decode(resMsg?.data);
+                    console.log(`Received reply to ${subject}`, res)
+
                     this.$patch({ unit: res.unit })
                 }
             }

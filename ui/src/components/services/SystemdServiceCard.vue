@@ -61,6 +61,7 @@ import { watch } from "vue";
 
 import { useWidgetStore } from "@/stores/widgets";
 import { useSystemdServiceStore } from "@/stores/systemdService";
+import { onMounted } from 'vue';
 
 
 
@@ -72,6 +73,9 @@ const props = defineProps({
 });
 
 const store = useSystemdServiceStore(props.item);
+onMounted(async () => {
+  await store.load();
+})
 
 
 // const idx = store.items.findIndex((el) => el.service === props.item.service);
