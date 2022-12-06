@@ -27,14 +27,6 @@
         <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{
           store.deviceInfo?.os_release
         }}</pre>
-        <h3 class="text-lg font-bold text-gray-900 prose p-4">
-          PrintNanny CLI Version (<span class="font-mono"
-            >printnanny --version</span
-          >)
-        </h3>
-        <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{
-          store.deviceInfo?.printnanny_cli_version
-        }}</pre>
       </div>
     </div>
   </div>
@@ -45,6 +37,7 @@ import TextSpinner from "@/components/TextSpinner.vue";
 import { useDeviceStore } from "@/stores/device";
 
 const store = useDeviceStore();
+store.load()
 </script>
 
 <style scoped>
