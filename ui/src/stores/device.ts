@@ -19,14 +19,16 @@ export const useDeviceStore = defineStore({
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
 
-      const subject = renderNatsSubjectPattern(NatsSubjectPattern.DeviceInfoLoad);
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.DeviceInfoLoad
+      );
 
       const resMsg = await natsConnection
         ?.request(subject, undefined, {
           timeout: DEFAULT_NATS_TIMEOUT,
         })
         .catch((e) => {
-          const msg = `Error loading ${this.widget?.service}`;
+          const msg = `Error loading device info`;
           handleError(msg, e);
         });
 

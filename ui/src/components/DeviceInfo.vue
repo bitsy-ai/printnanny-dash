@@ -37,7 +37,7 @@ import TextSpinner from "@/components/TextSpinner.vue";
 import { useDeviceStore } from "@/stores/device";
 
 const store = useDeviceStore();
-store.load()
+store.load();
 </script>
 
 <style scoped>
