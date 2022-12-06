@@ -5,27 +5,23 @@
     <div class="flex px-4 pt-4 grid grid-cols-2">
       <!-- toggle-->
       <div class="grid w-full justify-self-start">
-            <WidgetStatus :item="item" />
-
+        <WidgetStatus :item="item" />
       </div>
-
 
       <div class="grid w-full">
         <Switch
-        v-model="enabled"
-        v-if="(store.loading === false)"
-        :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
-        class="relative inline-flex h-6 w-11 items-center justify-self-end rounded-full"
+          v-model="enabled"
+          v-if="store.loading === false"
+          :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
+          class="relative inline-flex h-6 w-11 items-center justify-self-end rounded-full"
         >
-        <span class="sr-only">Enable {{ item.name }}</span>
+          <span class="sr-only">Enable {{ item.name }}</span>
           <span
             :class="enabled ? 'translate-x-6' : 'translate-x-1'"
             class="inline-block h-4 w-4 transform rounded-full bg-white transition"
           />
         </Switch>
       </div>
-
-
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -68,10 +64,8 @@ import { watch } from "vue";
 
 import { useWidgetStore } from "@/stores/widgets";
 import { useSystemdServiceStore } from "@/stores/systemdService";
-import { onMounted } from 'vue';
+import { onMounted } from "vue";
 import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
-
-
 
 const props = defineProps({
   item: {
@@ -84,11 +78,9 @@ const store = useSystemdServiceStore(props.item);
 
 onMounted(async () => {
   await store.load();
-})
-
+});
 
 const enabled = ref(undefined as undefined | boolean);
-
 
 // watch component refrence, update store state reference when component state changes
 watch(
@@ -109,8 +101,8 @@ watch(
 // watch store state reference, update component reference when store state changes
 watch(store.widget, async (newValue, _oldValue) => {
   if (newValue.unit !== undefined) {
-    enabled.value = newValue.unit.unit_file_state == SystemdUnitFileState.ENABLED;
+    enabled.value =
+      newValue.unit.unit_file_state == SystemdUnitFileState.ENABLED;
   }
 });
-
 </script>

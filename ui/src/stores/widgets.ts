@@ -172,9 +172,9 @@ export const useWidgetStore = defineStore({
       });
 
       if (configs !== undefined) {
-        this.$patch({ configs: configs as Array<ConfigFile> })
+        this.$patch({ configs: configs as Array<ConfigFile> });
         if (this.selectedConfig === undefined) {
-          this.$patch({ selectedConfig: configs[0].filename })
+          this.$patch({ selectedConfig: configs[0].filename });
         }
       }
     },

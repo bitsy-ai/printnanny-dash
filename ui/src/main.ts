@@ -3,7 +3,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import posthog from "posthog-js";
-import VueCodemirror from 'vue-codemirror';
+import VueCodemirror from "vue-codemirror";
 
 import App from "./App.vue";
 import router from "./router";

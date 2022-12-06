@@ -5,7 +5,7 @@ export interface NavItem {
 }
 
 export interface NatsError {
-  error: string,
-  request: any,
-  subject_pattern: string,
+  error: string;
+  request: any;
+  subject_pattern: string;
 }

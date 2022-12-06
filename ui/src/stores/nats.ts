@@ -1,4 +1,4 @@
-import { retry } from '@lifeomic/attempt';
+import { retry } from "@lifeomic/attempt";
 
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
@@ -14,8 +14,9 @@ import { useWidgetStore } from "./widgets";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   return uri;
 }
 
@@ -36,9 +37,11 @@ export const useNatsStore = defineStore({
       ]);
     },
     async connect(): Promise<NatsConnection | undefined> {
-
       // create nats connection if not initialized
-      if (this.natsConnection === undefined && this.status !== ConnectionStatus.ConnectionLoading) {
+      if (
+        this.natsConnection === undefined &&
+        this.status !== ConnectionStatus.ConnectionLoading
+      ) {
         this.$patch({ status: ConnectionStatus.ConnectionLoading });
         const servers = [getNatsURI()];
         console.log(`Connecting to NATS server: ${servers}`);
@@ -60,19 +63,17 @@ export const useNatsStore = defineStore({
             natsConnection,
             status: ConnectionStatus.ConnectionReady,
           });
-          return natsConnection
+          return natsConnection;
         }
         this.$patch({ status: ConnectionStatus.ConnectionError });
-
       }
-      return this.natsConnection
+      return this.natsConnection;
     },
     async getNatsConnection(): Promise<NatsConnection | undefined> {
       while (this.natsConnection === undefined) {
         await this.connect();
         console.warn("Establishing NatsConnection...");
-        await new Promise(r => setTimeout(r, 2000));
-
+        await new Promise((r) => setTimeout(r, 2000));
       }
       return await this.connect();
     },

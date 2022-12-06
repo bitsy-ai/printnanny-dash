@@ -8,7 +8,7 @@
     <main>
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
         <div class="rounded-lg border-4 border-dashed border-gray-200 p-4">
-          <Config/>
+          <Config />
         </div>
       </div>
     </main>

@@ -1,5 +1,9 @@
 import type { SystemdUnitStatus } from "./nats";
-import { SystemdManagerGetUnitRequest, SystemdManagerGetUnitReply, SystemdUnit } from '@bitsy-ai/printnanny-asyncapi-models';
+import {
+  SystemdManagerGetUnitRequest,
+  SystemdManagerGetUnitReply,
+  SystemdUnit,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
@@ -31,8 +35,8 @@ export interface DeviceInfo {
 }
 
 export interface ConfigFile {
-  filename: string
-  path: string
-  content: string
-  syntax: string
+  filename: string;
+  path: string;
+  content: string;
+  syntax: string;
 }

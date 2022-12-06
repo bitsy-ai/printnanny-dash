@@ -12,7 +12,7 @@ export enum NatsSubjectPattern {
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {
   const pi = window.location.hostname;
-  return pattern.replace("{pi_id}", pi)
+  return pattern.replace("{pi_id}", pi);
 }
 
 export enum SystemdUnitStatus {
