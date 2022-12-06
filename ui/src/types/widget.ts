@@ -1,8 +1,5 @@
-import type { SystemdUnitStatus } from "./nats";
 import {
-  SystemdManagerGetUnitRequest,
-  SystemdManagerGetUnitReply,
-  SystemdUnit,
+  type SystemdUnit,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 export enum WidgetCategory {

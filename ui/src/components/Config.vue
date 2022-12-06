@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="flex w-full">
     <div
       v-if="widgets.configs == undefined"
@@ -38,7 +38,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useWidgetStore } from "@/stores/widgets";
 import TextSpinner from "@/components/TextSpinner.vue";
 
 const widgets = useWidgetStore();
@@ -58,4 +57,4 @@ const updateEditor = function (event: Event) {
     code.value = widgets.configs[idx].content;
   }
 };
-</script>
+</script> -->

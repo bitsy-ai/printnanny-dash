@@ -10,13 +10,11 @@ import {
   NatsSubjectPattern,
   type ConnectCloudAccountRequest,
 } from "@/types";
-import { useWidgetStore } from "./widgets";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   return uri;
 }
 
@@ -29,12 +27,8 @@ export const useNatsStore = defineStore({
   }),
 
   actions: {
-    async onConnected(natsConnection: NatsConnection) {
-      const widgets = useWidgetStore();
-      return await Promise.all([
-        widgets.loadEnabledServices(natsConnection),
-        widgets.loadStatuses(natsConnection),
-      ]);
+    async onConnected(_natsConnection: NatsConnection) {
+      console.debug("NATS onConnected callback")
     },
     async connect(): Promise<NatsConnection | undefined> {
       // create nats connection if not initialized
@@ -69,7 +63,7 @@ export const useNatsStore = defineStore({
       }
       return this.natsConnection;
     },
-    async getNatsConnection(): Promise<NatsConnection | undefined> {
+    async getNatsConnection(): Promise<NatsConnection> {
       while (this.natsConnection === undefined) {
         await this.connect();
         console.warn("Establishing NatsConnection...");
@@ -83,7 +77,7 @@ export const useNatsStore = defineStore({
       api_uri: string
     ) {
       const req: ConnectCloudAccountRequest = {
-        subject: NatsSubjectPattern.ConnectCloudAccount,
+        subject: NatsSubjectPattern.PrintNannyCloudAuth,
         email,
         api_token,
         api_uri,

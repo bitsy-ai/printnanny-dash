@@ -123,9 +123,8 @@
 
 <script setup lang="ts">
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
-import { useWidgetStore } from "@/stores/widgets";
 import { useCloudStore } from "@/stores/cloud";
-
+import { useWidgetStore } from "@/stores/widgets";
 import SystemdServiceCard from "@/components/services/SystemdServiceCard.vue";
 
 const widgets = useWidgetStore();

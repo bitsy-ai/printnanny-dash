@@ -62,7 +62,6 @@ import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
 import { watch } from "vue";
 
-import { useWidgetStore } from "@/stores/widgets";
 import { useSystemdServiceStore } from "@/stores/systemdService";
 import { onMounted } from "vue";
 import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
