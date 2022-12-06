@@ -1,4 +1,5 @@
 export enum NatsSubjectPattern {
+  DeviceInfoLoad = "pi.{pi_id}.device_info.load",
   DataframeRow = "pi.qc.df",
 
   SystemdManagerGetUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.GetUnit",
