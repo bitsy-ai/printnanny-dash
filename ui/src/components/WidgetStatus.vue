@@ -1,44 +1,38 @@
 <template>
-  <div class="grid w-full justify-self-end">
-    <!-- spinner -->
-    <Transition
-      name="fade"
-      mode="out-in"
-      :duration="{ enter: 800, leave: 500 }"
+  <!-- spinner -->
+  <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
+    <TextSpinner v-if="item.unit === undefined && item.error === undefined" />
+    <div
+      class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
+      v-else-if="item.unit?.active_state == SystemdUnitActiveState.ACTIVE"
     >
-      <TextSpinner v-if="item.status == SystemdUnitStatus.Unknown" />
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600 justify-self-end"
-        v-else-if="item.status == SystemdUnitStatus.Active"
-      >
-        <div
-          class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
-          aria-hidden="true"
-        ></div>
-        <span class="text-grey-600">Online</span>
-      </div>
+        class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+        aria-hidden="true"
+      ></div>
+      <span class="text-grey-600">Active</span>
+    </div>
+    <div
+      class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
+      v-else-if="item.unit?.active_state == SystemdUnitActiveState.INACTIVE"
+    >
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600 justify-self-end"
-        v-else-if="item.status == SystemdUnitStatus.Inactive"
-      >
-        <div
-          class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
-          aria-hidden="true"
-        ></div>
-        <span class="text-grey-600">Inactive</span>
-      </div>
+        class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+        aria-hidden="true"
+      ></div>
+      <span class="text-grey-600">Inactive</span>
+    </div>
+    <div
+      class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
+      v-else-if="item.error !== undefined"
+    >
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600 justify-self-end"
-        v-else-if="item.status == SystemdUnitStatus.Error"
-      >
-        <div
-          class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
-          aria-hidden="true"
-        ></div>
-        <span class="text-grey-600">Error</span>
-      </div>
-    </Transition>
-  </div>
+        class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+        aria-hidden="true"
+      ></div>
+      <span class="text-grey-600">Error</span>
+    </div>
+  </Transition>
 </template>
 <style>
 .fade-enter-active,
@@ -55,7 +49,7 @@
 import type { PropType } from "vue";
 import type { WidgetItem } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
-import { SystemdUnitStatus } from "@/types";
+import { SystemdUnitActiveState } from "@bitsy-ai/printnanny-asyncapi-models";
 
 defineProps({
   item: {

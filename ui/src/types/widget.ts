@@ -1,4 +1,4 @@
-import type { SystemdUnitStatus } from "./nats";
+import type { SystemdUnit } from "@bitsy-ai/printnanny-asyncapi-models";
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
@@ -19,20 +19,13 @@ export interface WidgetItem {
   menuItems: Array<WidgetMenuItem>;
   service: string;
   category: WidgetCategory;
-  status: SystemdUnitStatus;
-  loaded: boolean;
-  enabled?: boolean;
-}
-
-export interface DeviceInfo {
-  issue: string;
-  os_release: string;
-  printnanny_cli_version: string;
+  unit?: SystemdUnit;
+  error?: Error;
 }
 
 export interface ConfigFile {
-  filename: string
-  path: string
-  content: string
-  syntax: string
+  filename: string;
+  path: string;
+  content: string;
+  syntax: string;
 }

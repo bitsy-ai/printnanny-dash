@@ -1,7 +1,7 @@
 <template>
   <div class="w-full bg-white rounded">
     <div
-      v-if="widgets.deviceInfo == undefined"
+      v-if="store.deviceInfo == undefined"
       class="h-24 text-center w-full m-auto"
     >
       <TextSpinner
@@ -16,7 +16,7 @@
           >)
         </h3>
         <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{
-          widgets.deviceInfo.issue
+          store.deviceInfo?.issue
         }}</pre>
       </div>
 
@@ -25,7 +25,7 @@
           PrintNanny OS Version (<span class="font-mono">/etc/os-release</span>)
         </h3>
         <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{
-          widgets.deviceInfo.os_release
+          store.deviceInfo?.os_release
         }}</pre>
         <h3 class="text-lg font-bold text-gray-900 prose p-4">
           PrintNanny CLI Version (<span class="font-mono"
@@ -33,7 +33,7 @@
           >)
         </h3>
         <pre class="mb-4 mx-4 bg-slate-200 p-2 rounded">{{
-          widgets.deviceInfo.printnanny_cli_version
+          store.deviceInfo?.printnanny_cli_version
         }}</pre>
       </div>
     </div>
@@ -41,11 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import { useWidgetStore } from "@/stores/widgets";
 import TextSpinner from "@/components/TextSpinner.vue";
+import { useDeviceStore } from "@/stores/device";
 
-const widgets = useWidgetStore();
-widgets.loadDeviceInfo();
+const store = useDeviceStore();
 </script>
 
 <style scoped>

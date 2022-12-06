@@ -8,14 +8,11 @@ import {
   NatsSubjectPattern,
   type ConnectCloudAccountRequest,
 } from "@/types";
-import { useWidgetStore } from "./widgets";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
-  console.log(`Connecting to NATS server: ${uri}`);
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   return uri;
 }
 
@@ -28,19 +25,19 @@ export const useNatsStore = defineStore({
   }),
 
   actions: {
-    async onConnected(natsConnection: NatsConnection) {
-      const widgets = useWidgetStore();
-      return await Promise.all([
-        widgets.loadEnabledServices(natsConnection),
-        widgets.loadStatuses(natsConnection),
-      ]);
+    async onConnected(_natsConnection: NatsConnection) {
+      console.debug("NATS onConnected callback");
     },
-    async connect(): Promise<boolean> {
-      this.$patch({ status: ConnectionStatus.ConnectionLoading });
-
+    async connect(): Promise<NatsConnection | undefined> {
       // create nats connection if not initialized
-      if (this.natsConnection === undefined) {
+      if (
+        this.natsConnection === undefined &&
+        this.status !== ConnectionStatus.ConnectionLoading
+      ) {
+        this.$patch({ status: ConnectionStatus.ConnectionLoading });
         const servers = [getNatsURI()];
+        console.log(`Connecting to NATS server: ${servers}`);
+
         const connectOptions = {
           servers,
           debug: false,
@@ -58,14 +55,23 @@ export const useNatsStore = defineStore({
             natsConnection,
             status: ConnectionStatus.ConnectionReady,
           });
-          await this.onConnected(natsConnection);
-          return true;
+          return natsConnection;
         }
         this.$patch({ status: ConnectionStatus.ConnectionError });
-        return false;
-      } else {
-        return true;
       }
+      return this.natsConnection;
+    },
+    async getNatsConnection(): Promise<NatsConnection> {
+      while (this.natsConnection === undefined) {
+        await this.connect();
+        console.warn("Establishing NatsConnection...");
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+      const res = await this.connect();
+      if (res === undefined) {
+        throw Error("Failed to connect to NATS server");
+      }
+      return res;
     },
     async connectCloudAccount(
       email: string,
@@ -73,7 +79,7 @@ export const useNatsStore = defineStore({
       api_uri: string
     ) {
       const req: ConnectCloudAccountRequest = {
-        subject: NatsSubjectPattern.ConnectCloudAccount,
+        subject: NatsSubjectPattern.PrintNannyCloudAuth,
         email,
         api_token,
         api_uri,

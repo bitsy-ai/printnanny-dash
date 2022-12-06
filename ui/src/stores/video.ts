@@ -215,27 +215,30 @@ export const useVideoStore = defineStore({
       const jsonCodec = JSONCodec<GstPipelineSettingsRequest>();
 
       // apply any video stream configuration changes
-      const cmdRequest: SystemctlCommandRequest = {
-        subject: NatsSubjectPattern.SystemctlCommand,
-        service: "printnanny-vision.service",
-        command: SystemctlCommand.Restart,
-      };
-      const natsRequest: GstPipelineSettingsRequest = {
-        subject: NatsSubjectPattern.GstPipelineSettings,
-        json: JSON.stringify({
-          video_src: selectedStream.src,
-          video_src_type: selectedStream.src_type,
-        }),
-        post_save: [cmdRequest],
-        pre_save: [],
-      };
-      console.debug("Publishing NATS request:", natsRequest);
-      const res = await natsClient
-        ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
-          timeout: 8000,
-        })
-        .catch((e) => handleError("Command Failed", e));
-      console.debug(`NATS response:`, res);
+
+      // TODO
+
+      // const cmdRequest: SystemctlCommandRequest = {
+      //   subject: NatsSubjectPattern.SystemctlCommand,
+      //   service: "printnanny-vision.service",
+      //   command: SystemctlCommand.Restart,
+      // };
+      // const natsRequest: GstPipelineSettingsRequest = {
+      //   subject: NatsSubjectPattern.GstPipelineSettings,
+      //   json: JSON.stringify({
+      //     video_src: selectedStream.src,
+      //     video_src_type: selectedStream.src_type,
+      //   }),
+      //   post_save: [cmdRequest],
+      //   pre_save: [],
+      // };
+      // console.debug("Publishing NATS request:", natsRequest);
+      // const res = await natsClient
+      //   ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
+      //     timeout: 8000,
+      //   })
+      //   .catch((e) => handleError("Command Failed", e));
+      // console.debug(`NATS response:`, res);
       janusStore.startJanusStream();
     },
     async stopStream() {
@@ -252,24 +255,25 @@ export const useVideoStore = defineStore({
       });
       const natsClient = toRaw(natsStore.natsConnection);
 
-      const natsRequest: SystemctlCommandRequest = {
-        subject: NatsSubjectPattern.SystemctlCommand,
-        service: "printnanny-vision.service",
-        command: SystemctlCommand.Stop,
-      };
-      const jsonCodec = JSONCodec<SystemctlCommandRequest>();
+      // TODO
+      // const natsRequest: SystemctlCommandRequest = {
+      //   subject: NatsSubjectPattern.SystemctlCommand,
+      //   service: "printnanny-vision.service",
+      //   command: SystemctlCommand.Stop,
+      // };
+      // const jsonCodec = JSONCodec<SystemctlCommandRequest>();
 
-      const res = await natsClient
-        ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
-          timeout: 8000,
-        })
-        .catch((e) => handleError("Command Failed", e));
-      console.debug(`NATS response:`, res);
-      console.log("Draining NATS subscription");
-      if (this.natsSubscription !== undefined) {
-        const sub = toRaw(this.natsSubscription);
-        await sub.drain();
-      }
+      // const res = await natsClient
+      //   ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
+      //     timeout: 8000,
+      //   })
+      //   .catch((e) => handleError("Command Failed", e));
+      // console.debug(`NATS response:`, res);
+      // console.log("Draining NATS subscription");
+      // if (this.natsSubscription !== undefined) {
+      //   const sub = toRaw(this.natsSubscription);
+      //   await sub.drain();
+      // }
       this.$patch({
         status: ConnectionStatus.ConnectionNotStarted,
         df: [],

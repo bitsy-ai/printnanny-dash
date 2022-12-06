@@ -13,7 +13,7 @@
         <div
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
-          <WidgetElement
+          <SystemdServiceCard
             v-for="item in widgets.printerManagementItems"
             :key="item.name"
             :item="item"
@@ -61,7 +61,7 @@
         <div
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
-          <WidgetElement
+          <SystemdServiceCard
             v-for="item in widgets.printNannyAppItems"
             :key="item.name"
             :item="item"
@@ -75,7 +75,7 @@
         <div
           class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
         >
-          <WidgetElement
+          <SystemdServiceCard
             v-for="item in widgets.otherAppItems"
             :key="item.name"
             :item="item"
@@ -122,11 +122,10 @@
 </template>
 
 <script setup lang="ts">
-import WidgetElement from "@/components/WidgetElement.vue";
-
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
-import { useWidgetStore } from "@/stores/widgets";
 import { useCloudStore } from "@/stores/cloud";
+import { useWidgetStore } from "@/stores/widgets";
+import SystemdServiceCard from "@/components/services/SystemdServiceCard.vue";
 
 const widgets = useWidgetStore();
 const cloud = useCloudStore();

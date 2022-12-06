@@ -4,21 +4,24 @@
   >
     <div class="flex px-4 pt-4 grid grid-cols-2">
       <!-- toggle-->
+      <div class="grid w-full justify-self-start">
+        <WidgetStatus :item="item" />
+      </div>
 
-      <Switch
-        v-model="enabled"
-        v-if="storeItemRef.loaded"
-        :class="storeItemRef.enabled ? 'bg-blue-600' : 'bg-gray-200'"
-        class="relative inline-flex h-6 w-11 items-center rounded-full"
-      >
-        <span class="sr-only">Enable {{ item.name }}</span>
-        <span
-          :class="item.enabled ? 'translate-x-6' : 'translate-x-1'"
-          class="inline-block h-4 w-4 transform rounded-full bg-white transition"
-        />
-      </Switch>
-
-      <WidgetStatus :item="item" />
+      <div class="grid w-full">
+        <Switch
+          v-model="enabled"
+          v-if="store.loading === false"
+          :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
+          class="relative inline-flex h-6 w-11 items-center justify-self-end rounded-full"
+        >
+          <span class="sr-only">Enable {{ item.name }}</span>
+          <span
+            :class="enabled ? 'translate-x-6' : 'translate-x-1'"
+            class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+          />
+        </Switch>
+      </div>
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -57,10 +60,11 @@ import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import WidgetMenu from "@/components/WidgetMenu.vue";
 import WidgetStatus from "@/components/WidgetStatus.vue";
 import type { WidgetItem } from "@/types";
-import { useWidgetStore } from "@/stores/widgets";
 import { watch } from "vue";
 
-const store = useWidgetStore();
+import { useSystemdServiceStore } from "@/stores/systemdService";
+import { onMounted } from "vue";
+import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
 
 const props = defineProps({
   item: {
@@ -69,8 +73,12 @@ const props = defineProps({
   },
 });
 
-const idx = store.items.findIndex((el) => el.service === props.item.service);
-const storeItemRef = store.items[idx];
+const store = useSystemdServiceStore(props.item);
+
+onMounted(async () => {
+  await store.load();
+});
+
 const enabled = ref(undefined as undefined | boolean);
 
 // watch component refrence, update store state reference when component state changes
@@ -78,22 +86,22 @@ watch(
   enabled,
   async (newValue: undefined | boolean, oldValue: undefined | boolean) => {
     console.log(`${props.item.service}: ${oldValue} -> ${newValue}`);
-    storeItemRef.enabled = newValue;
     if (oldValue === undefined) {
       return;
     }
     if (newValue === true) {
-      await store.enableService(storeItemRef, idx);
+      await store.enableService();
     } else if (newValue === false) {
-      await store.disableService(storeItemRef, idx);
+      await store.disableService();
     }
   }
 );
 
 // watch store state reference, update component reference when store state changes
-watch(storeItemRef, async (newValue, _oldValue) => {
-  if (newValue.enabled !== undefined) {
-    enabled.value = newValue.enabled;
+watch(store.widget, async (newValue, _oldValue) => {
+  if (newValue.unit !== undefined) {
+    enabled.value =
+      newValue.unit.unit_file_state == SystemdUnitFileState.ENABLED;
   }
 });
 </script>
