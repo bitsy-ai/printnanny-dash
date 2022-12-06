@@ -98,10 +98,9 @@ watch(
 );
 
 // watch store state reference, update component reference when store state changes
-watch(store.widget, async (newValue, _oldValue) => {
-  if (newValue.unit !== undefined) {
-    enabled.value =
-      newValue.unit.unit_file_state == SystemdUnitFileState.ENABLED;
+watch(store, async (newValue, _oldValue) => {
+  if (store.unit !== undefined) {
+    enabled.value = store.unit?.unit_file_state == SystemdUnitFileState.ENABLED;
   }
 });
 </script>

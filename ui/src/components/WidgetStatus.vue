@@ -1,10 +1,10 @@
 <template>
   <!-- spinner -->
   <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
-    <TextSpinner v-if="item.unit === undefined && item.error === undefined" />
+    <TextSpinner v-if="store.unit === null && store.error === null" />
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
-      v-else-if="item.unit?.active_state == SystemdUnitActiveState.ACTIVE"
+      v-else-if="store.unit?.active_state == SystemdUnitActiveState.ACTIVE"
     >
       <div
         class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
@@ -14,7 +14,7 @@
     </div>
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
-      v-else-if="item.unit?.active_state == SystemdUnitActiveState.INACTIVE"
+      v-else-if="store.unit?.active_state == SystemdUnitActiveState.INACTIVE"
     >
       <div
         class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
@@ -22,9 +22,13 @@
       ></div>
       <span class="text-grey-600">Inactive</span>
     </div>
+    <!-- show error only if unit is loaded-->
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
-      v-else-if="item.error !== undefined"
+      v-else-if="
+        store.error !== null &&
+        store.unit?.load_state == SystemdUnitLoadState.LOADED
+      "
     >
       <div
         class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
@@ -49,12 +53,18 @@
 import type { PropType } from "vue";
 import type { WidgetItem } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
-import { SystemdUnitActiveState } from "@bitsy-ai/printnanny-asyncapi-models";
+import {
+  SystemdUnitActiveState,
+  SystemdUnitLoadState,
+} from "@bitsy-ai/printnanny-asyncapi-models";
+import { useSystemdServiceStore } from "@/stores/systemdService";
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object as PropType<WidgetItem>,
     required: true,
   },
 });
+
+const store = useSystemdServiceStore(props.item);
 </script>
