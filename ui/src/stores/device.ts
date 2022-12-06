@@ -1,4 +1,3 @@
-import { handleError } from "@/utils";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import type { DeviceInfoLoadReply } from "@bitsy-ai/printnanny-asyncapi-models";
 
@@ -9,7 +8,7 @@ export const useDeviceStore = defineStore({
     deviceInfo: undefined as undefined | DeviceInfoLoadReply,
   }),
   actions: {
-    async loadDeviceInfo() {},
+    async loadDeviceInfo() { },
   },
 });
 
