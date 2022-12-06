@@ -1,18 +1,18 @@
 export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
 
-  SystemdManagerGetUnit = "pi.{pi}.dbus.org.freedesktop.systemd1.Manager.GetUnit",
-  SystemdManagerDisableUnits = "pi.{pi}.dbus.org.freedesktop.systemd1.Manager.DisableUnit",
+  SystemdManagerGetUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.GetUnit",
+  SystemdManagerDisableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.DisableUnit",
   SystemdManagerEnableUnits = "pi.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
-  SettingsLoad = "pi.{pi}.settings.vcs.load",
-  SettingsApply = "pi.{pi}.settings.vcs.apply",
-  SettingsRevert = "pi.{pi}.settings.vcs.revert",
-  PrintNannyCloudAuth = "pi.{pi}.settings.printnanny.cloud.auth",
+  SettingsLoad = "pi.{pi_id}.settings.vcs.load",
+  SettingsApply = "pi.{pi_id}.settings.vcs.apply",
+  SettingsRevert = "pi.{pi_id}.settings.vcs.revert",
+  PrintNannyCloudAuth = "pi.{pi_id}.settings.printnanny.cloud.auth",
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {
   const pi = window.location.hostname;
-  return pattern.replace("{pi}", pi)
+  return pattern.replace("{pi_id}", pi)
 }
 
 export enum SystemdUnitStatus {

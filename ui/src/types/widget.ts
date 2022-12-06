@@ -1,4 +1,5 @@
 import type { SystemdUnitStatus } from "./nats";
+import { SystemdManagerGetUnitRequest, SystemdManagerGetUnitReply, SystemdUnit } from '@bitsy-ai/printnanny-asyncapi-models';
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
@@ -19,9 +20,11 @@ export interface WidgetItem {
   menuItems: Array<WidgetMenuItem>;
   service: string;
   category: WidgetCategory;
-  status: SystemdUnitStatus;
-  loaded: boolean;
-  enabled?: boolean;
+  unit?: SystemdUnit;
+  error?: Error;
+  // status: SystemdUnitStatus;
+  // loaded: boolean;
+  // enabled?: boolean;
 }
 
 export interface DeviceInfo {

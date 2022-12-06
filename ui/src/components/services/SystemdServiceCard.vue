@@ -4,21 +4,28 @@
   >
     <div class="flex px-4 pt-4 grid grid-cols-2">
       <!-- toggle-->
+      <div class="grid w-full justify-self-start">
+            <WidgetStatus :item="item" />
 
-      <Switch
+      </div>
+
+
+      <div class="grid w-full">
+        <Switch
         v-model="enabled"
-        v-if="store.unit?.loaded"
-        :class="store.unit?.enabled ? 'bg-blue-600' : 'bg-gray-200'"
-        class="relative inline-flex h-6 w-11 items-center rounded-full"
-      >
+        v-if="(store.loading === false)"
+        :class="store.widget.unit?.unit_file_state == SystemdUnitFileState.ENABLED ? 'bg-blue-600' : 'bg-gray-200'"
+        class="relative inline-flex h-6 w-11 items-center justify-self-end rounded-full"
+        >
         <span class="sr-only">Enable {{ item.name }}</span>
-        <span
-          :class="item.enabled ? 'translate-x-6' : 'translate-x-1'"
-          class="inline-block h-4 w-4 transform rounded-full bg-white transition"
-        />
-      </Switch>
+          <span
+            :class="store.widget.unit?.unit_file_state == SystemdUnitFileState.ENABLED ? 'translate-x-6' : 'translate-x-1'"
+            class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+          />
+        </Switch>
+      </div>
 
-      <WidgetStatus :item="item" />
+
     </div>
     <div class="flex flex-col items-center pb-10">
       <img
@@ -62,6 +69,7 @@ import { watch } from "vue";
 import { useWidgetStore } from "@/stores/widgets";
 import { useSystemdServiceStore } from "@/stores/systemdService";
 import { onMounted } from 'vue';
+import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
 
 
 
@@ -73,13 +81,36 @@ const props = defineProps({
 });
 
 const store = useSystemdServiceStore(props.item);
+
 onMounted(async () => {
   await store.load();
 })
 
 
-// const idx = store.items.findIndex((el) => el.service === props.item.service);
-// const storeItemRef = store.items[idx];
 const enabled = ref(undefined as undefined | boolean);
+
+
+// watch component refrence, update store state reference when component state changes
+watch(
+  enabled,
+  async (newValue: undefined | boolean, oldValue: undefined | boolean) => {
+    console.log(`${props.item.service}: ${oldValue} -> ${newValue}`);
+    if (oldValue === undefined) {
+      return;
+    }
+    if (newValue === true) {
+      await store.enableService();
+    } else if (newValue === false) {
+      await store.disableService();
+    }
+  }
+);
+
+// watch store state reference, update component reference when store state changes
+watch(store.widget, async (newValue, _oldValue) => {
+  if (newValue.unit !== undefined) {
+    enabled.value = newValue.unit.unit_file_state == SystemdUnitFileState.ENABLED;
+  }
+});
 
 </script>
