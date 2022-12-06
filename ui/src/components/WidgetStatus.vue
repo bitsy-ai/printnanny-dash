@@ -49,6 +49,7 @@
 import type { PropType } from "vue";
 import type { WidgetItem } from "@/types";
 import TextSpinner from "@/components/TextSpinner.vue";
+import { SystemdUnitActiveState } from "@bitsy-ai/printnanny-asyncapi-models";
 
 defineProps({
   item: {
