@@ -14,12 +14,12 @@
         <Switch
         v-model="enabled"
         v-if="(store.loading === false)"
-        :class="store.widget.unit?.unit_file_state == SystemdUnitFileState.ENABLED ? 'bg-blue-600' : 'bg-gray-200'"
+        :class="enabled ? 'bg-blue-600' : 'bg-gray-200'"
         class="relative inline-flex h-6 w-11 items-center justify-self-end rounded-full"
         >
         <span class="sr-only">Enable {{ item.name }}</span>
           <span
-            :class="store.widget.unit?.unit_file_state == SystemdUnitFileState.ENABLED ? 'translate-x-6' : 'translate-x-1'"
+            :class="enabled ? 'translate-x-6' : 'translate-x-1'"
             class="inline-block h-4 w-4 transform rounded-full bg-white transition"
           />
         </Switch>
