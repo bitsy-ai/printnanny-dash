@@ -22,9 +22,6 @@ export interface WidgetItem {
   category: WidgetCategory;
   unit?: SystemdUnit;
   error?: Error;
-  // status: SystemdUnitStatus;
-  // loaded: boolean;
-  // enabled?: boolean;
 }
 
 export interface DeviceInfo {
