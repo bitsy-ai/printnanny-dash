@@ -19,7 +19,6 @@ export interface WidgetItem {
   menuItems: Array<WidgetMenuItem>;
   service: string;
   category: WidgetCategory;
-  unit?: SystemdUnit;
   error?: Error;
 }
 
