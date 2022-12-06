@@ -25,12 +25,6 @@ export interface WidgetItem {
   error?: Error;
 }
 
-export interface DeviceInfo {
-  issue: string;
-  os_release: string;
-  printnanny_cli_version: string;
-}
-
 export interface ConfigFile {
   filename: string;
   path: string;
