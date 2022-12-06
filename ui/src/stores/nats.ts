@@ -13,8 +13,9 @@ import {
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   return uri;
 }
 
@@ -28,7 +29,7 @@ export const useNatsStore = defineStore({
 
   actions: {
     async onConnected(_natsConnection: NatsConnection) {
-      console.debug("NATS onConnected callback")
+      console.debug("NATS onConnected callback");
     },
     async connect(): Promise<NatsConnection | undefined> {
       // create nats connection if not initialized
@@ -69,7 +70,11 @@ export const useNatsStore = defineStore({
         console.warn("Establishing NatsConnection...");
         await new Promise((r) => setTimeout(r, 2000));
       }
-      return await this.connect();
+      const res = await this.connect();
+      if (res === undefined) {
+        throw Error("Failed to connect to NATS server");
+      }
+      return res;
     },
     async connectCloudAccount(
       email: string,

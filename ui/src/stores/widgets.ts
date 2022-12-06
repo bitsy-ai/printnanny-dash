@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import type { ConfigFile, DeviceInfo, WidgetItem } from "@/types";
+import type { ConfigFile, WidgetItem } from "@/types";
 import { toRaw } from "vue";
 
 import { JSONCodec, type NatsConnection } from "nats.ws";
@@ -29,7 +29,6 @@ export const useWidgetStore = defineStore({
   id: "widgets",
   state: () => ({
     enabledServices: {},
-    deviceInfo: undefined as undefined | DeviceInfo,
     configs: undefined as undefined | Array<ConfigFile>,
     selectedConfig: undefined as undefined | string,
     items: [
@@ -244,7 +243,6 @@ export const useWidgetStore = defineStore({
     //     alertStore.pushAlert(successAlert);
     //   }
     // },
-
   },
 });
 

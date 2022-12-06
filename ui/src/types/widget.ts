@@ -1,6 +1,4 @@
-import {
-  type SystemdUnit,
-} from "@bitsy-ai/printnanny-asyncapi-models";
+import type { SystemdUnit } from "@bitsy-ai/printnanny-asyncapi-models";
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
