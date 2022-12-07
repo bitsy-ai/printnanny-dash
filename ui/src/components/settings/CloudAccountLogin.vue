@@ -2,21 +2,25 @@
   <div class="flex w-full">
     <div
       v-if="cloudStore.user !== undefined"
-      class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full md:w-1/2 mx-auto"
+      class="bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 w-full mx-auto"
     >
-      <h2 class="text-xl font-bold text-gray-900 prose mb-4">
+      <h2 class="text-lg font-medium leading-6 text-gray-900">
         Account Information
       </h2>
 
-      <p class="block text-gray-700 text-sm font-bold mb-4">
+      <p class="block text-gray-700 text-md font-medium my-4">
         Logged in as: {{ cloudStore.user.email }}
       </p>
 
       <a href="https://printnanny.ai/devices">
+        
         <button
-          class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300"
         >
-          PrintNanny Cloud
+        <ArrowUpRightIcon
+            class="w-4 h-4 text-sm font-medium mr-1 text-white-600"
+          />
+          Open PrintNanny Cloud
         </button>
       </a>
     </div>
@@ -57,7 +61,7 @@
       :validation-schema="formSchema2"
       class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 mx-auto"
     >
-      <h2 class="text-xl font-bold text-gray-900 prose mb-4">
+      <h2 class="text-lg font-medium leading-6 text-gray-900">
         Connect Account
       </h2>
       <div class="mb-4">
@@ -103,6 +107,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { ArrowUpRightIcon
+} from '@heroicons/vue/24/outline'
+
 import { Field, Form, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { useCloudStore } from "@/stores/cloud";
