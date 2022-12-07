@@ -1,7 +1,7 @@
 <template>
   <!-- spinner -->
   <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
-    <TextSpinner v-if="store.unit === null && store.error === null" />
+    <TextSpinner v-if="store.loading" />
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
       v-else-if="store.unit?.active_state == SystemdUnitActiveState.ACTIVE"

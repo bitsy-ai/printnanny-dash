@@ -3,6 +3,8 @@ export enum NatsSubjectPattern {
   DataframeRow = "pi.qc.df",
 
   SystemdManagerGetUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.GetUnit",
+  SystemdManagerGetUnitFileState = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.GetUnitFileState",
+
   SystemdManagerDisableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.DisableUnit",
   SystemdManagerEnableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
   SystemdManagerStartUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StartUnit",
