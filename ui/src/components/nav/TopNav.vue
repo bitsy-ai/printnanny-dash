@@ -60,7 +60,7 @@
             </button>
             -->
           <router-link
-            :to="{ name: 'Settings' }"
+            :to="{ name: 'printnanny-settings' }"
             :class="[
               router.currentRoute.value.name == 'Settings'
                 ? 'border-indigo-500 text-gray-900'

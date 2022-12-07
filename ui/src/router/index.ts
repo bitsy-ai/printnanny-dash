@@ -33,6 +33,11 @@ router.beforeEach(async (to, _from) => {
   if (cloud.isAuthenticated && to.name == "login") {
     return { name: "Home" };
   }
+
+  // redirect base /settings view to /settings/printnanny/
+  if (to.name === "settings") {
+    return { name: "printnanny-settings" }
+  }
 });
 
 export default router;

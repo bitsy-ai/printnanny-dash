@@ -20,20 +20,32 @@ const TopBarRoutes = [
   },
 ];
 
+const SettingsRoutes = [
+  {
+    path: "/settings",
+    name: "settings",
+    components: {
+      default: () => import("@/views/SettingsView.vue"),
+      TopNav: TopNav,
+    },
+    children: [
+      {
+        path: "printnanny",
+        name: "printnanny-settings",
+        components: {
+          SettingsPanel: () => import("@/components/settings/PrintNannyAccountPanel.vue")
+        }
+      }
+    ]
+  },
+]
+
 const AllRoutes = [
   {
     path: "/login",
     name: "login",
     components: {
       default: () => import("@/views/LoginView.vue"),
-    },
-  },
-  {
-    path: "/settings",
-    name: "Settings",
-    components: {
-      default: () => import("@/views/SettingsView.vue"),
-      TopNav: TopNav,
     },
   },
   {
@@ -44,6 +56,8 @@ const AllRoutes = [
       TopNav: TopNav,
     },
   },
-].concat(TopBarRoutes) as RouteRecordRaw[];
+].concat(TopBarRoutes).concat(SettingsRoutes) as RouteRecordRaw[];
 
-export { AllRoutes, TopBarRoutes };
+
+
+export { AllRoutes, TopBarRoutes, SettingsRoutes };
