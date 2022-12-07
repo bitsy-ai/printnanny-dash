@@ -12,7 +12,7 @@ export const useDeviceStore = defineStore({
   state: () => ({
     loading: true,
     deviceInfo: undefined as undefined | DeviceInfoLoadReply,
-    error: Error
+    error: null as null | Error
   }),
   actions: {
     async load() {
