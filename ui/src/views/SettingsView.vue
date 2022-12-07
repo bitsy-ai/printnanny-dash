@@ -68,8 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import {
   Disclosure,
   DisclosureButton,
@@ -100,33 +100,21 @@ import {
 
 import CloudAccountLogin from '@/components/settings/CloudAccountLogin.vue';
 
-const user = {
-  name: 'Debbie Lewis',
-  handle: 'deblewis',
-  email: 'debbielewis@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=320&h=320&q=80',
-}
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Jobs', href: '#', current: false },
-  { name: 'Applicants', href: '#', current: false },
-  { name: 'Company', href: '#', current: false },
-]
-const subNavigation = [
-  { name: 'PrintNanny Account', link: {name: "printnanny-account"}, icon: UserCircleIcon, current: true },
-  { name: 'Edit Settings Files', link: {name: "edit-settings-files"}, icon: CogIcon, current: false },
-  { name: 'Device Info', link: {name: "device-info"}, icon: InformationCircleIcon, current: false },
+const router = useRouter();
+
+const subNavigation = ref([
+  { name: 'PrintNanny Account', link: {name: "printnanny-account"}, icon: UserCircleIcon, current: computed(() => router.currentRoute.value.name === "printnanny-account")},
+  { name: 'Edit Settings Files', link: {name: "edit-settings-files"}, icon: CogIcon, current: computed(() => router.currentRoute.value.name === "edit-settings-files")},
+  { name: 'Device Info', link: {name: "device-info"}, icon: InformationCircleIcon, current: computed(() => router.currentRoute.value.name === "device-info")},
   // { name: 'Notifications', href: '#', icon: BellIcon, current: false },
   // { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
   // { name: 'Integrations', href: '#', icon: SquaresPlusIcon, current: false },
-]
+
+])
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
-
+  { name: 'Sign out', href: '#' },]
 const availableToHire = ref(true)
 const privateAccount = ref(false)
 const allowCommenting = ref(true)
