@@ -31,9 +31,23 @@ const SettingsRoutes = [
     children: [
       {
         path: "printnanny",
-        name: "printnanny-settings",
+        name: "printnanny-account",
         components: {
           SettingsPanel: () => import("@/components/settings/PrintNannyAccountPanel.vue")
+        }
+      },
+      {
+        path: "files",
+        name: "edit-settings-files",
+        components: {
+          SettingsPanel: () => import("@/components/settings/SettingsFileEditor.vue")
+        }
+      },
+      {
+        path: "device-info",
+        name: "device-info",
+        components: {
+          SettingsPanel: () => import("@/components/settings/DeviceInfoPanel.vue")
         }
       }
     ]

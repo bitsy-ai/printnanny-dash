@@ -52,10 +52,10 @@
           <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
             <aside class="py-6 lg:col-span-3">
               <nav class="space-y-1">
-                <a v-for="item in subNavigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-indigo-50 border-indigo-500 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700' : 'border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">
+                <router-link v-for="item in subNavigation" :key="item.name" :to="item.link" :class="[item.current ? 'bg-indigo-50 border-indigo-500 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700' : 'border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">
                   <component :is="item.icon" :class="[item.current ? 'text-indigo-500 group-hover:text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', 'flex-shrink-0 -ml-1 mr-3 h-6 w-6']" aria-hidden="true" />
                   <span class="truncate">{{ item.name }}</span>
-                </a>
+                </router-link>
               </nav>
             </aside>
             
@@ -69,6 +69,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import {
   Disclosure,
   DisclosureButton,
@@ -81,6 +82,7 @@ import {
   SwitchDescription,
   SwitchGroup,
   SwitchLabel,
+  
 } from '@headlessui/vue'
 import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import {
@@ -92,7 +94,8 @@ import {
   SquaresPlusIcon,
   UserCircleIcon,
   XMarkIcon,
-  ArrowUpRightIcon
+  ArrowUpRightIcon,
+  InformationCircleIcon
 } from '@heroicons/vue/24/outline'
 
 import CloudAccountLogin from '@/components/settings/CloudAccountLogin.vue';
@@ -111,12 +114,12 @@ const navigation = [
   { name: 'Company', href: '#', current: false },
 ]
 const subNavigation = [
-  { name: 'PrintNanny', href: '#', icon: UserCircleIcon, current: true },
-  { name: 'Account', href: '#', icon: CogIcon, current: false },
-  { name: 'Password', href: '#', icon: KeyIcon, current: false },
-  { name: 'Notifications', href: '#', icon: BellIcon, current: false },
-  { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Integrations', href: '#', icon: SquaresPlusIcon, current: false },
+  { name: 'PrintNanny Account', link: {name: "printnanny-account"}, icon: UserCircleIcon, current: true },
+  { name: 'Edit Settings Files', link: {name: "edit-settings-files"}, icon: CogIcon, current: false },
+  { name: 'Device Info', link: {name: "device-info"}, icon: InformationCircleIcon, current: false },
+  // { name: 'Notifications', href: '#', icon: BellIcon, current: false },
+  // { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
+  // { name: 'Integrations', href: '#', icon: SquaresPlusIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },

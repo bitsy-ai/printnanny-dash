@@ -84,5 +84,6 @@
             </form>
 </template>
 <script setup lang="ts">
+import CloudAccountLogin from '@/components/settings/CloudAccountLogin.vue';
 
 </script>

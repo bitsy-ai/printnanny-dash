@@ -36,7 +36,7 @@ router.beforeEach(async (to, _from) => {
 
   // redirect base /settings view to /settings/printnanny/
   if (to.name === "settings") {
-    return { name: "printnanny-settings" }
+    return { name: "printnanny-account" }
   }
 });
 
