@@ -4,7 +4,9 @@ export enum NatsSubjectPattern {
 
   SystemdManagerGetUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.GetUnit",
   SystemdManagerDisableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.DisableUnit",
-  SystemdManagerEnableUnits = "pi.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
+  SystemdManagerEnableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
+  SystemdManagerStartUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StartUnit",
+  SystemdManagerStopUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StopUnit",
   SettingsLoad = "pi.{pi_id}.settings.vcs.load",
   SettingsApply = "pi.{pi_id}.settings.vcs.apply",
   SettingsRevert = "pi.{pi_id}.settings.vcs.revert",
