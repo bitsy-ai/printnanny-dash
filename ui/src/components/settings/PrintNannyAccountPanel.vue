@@ -76,89 +76,8 @@
           </div>
         </div>
       </div>
-
-      <div class="mt-6 grid grid-cols-12 gap-6">
-        <div class="col-span-12 sm:col-span-6">
-          <label
-            for="first-name"
-            class="block text-sm font-medium text-gray-700"
-            >First name</label
-          >
-          <input
-            type="text"
-            name="first-name"
-            id="first-name"
-            autocomplete="given-name"
-            class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-          />
-        </div>
-
-        <div class="col-span-12 sm:col-span-6">
-          <label for="last-name" class="block text-sm font-medium text-gray-700"
-            >Last name</label
-          >
-          <input
-            type="text"
-            name="last-name"
-            id="last-name"
-            autocomplete="family-name"
-            class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-          />
-        </div>
-
-        <div class="col-span-12">
-          <label for="url" class="block text-sm font-medium text-gray-700"
-            >URL</label
-          >
-          <input
-            type="text"
-            name="url"
-            id="url"
-            class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-          />
-        </div>
-
-        <div class="col-span-12 sm:col-span-6">
-          <label for="company" class="block text-sm font-medium text-gray-700"
-            >Company</label
-          >
-          <input
-            type="text"
-            name="company"
-            id="company"
-            autocomplete="organization"
-            class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-          />
-        </div>
-      </div>
     </div>
 
-    <!-- Privacy section -->
-    <div class="divide-y divide-gray-200 pt-6">
-      <div class="px-4 sm:px-6">
-        <div>
-          <h2 class="text-lg font-medium leading-6 text-gray-900">Privacy</h2>
-          <p class="mt-1 text-sm text-gray-500">
-            Ornare eu a volutpat eget vulputate. Fringilla commodo amet.
-          </p>
-        </div>
-        <ul role="list" class="mt-2 divide-y divide-gray-200"></ul>
-      </div>
-      <div class="mt-4 flex justify-end py-4 px-4 sm:px-6">
-        <button
-          type="button"
-          class="inline-flex justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          class="ml-5 inline-flex justify-center rounded-md border border-transparent bg-sky-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-        >
-          Save
-        </button>
-      </div>
-    </div>
   </form>
 </template>
 <script setup lang="ts">
