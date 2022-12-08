@@ -21,12 +21,12 @@
         <div class="py-6 px-4 sm:p-6 lg:pb-8">
             <pre>/etc/issue
 
-{{store.deviceInfo.issue}}</pre>
+{{store.deviceInfo?.issue}}</pre>
         </div>
         <div class="py-6 px-4 sm:p-6 lg:pb-8">
             <pre>/etc/os-release
 
-{{store.deviceInfo.os_release}}</pre>
+{{store.deviceInfo?.os_release}}</pre>
         </div>
     </div>
     </Transition>
