@@ -3,15 +3,15 @@
     <Disclosure as="div" class="relative overflow-hidden bg-sky-700 pb-32" v-slot="{ open }">
       <div aria-hidden="true" :class="[open ? 'bottom-0' : 'inset-y-0', 'absolute inset-x-0 left-1/2 w-full -translate-x-1/2 transform overflow-hidden lg:inset-y-0']">
         <div class="absolute inset-0 flex">
-          <div class="h-full w-1/2" style="background-color: #4f46e5" />
-          <div class="h-full w-1/2" style="background-color: #4f46e5" />
+          <div class="h-full w-1/2" style="background-color: #1f2937" />
+          <div class="h-full w-1/2" style="background-color: #1f2937" />
         </div>
         <div class="relative flex justify-center">
           <svg class="flex-shrink-0" width="1750" height="308" viewBox="0 0 1750 308" xmlns="http://www.w3.org/2000/svg">
-            <path d="M284.161 308H1465.84L875.001 182.413 284.161 308z" fill="#0369a1" />
-            <path d="M1465.84 308L16.816 0H1750v308h-284.16z" fill="#4f46e5" />
-            <path d="M1733.19 0L284.161 308H0V0h1733.19z" fill="#4f46e5" />
-            <path d="M875.001 182.413L1733.19 0H16.816l858.185 182.413z" fill="#4338ca" />
+            <path d="M284.161 308H1465.84L875.001 182.413 284.161 308z" fill="#1f2937" />
+            <path d="M1465.84 308L16.816 0H1750v308h-284.16z" fill="#1f2937" />
+            <path d="M1733.19 0L284.161 308H0V0h1733.19z" fill="#1f2937" />
+            <path d="M875.001 182.413L1733.19 0H16.816l858.185 182.413z" fill="#334155" />
           </svg>
         </div>
       </div>
