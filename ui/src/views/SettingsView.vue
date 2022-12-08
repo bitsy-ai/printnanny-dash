@@ -122,7 +122,7 @@ const subNavigation = ref([
     ),
   },
   {
-    name: "Edit Settings Files",
+    name: "Edit Settings",
     link: { name: "edit-settings-files" },
     icon: CogIcon,
     current: computed(
