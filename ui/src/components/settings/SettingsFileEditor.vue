@@ -18,7 +18,7 @@
       >
         <div class="py-6 px-4 sm:p-6 lg:pb-8">
           <h2 class="text-lg font-medium leading-6 text-gray-900 py-4">
-            Edit Settings Files
+            Edit Settings
           </h2>
 
           <Listbox as="div" v-model="selectedFile" class="md:w-3/4">
@@ -93,16 +93,32 @@
             class="py-6 px-4 sm:p-6 lg:pb-8"
           />
         </div>
+        <div class="py-6 lg:pb-8">
+          <h2 class="text-lg font-medium leading-6 text-gray-900 py-2">
+            Describe your changes:
+          </h2>
+          <p class="text-sm text-gray-500 mb-2">
+            Your description is saved as a git commit message, so you can revert
+            back to a previous state.
+          </p>
+          <codemirror
+            key="commitMsg"
+            v-model="commitMsg"
+            class="py-6 px-4 sm:p-6 lg:pb-8"
+          />
+        </div>
         <div class="flex justify-end py-4 px-4 sm:px-6">
           <button
             type="button"
+            @click="store.load"
             class="inline-flex justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
           >
             Cancel
           </button>
           <button
-            type="submit"
-            class="ml-5 inline-flex justify-center rounded-md border border-transparent bg-sky-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            type="button"
+            @click="applyChanges"
+            class="ml-5 inline-flex justify-center rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
           >
             Save
           </button>
@@ -112,26 +128,40 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useSettingsFileStore } from "@/stores/settingsFile";
+import { ChevronUpDownIcon } from "@heroicons/vue/24/outline";
+import { CheckIcon } from "@heroicons/vue/24/solid";
 import TextSpinner from "@/components/TextSpinner.vue";
 import {
   Listbox,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
+  ListboxLabel,
 } from "@headlessui/vue";
 
 import type { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
 import { basicSetup } from "codemirror";
 
-
 const store = useSettingsFileStore();
 
 const selectedFile = ref(null as null | SettingsFile);
+let now = new Date();
+const commitMsg = ref(`Updated settings at ${now}`);
+
+function applyChanges() {
+  store.apply(selectedFile.value as SettingsFile, commitMsg.value);
+}
 
 onMounted(async () => {
   await store.load();
   selectedFile.value = store.settingsFiles[0];
+  commitMsg;
+});
+
+watch(selectedFile, async (newValue, oldValue) => {
+  now = new Date();
+  commitMsg.value = `Updated ${newValue?.app} settings at ${now}`;
 });
 </script>

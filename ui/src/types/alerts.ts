@@ -13,5 +13,5 @@ export interface UiStickyAlert {
   actions: Array<AlertAction>;
   error?: Error | undefined | string;
   icon?: FunctionalComponent<HTMLAttributes & VNodeProps>;
-  color?: string;
+  iconClass?: string;
 }

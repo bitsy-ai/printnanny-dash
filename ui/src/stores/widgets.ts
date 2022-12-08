@@ -9,10 +9,7 @@ import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
 import printNannyLogo from "@/assets/logos/printnanny/logo.svg";
 import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
 import { useNatsStore } from "./nats";
-import {
-  SystemdUnitStatus,
-  WidgetCategory,
-} from "@/types";
+import { SystemdUnitStatus, WidgetCategory } from "@/types";
 import { handleError } from "@/utils";
 import { useAlertStore } from "./alerts";
 
