@@ -4,11 +4,11 @@ import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import type { UiStickyAlert } from "@/types";
 import { CheckIcon } from "@heroicons/vue/20/solid";
-import {
+import type {
   SettingsApplyRequest,
-  type SettingsFile,
-  type SettingsLoadReply,
-  type SettingsApplyReply,
+  SettingsFile,
+  SettingsLoadReply,
+  SettingsApplyReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useAlertStore } from "./alerts";

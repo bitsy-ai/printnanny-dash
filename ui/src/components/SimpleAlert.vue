@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
-import { ref, PropType } from "vue";
+import { ref, type PropType } from "vue";
 import AlertActionFooter from "./AlertActionFooter.vue";
 import type { AlertAction } from "@/types";
 

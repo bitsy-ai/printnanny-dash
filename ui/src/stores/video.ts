@@ -114,7 +114,7 @@ export const useVideoStore = defineStore({
         const alert: UiStickyAlert = {
           header: "Calibration: Nozzle",
           icon: ExclamationTriangleIcon,
-          color: "indigo",
+          iconClass: "text-indigo-500",
           message: "Calibration needed to improve nozzle monitoring.",
           actions: [],
         };
@@ -125,7 +125,7 @@ export const useVideoStore = defineStore({
         const alert: UiStickyAlert = {
           header: "Calibration: Printer",
           icon: ExclamationTriangleIcon,
-          color: "indigo",
+          iconClass: "text-indigo-500",
           message: "Calibration needed to improve print object detection.",
           actions: [],
         };
@@ -136,7 +136,7 @@ export const useVideoStore = defineStore({
         const alert: UiStickyAlert = {
           header: "Calibration: Raft",
           icon: ExclamationTriangleIcon,
-          color: "indigo",
+          iconClass: "text-indigo-500",
           message:
             "Calibration needed to improve raft detection. Ignore this message if you are not printing with a raft.",
           actions: [],
@@ -148,7 +148,7 @@ export const useVideoStore = defineStore({
         const alert: UiStickyAlert = {
           header: "Failure: Bed Adhesion",
           icon: ExclamationTriangleIcon,
-          color: "red",
+          iconClass: "text-red-500",
           message: "Critical failures detected..",
           actions: [],
         };
@@ -158,7 +158,7 @@ export const useVideoStore = defineStore({
         const alert: UiStickyAlert = {
           header: "Failure: Spaghetti",
           icon: ExclamationTriangleIcon,
-          color: "red",
+          iconClass: "text-red-500",
           message: "Critical failures detected.",
           actions: [],
         };

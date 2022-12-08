@@ -162,6 +162,6 @@ onMounted(async () => {
 
 watch(selectedFile, async (newValue, oldValue) => {
   now = new Date();
-  commitMsg.value = `Updated ${newValue.app} settings at ${now}`;
+  commitMsg.value = `Updated ${newValue?.app} settings at ${now}`;
 });
 </script>
