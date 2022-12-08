@@ -90,10 +90,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import {
-  Disclosure,
-
-} from "@headlessui/vue";
+import { Disclosure } from "@headlessui/vue";
 import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid";
 import {
   Bars3Icon,

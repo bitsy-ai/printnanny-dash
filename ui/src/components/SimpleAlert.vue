@@ -1,5 +1,3 @@
-<!-- Simple text-only dismissable alert with customizable background and actions -->
-
 <template>
   <transition
     enter-active-class="transform ease-out duration-300 transition"
@@ -11,13 +9,12 @@
   >
     <div
       v-if="show"
-      class="max-w-sm w-full shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden"
-      :class="bgColor"
+      class="max-w-sm w-full shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden bg-white"
     >
       <div class="p-4">
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <slot name="icon"></slot>
+            <slot name="icon" :class="iconClass"></slot>
             <!-- icon slot -->
           </div>
           <div class="ml-3 w-0 flex-1 pt-0.5">
@@ -47,9 +44,10 @@
 <script setup lang="ts">
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
-import { ref } from "vue";
+import { ref, PropType } from "vue";
 import AlertActionFooter from "./AlertActionFooter.vue";
 import type { AlertAction } from "@/types";
+
 defineProps({
   message: {
     type: String,
@@ -59,13 +57,13 @@ defineProps({
     type: String,
     default: "",
   },
-  bgColor: {
+  iconClass: {
     type: String,
     required: false,
-    default: "bg-white",
+    default: "text-indigo-500",
   },
   actions: {
-    type: Array<AlertAction>,
+    type: Array as PropType<Array<AlertAction>>,
     default: [],
   },
 });
