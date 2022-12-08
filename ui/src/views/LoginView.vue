@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import CloudAccountLogin from "@/components/cloud/CloudAccountLogin.vue";
+import CloudAccountLogin from "@/components/settings/CloudAccountLogin.vue";
 
 const pageTitle = "👋 Welcome to PrintNanny OS";
 

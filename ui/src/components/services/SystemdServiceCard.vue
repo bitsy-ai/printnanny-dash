@@ -8,7 +8,8 @@
         <WidgetStatus :item="item" />
       </div>
 
-      <div class="grid w-full">
+      <div class="w-full flex justify-end">
+        <Cog6ToothIcon class="h-6 w-6 mr-4" />
         <Switch
           v-model="enabled"
           v-if="store.loading === false"
@@ -56,6 +57,8 @@
 import type { PropType } from "vue";
 import { ref } from "vue";
 import { Switch } from "@headlessui/vue";
+import { Cog6ToothIcon } from "@heroicons/vue/24/solid";
+
 import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 import WidgetMenu from "@/components/WidgetMenu.vue";
 import WidgetStatus from "@/components/WidgetStatus.vue";
@@ -98,7 +101,7 @@ watch(
 );
 
 // watch store state reference, update component reference when store state changes
-watch(store, async (newValue, _oldValue) => {
+watch(store, async (_newValue, _oldValue) => {
   if (store.unit !== undefined) {
     enabled.value = store.unit?.unit_file_state == SystemdUnitFileState.ENABLED;
   }
