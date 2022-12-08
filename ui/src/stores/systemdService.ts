@@ -59,7 +59,7 @@ function isSystemdManagerGetUnitFileState(
 }
 
 export const useSystemdServiceStore = (widget: WidgetItem) => {
-    const scopedStoreDefinition = defineStore(`systemd1/${widget.service}`, {
+    const scopedStoreDefinition = defineStore(`systemd/${widget.service}`, {
         state: () => ({
             widget: widget,
             loading: true,

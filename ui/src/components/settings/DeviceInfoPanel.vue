@@ -1,5 +1,5 @@
 <template>
-<div class="divide-y divide-gray-200 lg:col-span-9">
+<div class="divide-y divide-gray-200 lg:col-span-9 flex">
     <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
 
     <TextSpinner text-size="xl" spinner-size="64" class="m-auto" v-if="store.loading"/>

@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="flex w-full">
     <div
       v-if="widgets.configs == undefined"
@@ -57,4 +57,4 @@ const updateEditor = function (event: Event) {
     code.value = widgets.configs[idx].content;
   }
 };
-</script> -->
+</script>
