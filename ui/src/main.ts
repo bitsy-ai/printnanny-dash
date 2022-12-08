@@ -4,7 +4,7 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import posthog from "posthog-js";
 import VueCodemirror from "vue-codemirror";
-import { basicSetup } from 'codemirror';
+import { basicSetup } from "codemirror";
 import { StreamLanguage } from "@codemirror/language";
 import { toml } from "@codemirror/legacy-modes/mode/toml";
 import { yaml } from "@codemirror/legacy-modes/mode/yaml";
@@ -24,7 +24,11 @@ app.use(router);
 app.use(VueCodemirror, {
   autofocus: true,
   tabSize: 2,
-  extensions: [basicSetup, StreamLanguage.define(toml), StreamLanguage.define(yaml)]
+  extensions: [
+    basicSetup,
+    StreamLanguage.define(toml),
+    StreamLanguage.define(yaml),
+  ],
 });
 
 if (

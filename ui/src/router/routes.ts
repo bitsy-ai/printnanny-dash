@@ -33,26 +33,29 @@ const SettingsRoutes = [
         path: "printnanny",
         name: "printnanny-account",
         components: {
-          SettingsPanel: () => import("@/components/settings/PrintNannyAccountPanel.vue")
-        }
+          SettingsPanel: () =>
+            import("@/components/settings/PrintNannyAccountPanel.vue"),
+        },
       },
       {
         path: "files",
         name: "edit-settings-files",
         components: {
-          SettingsPanel: () => import("@/components/settings/SettingsFileEditor.vue")
-        }
+          SettingsPanel: () =>
+            import("@/components/settings/SettingsFileEditor.vue"),
+        },
       },
       {
         path: "device-info",
         name: "device-info",
         components: {
-          SettingsPanel: () => import("@/components/settings/DeviceInfoPanel.vue")
-        }
-      }
-    ]
+          SettingsPanel: () =>
+            import("@/components/settings/DeviceInfoPanel.vue"),
+        },
+      },
+    ],
   },
-]
+];
 
 const AllRoutes = [
   {
@@ -62,16 +65,8 @@ const AllRoutes = [
       default: () => import("@/views/LoginView.vue"),
     },
   },
-  {
-    path: "/config",
-    name: "Config",
-    components: {
-      default: () => import("@/views/ConfigView.vue"),
-      TopNav: TopNav,
-    },
-  },
-].concat(TopBarRoutes).concat(SettingsRoutes) as RouteRecordRaw[];
-
-
+]
+  .concat(TopBarRoutes)
+  .concat(SettingsRoutes) as RouteRecordRaw[];
 
 export { AllRoutes, TopBarRoutes, SettingsRoutes };

@@ -1,9 +1,10 @@
 <template>
   <div :aria-label="text" role="status" class="flex items-center space-x-2">
-    <svg class="h-6 w-6 animate-spin stroke-gray-500" viewBox="0 0 256 256" :class="[
-      `h-${spinnerSize}`,
-      `w-${spinnerSize}`
-    ]">
+    <svg
+      class="h-6 w-6 animate-spin stroke-gray-500"
+      viewBox="0 0 256 256"
+      :class="[`h-${spinnerSize}`, `w-${spinnerSize}`]"
+    >
       <line
         x1="128"
         y1="32"
@@ -77,9 +78,9 @@
         stroke-width="24"
       ></line>
     </svg>
-    <span class="font-medium text-gray-500" :class="[
-      `text-${textSize}`,
-    ]">{{ text }}</span>
+    <span class="font-medium text-gray-500" :class="[`text-${textSize}`]">{{
+      text
+    }}</span>
   </div>
 </template>
 
@@ -91,11 +92,11 @@ defineProps({
   },
   textSize: {
     type: String,
-    default: 'xs'
+    default: "xs",
   },
   spinnerSize: {
     type: String,
-    default: '6'
-  }
+    default: "6",
+  },
 });
 </script>

@@ -12,7 +12,7 @@ export const useDeviceStore = defineStore({
   state: () => ({
     loading: true,
     deviceInfo: undefined as undefined | DeviceInfoLoadReply,
-    error: null as null | Error
+    error: null as null | Error,
   }),
   actions: {
     async load() {
@@ -30,7 +30,7 @@ export const useDeviceStore = defineStore({
         })
         .catch((e) => {
           const msg = `Error loading device info`;
-          this.$patch({ error: e })
+          this.$patch({ error: e });
           handleError(msg, e);
         });
 

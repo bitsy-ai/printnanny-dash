@@ -101,7 +101,7 @@ watch(
 );
 
 // watch store state reference, update component reference when store state changes
-watch(store, async (newValue, _oldValue) => {
+watch(store, async (_newValue, _oldValue) => {
   if (store.unit !== undefined) {
     enabled.value = store.unit?.unit_file_state == SystemdUnitFileState.ENABLED;
   }

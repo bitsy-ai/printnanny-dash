@@ -5,11 +5,9 @@ import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import {
   ConnectionStatus,
   NatsSubjectPattern,
-  SystemctlCommand,
   VideoSrcType,
   type QcDataframeRow,
   type UiStickyAlert,
-  type SystemctlCommandRequest,
   type GstPipelineSettingsRequest,
   type VideoStream,
 } from "@/types";

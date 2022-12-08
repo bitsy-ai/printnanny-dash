@@ -13,11 +13,10 @@
       </p>
 
       <a href="https://printnanny.ai/devices">
-        
         <button
           class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300"
         >
-        <ArrowUpRightIcon
+          <ArrowUpRightIcon
             class="w-4 h-4 text-sm font-medium mr-1 text-white-600"
           />
           Open PrintNanny Cloud
@@ -107,8 +106,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { ArrowUpRightIcon
-} from '@heroicons/vue/24/outline'
+import { ArrowUpRightIcon } from "@heroicons/vue/24/outline";
 
 import { Field, Form, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
