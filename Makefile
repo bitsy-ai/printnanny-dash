@@ -1,5 +1,10 @@
 .PHONY: install-fake-services uninstall-fake-services
 
+
+clean:
+	rm -rf dist
+
+
 install-fake-services:
 	cp systemd/mainsail.service /etc/systemd/system/mainsail.service
 	cp systemd/octoprint.service /etc/systemd/system/octoprint.service
