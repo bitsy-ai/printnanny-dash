@@ -17,4 +17,4 @@ jobs:
           node-version: "16"
       - name: Build UI
         run: |
-          cd ui && npm install && npm run build
+          npm install && npm run build
