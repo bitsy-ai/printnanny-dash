@@ -1,6 +1,6 @@
 {
-  "name": "printnanny-demo-ui",
-  "version": "0.1.0",
+  "name": "printnanny-os-dash",
+  "version": "0.4.0",
   "browser": "main.ts",
   "scripts": {
     "dev": "vite --mode dev",
