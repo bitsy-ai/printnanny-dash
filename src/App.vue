@@ -2,7 +2,7 @@
   <div class="h-full">
     <StickyAlerts />
     <router-view class="view left-sidebar" name="TopNav"> </router-view>
-    <router-view class="view main-content md:min-h-[62rem]"></router-view>
+    <router-view class="view main-content lg:min-h-[32rem] 2xl:min-h-[62rem]"></router-view>
     <router-view class="view right-sidebar" name="FooterNav">
       <FooterNav />
     </router-view>
