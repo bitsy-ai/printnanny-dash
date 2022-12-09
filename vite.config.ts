@@ -21,6 +21,7 @@ export default defineConfig(({ _command, mode }) => {
     },
     envDir: ".env",
     resolve: {
+      preserveSymlinks: true,
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
