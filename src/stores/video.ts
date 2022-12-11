@@ -2,7 +2,9 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
 import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import type { CameraLoadReply, Camera } from "@bitsy-ai/printnanny-asyncapi-models";
+import type {
+  Camera,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
   ConnectionStatus,
@@ -21,7 +23,6 @@ import { useAlertStore } from "./alerts";
 import VideoPaused from "@/assets/video-paused.svg";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
-
 
 // returns true if num truthy elements / total elements >= threshold
 function atLeast(arr: Array<boolean>, threshold: number): boolean {
@@ -86,12 +87,10 @@ export const useVideoStore = defineStore({
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
 
-      const subject = renderNatsSubjectPattern(
-        NatsSubjectPattern.CamerasLoad
-      );
+      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CamerasLoad);
 
-      const resMsg = await natsConnection?.request(
-        subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT })
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT })
         .catch((e) => {
           const msg = `Error loading cameras`;
           this.$patch({ error: e });
@@ -101,9 +100,8 @@ export const useVideoStore = defineStore({
       if (resMsg) {
         const resCodec = JSONCodec<CamerasLoadReply>();
         const res = resCodec.decode(resMsg?.data);
-        this.$patch({ cameras: res.cameras })
+        this.$patch({ cameras: res.cameras });
       }
-
     },
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       const alertStore = useAlertStore();
