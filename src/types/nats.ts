@@ -1,4 +1,5 @@
 export enum NatsSubjectPattern {
+  CamerasLoad = "pi.{pi_id}.cameras.load",
   DeviceInfoLoad = "pi.{pi_id}.device_info.load",
   DataframeRow = "pi.qc.df",
 

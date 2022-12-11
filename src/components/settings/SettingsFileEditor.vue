@@ -142,7 +142,6 @@ import {
 } from "@headlessui/vue";
 
 import type { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
-import { basicSetup } from "codemirror";
 
 const store = useSettingsFileStore();
 
@@ -160,7 +159,7 @@ onMounted(async () => {
   commitMsg;
 });
 
-watch(selectedFile, async (newValue, oldValue) => {
+watch(selectedFile, async (newValue, _oldValue) => {
   now = new Date();
   commitMsg.value = `Updated ${newValue?.app} settings at ${now}`;
 });

@@ -1,11 +1,17 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { JSONCodec, type Subscription } from "nats.ws";
+import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
+import type {
+  CamerasLoadReply,
+  Camera,
+} from "@bitsy-ai/printnanny-asyncapi-models";
+
 import {
   ConnectionStatus,
   NatsSubjectPattern,
   VideoSrcType,
+  renderNatsSubjectPattern,
   type QcDataframeRow,
   type UiStickyAlert,
   type GstPipelineSettingsRequest,
@@ -17,20 +23,14 @@ import { useJanusStore } from "./janus";
 import { useAlertStore } from "./alerts";
 import VideoPaused from "@/assets/video-paused.svg";
 
+const DEFAULT_NATS_TIMEOUT = 12000;
+
 // returns true if num truthy elements / total elements >= threshold
 function atLeast(arr: Array<boolean>, threshold: number): boolean {
   return arr.filter((el) => el === true).length / arr.length >= threshold;
 }
 
-export const VIDEO_STREAMS: Array<VideoStream> = [
-  {
-    src: "/dev/video0",
-    src_type: VideoSrcType.Device,
-    cover: VideoPaused,
-    name: "Camera: /dev/video0",
-    description: "",
-    udp_port: 20002,
-  },
+export const DEMO_VIDEOS: Array<VideoStream> = [
   {
     src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
     src_type: VideoSrcType.Uri,
@@ -52,12 +52,14 @@ export const VIDEO_STREAMS: Array<VideoStream> = [
 export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
+    cameras: [] as Array<Camera>,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
-    videoStreams: VIDEO_STREAMS,
+    videoStreams: DEMO_VIDEOS,
     selectedVideoStream: 0,
     playingVideoStream: undefined as undefined | number,
+    error: null as null | Error,
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -81,6 +83,29 @@ export const useVideoStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
+    async loadCameras(): Promise<Camera[]> {
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+
+      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CamerasLoad);
+
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT })
+        .catch((e) => {
+          const msg = `Error loading cameras`;
+          this.$patch({ error: e });
+          handleError(msg, e);
+        });
+
+      if (resMsg) {
+        const resCodec = JSONCodec<CamerasLoadReply>();
+        const res = resCodec.decode(resMsg?.data);
+        this.$patch({ cameras: res.cameras });
+        return res.cameras;
+      }
+      return [];
+    },
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       const alertStore = useAlertStore();
 
