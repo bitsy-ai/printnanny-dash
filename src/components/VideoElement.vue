@@ -38,7 +38,24 @@ onBeforeRouteLeave((_to, _from) => {
   >
     <div div class="col-span-2">
       <h3 class="text-lg font-bold text-gray-900 prose pb-2">Cameras</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-md bg-yellow-50 p-4" v-if="(store.cameras.length === 0)">
+        <div class="flex">
+            <div class="flex-shrink-0">
+              <ExclamationTriangleIcon class="h-5 w-5 text-yellow-400" aria-hidden="true" />
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-yellow-800">Warning - No Cameras Found</h3>
+              <div class="mt-2 text-sm text-yellow-700">
+                <ul role="list" class="list-disc space-y-1 pl-5">
+                  <li>Check ribbon cable if you're using a Raspberry Pi camera module</li>
+                  <li>Unplug USB camera and plug into a different port</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div> 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" v-else>
+ 
         <a
           v-for="(stream, idx) in store.cameras"
           :key="idx"
