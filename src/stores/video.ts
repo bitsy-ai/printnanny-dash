@@ -3,6 +3,7 @@ import { toRaw } from "vue";
 import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type {
+  CamerasLoadReply,
   Camera,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
@@ -101,7 +102,9 @@ export const useVideoStore = defineStore({
         const resCodec = JSONCodec<CamerasLoadReply>();
         const res = resCodec.decode(resMsg?.data);
         this.$patch({ cameras: res.cameras });
+        return res.cameras;
       }
+      return [];
     },
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       const alertStore = useAlertStore();

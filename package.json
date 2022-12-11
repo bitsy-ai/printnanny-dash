@@ -15,7 +15,7 @@
     "lint:fix": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@bitsy-ai/printnanny-asyncapi-models": "^0.1.30",
+    "@bitsy-ai/printnanny-asyncapi-models": "^0.1.31",
     "@codemirror/legacy-modes": "^6.3.1",
     "@headlessui/vue": "^1.7.3",
     "@heroicons/vue": "^2.0.12",

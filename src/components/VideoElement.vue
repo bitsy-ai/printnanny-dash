@@ -75,7 +75,7 @@ onBeforeRouteLeave((_to, _from) => {
         >
           <img :src="VideoPaused" class="w-full" />
           <h3 class="text-md font-medium leading-6 text-gray-900 text-center">
-            {{ stream.name }}
+            {{ stream.label }}
           </h3>
         </a>
       </div>
