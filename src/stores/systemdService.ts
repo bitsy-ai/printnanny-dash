@@ -5,10 +5,9 @@ import type {
   SystemdManagerGetUnitError,
   SystemdManagerGetUnitReply,
   SystemdManagerEnableUnitsReply,
-  SystemdManagerEnableUnitsRequest,
   SystemdManagerEnableUnitsError,
   SystemdManagerDisableUnitsReply,
-  SystemdManagerDisableUnitsRequest,
+  SystemdManagerUnitFilesRequest,
   SystemdManagerDisableUnitsError,
   SystemdManagerStartUnitReply,
   SystemdManagerStartUnitError,
@@ -17,7 +16,6 @@ import type {
   SystemdManagerStopUnitRequest,
   SystemdManagerStopUnitReply,
   SystemdManagerStopUnitError,
-  SystemdManagerGetUnitFileStateRequest,
   SystemdManagerGetUnitFileStateReply,
   SystemdManagerGetUnitFileStateError,
 } from "@bitsy-ai/printnanny-asyncapi-models";
@@ -80,10 +78,10 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           NatsSubjectPattern.SystemdManagerDisableUnits
         );
 
-        const requestCodec = JSONCodec<SystemdManagerDisableUnitsRequest>();
+        const requestCodec = JSONCodec<SystemdManagerUnitFilesRequest>();
         const req = {
           files: [this.widget.service],
-        } as SystemdManagerDisableUnitsRequest;
+        } as SystemdManagerUnitFilesRequest;
         console.log(`Sending request to ${subject}`, req);
         const resMsg = await natsConnection
           ?.request(subject, requestCodec.encode(req), {
@@ -125,11 +123,11 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           NatsSubjectPattern.SystemdManagerEnableUnits
         );
 
-        const requestCodec = JSONCodec<SystemdManagerEnableUnitsRequest>();
+        const requestCodec = JSONCodec<SystemdManagerUnitFilesRequest>();
 
         const req = {
           files: [this.widget.service],
-        } as SystemdManagerEnableUnitsRequest;
+        } as SystemdManagerUnitFilesRequest;
         console.log(`Sending request to ${subject}`, req);
         const resMsg = await natsConnection
           ?.request(subject, requestCodec.encode(req), {
@@ -306,10 +304,10 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
         );
         const req = {
           unit_name: this.widget?.service,
-        } as SystemdManagerGetUnitFileStateRequest;
+        } as SystemdManagerGetUnitRequest;
         console.log(`Sending request to ${subject}`, req);
 
-        const requestCodec = JSONCodec<SystemdManagerGetUnitFileStateRequest>();
+        const requestCodec = JSONCodec<SystemdManagerGetUnitRequest>();
 
         const resMsg = await natsConnection
           ?.request(subject, requestCodec.encode(req), {
