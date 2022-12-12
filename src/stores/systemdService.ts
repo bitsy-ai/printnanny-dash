@@ -88,7 +88,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             timeout: DEFAULT_NATS_TIMEOUT,
           })
           .catch((e) => {
-            const msg = `Error enabling ${this.widget?.service}`;
+            const msg = `Error disabling ${this.widget?.service}`;
             handleError(msg, e);
           });
         if (resMsg) {
@@ -101,7 +101,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           if (isSystemdManagerEnableUnitError(res)) {
             res = res as SystemdManagerEnableUnitsError;
             const error = new Error(res.error);
-            const msg = `Error enabling ${this.widget.service}`;
+            const msg = `Error disabling ${this.widget.service}`;
             handleError(msg, error);
             this.$patch({ error });
           } else {
@@ -184,7 +184,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             timeout: DEFAULT_NATS_TIMEOUT,
           })
           .catch((e) => {
-            const msg = `Error enabling ${this.widget?.service}`;
+            const msg = `Error starting ${this.widget?.service}`;
             handleError(msg, e);
           });
 
@@ -198,7 +198,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           if (isSystemdManagerStartUnitError(res)) {
             res = res as SystemdManagerEnableUnitsError;
             const error = new Error(res.error);
-            const msg = `Error enabling ${this.widget.service}`;
+            const msg = `Error starting ${this.widget.service}`;
             handleError(msg, error);
             this.$patch({ error });
           } else {
@@ -230,7 +230,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             timeout: DEFAULT_NATS_TIMEOUT,
           })
           .catch((e) => {
-            const msg = `Error enabling ${this.widget?.service}`;
+            const msg = `Error stopping ${this.widget?.service}`;
             handleError(msg, e);
           });
         if (resMsg) {
@@ -243,7 +243,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           if (isSystemdManagerStartUnitError(res)) {
             res = res as SystemdManagerEnableUnitsError;
             const error = new Error(res.error);
-            const msg = `Error enabling ${this.widget.service}`;
+            const msg = `Error stopping ${this.widget.service}`;
             handleError(msg, error);
             this.$patch({ error });
           } else {
