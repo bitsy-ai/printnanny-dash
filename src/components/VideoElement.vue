@@ -10,8 +10,12 @@ import { handleError } from "@/utils";
 const store = useVideoStore();
 store.subscribeQcDataframes();
 
-function selectStream(idx: number) {
+function selectVideoStream(idx: number) {
   store.$patch({ selectedVideoStream: idx });
+}
+
+function selectCameraStream(idx: number) {
+  store.$patch({ selectedCameraStream: idx });
 }
 
 async function startStream() {
@@ -67,9 +71,9 @@ onBeforeRouteLeave((_to, _from) => {
         <a
           v-for="(stream, idx) in store.cameras"
           :key="idx"
-          @click="() => selectStream(idx)"
+          @click="() => selectCameraStream(idx)"
           :class="[
-            store.selectedVideoStream == idx ? 'ring ring-indigo-500' : '',
+            store.selectedCameraStream == idx ? 'ring ring-indigo-500' : '',
             'cursor-pointer w-full bg-gray-200 rounded-md p-4 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg',
           ]"
         >
@@ -84,7 +88,7 @@ onBeforeRouteLeave((_to, _from) => {
         <a
           v-for="(stream, idx) in DEMO_VIDEOS"
           :key="idx"
-          @click="() => selectStream(idx)"
+          @click="() => selectVideoStream(idx)"
           :class="[
             store.selectedVideoStream == idx ? 'ring ring-indigo-500' : '',
             'cursor-pointer w-full bg-gray-200 rounded-md p-4 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg',
