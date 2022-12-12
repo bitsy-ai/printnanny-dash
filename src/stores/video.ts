@@ -57,8 +57,9 @@ export const useVideoStore = defineStore({
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
     videoStreams: DEMO_VIDEOS,
-    selectedVideoStream: 0,
-    playingVideoStream: undefined as undefined | number,
+    selectedVideoStream: -1,
+    selectedCameraStream: 0,
+    playingStream: -1,
     error: null as null | Error,
   }),
   getters: {
@@ -228,11 +229,8 @@ export const useVideoStore = defineStore({
       const natsStore = useNatsStore();
       const janusStore = useJanusStore();
 
-      const selectedStream = this.videoStreams[this.selectedVideoStream];
-      console.log("Attempting to start stream: ", selectedStream);
-
       await janusStore.connectJanus();
-      janusStore.selectJanusStreamByPort(selectedStream);
+      janusStore.selectJanusStreamByPort();
 
       const natsClient = toRaw(natsStore.natsConnection);
       const jsonCodec = JSONCodec<GstPipelineSettingsRequest>();
@@ -267,7 +265,7 @@ export const useVideoStore = defineStore({
     async stopStream() {
       this.$patch({
         status: ConnectionStatus.ConnectionClosing,
-        playingVideoStream: undefined,
+        playingStream: -1,
       });
 
       console.log("Attempting to stop all active streams");
@@ -304,11 +302,14 @@ export const useVideoStore = defineStore({
     },
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
-      if (this.selectedVideoStream == this.playingVideoStream) {
+      if (this.playingStream > -1) {
         return this.stopStream();
       } else {
-        const selectedVideoStream = toRaw(this.selectedVideoStream);
-        this.$patch({ playingVideoStream: selectedVideoStream });
+        const selectedVideoStream =
+          toRaw(this.selectedVideoStream) === -1
+            ? toRaw(this.selectedVideoStream)
+            : toRaw(this.selectedCameraStream);
+        this.$patch({ playingStream: selectedVideoStream });
         await this.startStream();
       }
     },

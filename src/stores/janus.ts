@@ -37,7 +37,7 @@ export const useJanusStore = defineStore({
   }),
 
   actions: {
-    selectJanusStreamByPort(_stream: VideoStream) {
+    selectJanusStreamByPort() {
       // for now, only 1 stream is configured in janus.plugin.streaming.jcfg so we can select it
       // if we want to support multiple camera streams, we'd need to select the appropriate camera stream here
       const janusStream = this.streamList[0];
