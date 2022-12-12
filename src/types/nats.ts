@@ -17,7 +17,7 @@ export enum NatsSubjectPattern {
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {
-  const pi = window.location.hostname;
+  const pi = window.location.hostname.replace(".local", "");
   return pattern.replace("{pi_id}", pi);
 }
 
