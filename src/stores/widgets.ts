@@ -1,19 +1,17 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import type { ConfigFile, WidgetItem } from "@/types";
-import { toRaw } from "vue";
-
-import { JSONCodec, type NatsConnection } from "nats.ws";
 
 import ocotoprintLogo from "@/assets/logos/octoprint/octoprint_logo_rgb_250px.png";
 import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
 import printNannyLogo from "@/assets/logos/printnanny/logo.svg";
 import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
-import { useNatsStore } from "./nats";
+// import moonrakerLogo from "@/assets/logos/moonraker/moonraker-512x512.png";
+// import klipperLogo from "@/assets/logos/klipper/klipper.svg";
+import tailscaleLogo from "@/assets/logos/tailscale/tailscale-512.png";
+
 import { SystemdUnitStatus, WidgetCategory } from "@/types";
 import { handleError } from "@/utils";
-import { useAlertStore } from "./alerts";
 
-const DEFAULT_NATS_TIMEOUT = 12000;
 
 export const useWidgetStore = defineStore({
   id: "widgets",
@@ -55,16 +53,61 @@ export const useWidgetStore = defineStore({
         description:
           "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
         menuItems: [
-          { name: "Documentation", href: "https://docs.mainsail.xyz/" },
-          { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
-          { name: "Discord", href: "https://discord.gg/skWTwTD" },
           {
-            name: "Github Issues",
-            href: "https://github.com/mainsail-crew/mainsail/issues",
+            name: "Mainsail Documentation",
+            href: "https://docs.mainsail.xyz/",
           },
+          { name: "Mainsail Discord", href: "https://discord.gg/skWTwTD" },
+          {
+            name: "Moonraker Documentation",
+            href: "https://moonraker.readthedocs.io/en/latest/",
+          },
+          {
+            name: "Klipper Documentation",
+            href: "https://moonraker.readthedocs.io/en/latest/",
+          },
+          { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
         ],
       } as WidgetItem,
-
+      // {
+      //   name: "Moonraker",
+      //   href: "/mainsail/server",
+      //   loaded: false,
+      //   service: "moonraker.service",
+      //   logo: moonrakerLogo,
+      //   category: WidgetCategory.PrinterManagement,
+      //   enabled: undefined,
+      //   status: SystemdUnitStatus.Unknown,
+      //   description:
+      //     "Moonraker is an API with used to interact with the 3D printing firmware Klipper.",
+      //   menuItems: [
+      //     { name: "Documentation", href: "https://moonraker.readthedocs.io/en/latest/" },
+      //     { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
+      //     {
+      //       name: "Github Issues",
+      //       href: "https://github.com/Arksine/moonraker/issues",
+      //     },
+      //   ],
+      // } as WidgetItem,
+      // {
+      //   name: "Klipper",
+      //   href: "/mainsail/server",
+      //   loaded: false,
+      //   service: "klipper.service",
+      //   logo: klipperLogo,
+      //   category: WidgetCategory.PrinterManagement,
+      //   enabled: undefined,
+      //   status: SystemdUnitStatus.Unknown,
+      //   description:
+      //     "Klipper is a 3D-Printer firmware.",
+      //   menuItems: [
+      //     { name: "Documentation", href: "https://www.klipper3d.org/Overview.html" },
+      //     {
+      //       name: "Github Issues",
+      //       href: "https://github.com/Klipper3d/klipper/issues",
+      //     },
+      //   ],
+      // } as WidgetItem,
       {
         name: "PrintNanny Vision",
         loaded: false,
@@ -127,6 +170,24 @@ export const useWidgetStore = defineStore({
           { name: "Commmunity Forum", href: "https://forum.syncthing.net/" },
         ],
       } as WidgetItem,
+      {
+        name: "Tailscale",
+        href: "https://login.tailscale.com/admin/welcome",
+        logo: tailscaleLogo,
+        category: WidgetCategory.OtherApps,
+        status: SystemdUnitStatus.Unknown,
+        enabled: undefined,
+        description:
+          "Tailscale lets you easily manage access to private resources and work securely from anywhere in the world.",
+        service: "tailscaled.service",
+        menuItems: [
+          {
+            name: "Quick Start",
+            href: "https://printnanny.ai/docs/docs/quick-start/tailscale/",
+          },
+          { name: "Tailscale Docs", href: "https://tailscale.com/kb/" },
+        ],
+      } as WidgetItem,
     ],
   }),
 
@@ -167,72 +228,6 @@ export const useWidgetStore = defineStore({
         }
       }
     },
-
-    // async startService(item: WidgetItem) {
-    //   const natsStore = useNatsStore();
-    //   const alertStore = useAlertStore();
-    //   if (natsStore.natsConnection === undefined) {
-    //     console.warn("startService called before NATS connection initialized");
-    //     return;
-    //   }
-    //   const natsClient = toRaw(natsStore.natsConnection);
-    //   const req = {
-    //     service: item.service,
-    //     command: SystemctlCommand.Start,
-    //     subject: NatsSubjectPattern.SystemctlCommand,
-    //   } as NatsRequest;
-    //   const requestCodec = JSONCodec<NatsRequest>();
-    //   console.log(`Starting ${item.service}`);
-    //   const resMsg = await natsClient
-    //     ?.request(req.subject, requestCodec.encode(req), {
-    //       timeout: DEFAULT_NATS_TIMEOUT,
-    //     })
-    //     .catch((e) => {
-    //       handleError(`Error starting ${item.service}`, e);
-    //     });
-
-    //   if (resMsg) {
-    //     const successAlert: UiStickyAlert = {
-    //       message: `${item.service} will start automatically.`,
-    //       header: `Enabled ${item.service}`,
-    //       actions: [],
-    //     };
-    //     alertStore.pushAlert(successAlert);
-    //   }
-    // },
-    // async stopService(item: WidgetItem) {
-    //   const natsStore = useNatsStore();
-    //   const alertStore = useAlertStore();
-
-    //   if (natsStore.natsConnection === undefined) {
-    //     console.warn("stopService called before NATS connection initialized");
-    //     return;
-    //   }
-    //   const natsClient = toRaw(natsStore.natsConnection);
-    //   const req = {
-    //     service: item.service,
-    //     command: SystemctlCommand.Stop,
-    //     subject: NatsSubjectPattern.SystemctlCommand,
-    //   } as NatsRequest;
-    //   const requestCodec = JSONCodec<NatsRequest>();
-    //   console.log(`Stopping ${item.service}`);
-    //   const resMsg = await natsClient
-    //     ?.request(req.subject, requestCodec.encode(req), {
-    //       timeout: DEFAULT_NATS_TIMEOUT,
-    //     })
-    //     .catch((e) => {
-    //       handleError(`Error stopping ${item.service}`, e);
-    //     });
-
-    //   if (resMsg) {
-    //     const successAlert: UiStickyAlert = {
-    //       message: `${item.service} will no longer start automatically.`,
-    //       header: `Disabled ${item.service}`,
-    //       actions: [],
-    //     };
-    //     alertStore.pushAlert(successAlert);
-    //   }
-    // },
   },
 });
 
