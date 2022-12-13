@@ -20,7 +20,7 @@ import {
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
-import { useAlertStore } from "./alerts";
+import { error, useAlertStore, warning } from "./alerts";
 import VideoPaused from "@/assets/video-paused.svg";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
@@ -137,58 +137,36 @@ export const useVideoStore = defineStore({
         0.1
       );
       if (!nozzleDetected) {
-        const alert: UiStickyAlert = {
-          header: "Calibration: Nozzle",
-          icon: ExclamationTriangleIcon,
-          iconClass: "text-indigo-500",
-          message: "Calibration needed to improve nozzle monitoring.",
-          actions: [],
-        };
-        // alert store will filter duplicate alerts
-        alertStore.pushAlert(alert);
+        warning(
+          "Calibration: Nozzle",
+          "Calibration needed to improve nozzle monitoring."
+        );
       }
       if (!printDetected) {
-        const alert: UiStickyAlert = {
-          header: "Calibration: Printer",
-          icon: ExclamationTriangleIcon,
-          iconClass: "text-indigo-500",
-          message: "Calibration needed to improve print object detection.",
-          actions: [],
-        };
-        alertStore.pushAlert(alert);
+        warning(
+          "Calibration: Printer",
+          "Calibration needed to improve print object detection."
+        );
       }
 
       if (!raftDetected) {
-        const alert: UiStickyAlert = {
-          header: "Calibration: Raft",
-          icon: ExclamationTriangleIcon,
-          iconClass: "text-indigo-500",
-          message:
-            "Calibration needed to improve raft detection. Ignore this message if you are not printing with a raft.",
-          actions: [],
-        };
-        alertStore.pushAlert(alert);
+        warning(
+          "Calibration: Raft",
+          "Calibration needed to improve raft detection. Ignore this message if you are not printing with a raft."
+        );
       }
 
       if (adhesionFailureDetected) {
-        const alert: UiStickyAlert = {
-          header: "Failure: Bed Adhesion",
-          icon: ExclamationTriangleIcon,
-          iconClass: "text-red-500",
-          message: "Critical failures detected..",
-          actions: [],
-        };
-        alertStore.pushAlert(alert);
+        error(
+          "Failure: Bed Adhesion",
+          "Critical failures detected: print bed ahesion"
+        );
       }
       if (spaghettiFailureDetected) {
-        const alert: UiStickyAlert = {
-          header: "Failure: Spaghetti",
-          icon: ExclamationTriangleIcon,
-          iconClass: "text-red-500",
-          message: "Critical failures detected.",
-          actions: [],
-        };
-        alertStore.pushAlert(alert);
+        error(
+          "Failure: Spaghetti",
+          "Critical failures detected: filament spagehetti"
+        );
       }
     },
 

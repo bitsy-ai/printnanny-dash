@@ -11,7 +11,7 @@ import type {
   SettingsApplyReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { useAlertStore } from "./alerts";
+import { useAlertStore, success } from "./alerts";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
@@ -52,15 +52,10 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
         const res = resCodec.decode(resMsg?.data);
         console.log("Sucessfully applied settings:", res);
         await this.load();
-        const alertStore = useAlertStore();
-        const alert: UiStickyAlert = {
-          header: `Updated ${file.app} settings`,
-          icon: CheckIcon,
-          iconClass: "text-emerald-500",
-          message: `${file.app} services were automatically restarted.`,
-          actions: [],
-        };
-        alertStore.pushAlert(alert);
+        success(
+          `Updated ${file.app} settings`,
+          `${file.app} services were automatically restarted.`
+        );
       }
     },
     async load() {
