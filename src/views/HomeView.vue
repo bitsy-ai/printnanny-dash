@@ -27,7 +27,7 @@
             </div>
             <div class="flex flex-col items-center pb-10">
               <img
-                class="mb-3 w-24 h-24 rounded-full shadow-lg"
+                class="mb-3 p-2 w-24 h-24 rounded-full shadow-lg"
                 src="@/assets/logos/repetier/repetier.png"
                 alt="Repetier"
               />
@@ -89,7 +89,7 @@
             </div>
             <div class="flex flex-col items-center pb-10">
               <img
-                class="mb-3 w-24 h-24 rounded-full shadow-lg p-4"
+                class="mb-3 p-2 w-24 h-24 rounded-full shadow-lg p-4"
                 src="@/assets/logos/zapier/zapier.png"
                 alt="Zapier"
               />
