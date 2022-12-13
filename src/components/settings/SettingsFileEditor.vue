@@ -143,6 +143,13 @@ import {
 
 import type { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
 
+const props = defineProps({
+  app: {
+    type: String,
+    default: "printnanny",
+  },
+});
+
 const store = useSettingsFileStore();
 
 const selectedFile = ref(null as null | SettingsFile);
@@ -155,7 +162,9 @@ function applyChanges() {
 
 onMounted(async () => {
   await store.load();
-  selectedFile.value = store.settingsFiles[0];
+  selectedFile.value =
+    store.settingsFiles.find((el) => el.app == props.app) ||
+    store.settingsFiles[0];
   commitMsg;
 });
 

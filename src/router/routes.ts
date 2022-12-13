@@ -38,12 +38,13 @@ const SettingsRoutes = [
         },
       },
       {
-        path: "files",
+        path: "files/:app",
         name: "edit-settings-files",
         components: {
           SettingsPanel: () =>
             import("@/components/settings/SettingsFileEditor.vue"),
         },
+        props: true,
       },
       {
         path: "device-info",
