@@ -141,7 +141,7 @@ import {
   ListboxLabel,
 } from "@headlessui/vue";
 
-import { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
+import type { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
 
 const props = defineProps({
   app: {
