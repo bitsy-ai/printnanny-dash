@@ -64,6 +64,26 @@ export const useWidgetStore = defineStore({
           },
         ],
       } as WidgetItem,
+      {
+        name: "Moonraker",
+        href: "/mainsail/server",
+        loaded: false,
+        service: "moonraker.service",
+        logo: mainsailLogo,
+        category: WidgetCategory.PrinterManagement,
+        enabled: undefined,
+        status: SystemdUnitStatus.Unknown,
+        description:
+          "Moonraker is an API with used to interact with the 3D printing firmware Klipper.",
+        menuItems: [
+          { name: "Documentation", href: "https://moonraker.readthedocs.io/en/latest/" },
+          { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
+          {
+            name: "Github Issues",
+            href: "https://github.com/Arksine/moonraker/issues",
+          },
+        ],
+      } as WidgetItem,
 
       {
         name: "PrintNanny Vision",
@@ -125,6 +145,24 @@ export const useWidgetStore = defineStore({
           },
           { name: "Syncthing Docs", href: "https://docs.syncthing.net/" },
           { name: "Commmunity Forum", href: "https://forum.syncthing.net/" },
+        ],
+      } as WidgetItem,
+      {
+        name: "Tailscale",
+        href: "https://login.tailscale.com/admin/welcome",
+        logo: syncThingLogo,
+        category: WidgetCategory.OtherApps,
+        status: SystemdUnitStatus.Unknown,
+        enabled: undefined,
+        description:
+          "Tailscale lets you easily manage access to private resources and work securely from anywhere in the world.",
+        service: "tailscaled.service",
+        menuItems: [
+          {
+            name: "Quick Start",
+            href: "https://printnanny.ai/docs/docs/quick-start/tailscale/",
+          },
+          { name: "Tailscale Docs", href: "https://tailscale.com/kb/" },
         ],
       } as WidgetItem,
     ],
