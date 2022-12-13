@@ -92,9 +92,15 @@ watch(
     if (oldValue === undefined) {
       return;
     }
-    if (newValue === true) {
+    if (
+      newValue === true &&
+      store.unit?.unit_file_state != SystemdUnitFileState.ENABLED
+    ) {
       await store.enableService();
-    } else if (newValue === false) {
+    } else if (
+      newValue === false &&
+      store.unit?.unit_file_state != SystemdUnitFileState.DISABLED
+    ) {
       await store.disableService();
     }
   }
