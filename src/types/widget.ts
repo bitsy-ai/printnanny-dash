@@ -1,4 +1,4 @@
-import type { SystemdUnit } from "@bitsy-ai/printnanny-asyncapi-models";
+import type { SettingsApp, SystemdUnit } from "@bitsy-ai/printnanny-asyncapi-models";
 
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
@@ -19,6 +19,7 @@ export interface WidgetItem {
   menuItems: Array<WidgetMenuItem>;
   service: string;
   category: WidgetCategory;
+  settings?: SettingsApp,
   error?: Error;
 }
 

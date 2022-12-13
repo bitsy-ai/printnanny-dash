@@ -9,7 +9,12 @@
       </div>
 
       <div class="w-full flex justify-end">
+        <router-link
+          v-if="item.settings"
+          :to="{name: 'edit-settings-files', params: {app: item.settings}}"
+          class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center text-sm font-medium">
         <Cog6ToothIcon class="h-6 w-6 mr-4" />
+        </router-link>
         <Switch
           v-model="enabled"
           v-if="store.loading === false"
@@ -56,6 +61,7 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
 import { Switch } from "@headlessui/vue";
 import { Cog6ToothIcon } from "@heroicons/vue/24/solid";
 

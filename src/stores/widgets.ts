@@ -11,6 +11,7 @@ import tailscaleLogo from "@/assets/logos/tailscale/tailscale-512.png";
 
 import { SystemdUnitStatus, WidgetCategory } from "@/types";
 import { handleError } from "@/utils";
+import { SettingsApp } from "@bitsy-ai/printnanny-asyncapi-models";
 
 
 export const useWidgetStore = defineStore({
@@ -22,6 +23,7 @@ export const useWidgetStore = defineStore({
     items: [
       {
         name: "OctoPrint",
+        settings: SettingsApp.OCTOPRINT,
         loaded: false,
         href: "/octoprint/",
         service: "octoprint.service",
@@ -43,6 +45,7 @@ export const useWidgetStore = defineStore({
       } as WidgetItem,
       {
         name: "Mainsail",
+        settings: SettingsApp.KLIPPER,
         href: "/mainsail/",
         loaded: false,
         service: "mainsail.target",

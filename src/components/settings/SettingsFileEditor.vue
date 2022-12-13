@@ -141,7 +141,14 @@ import {
   ListboxLabel,
 } from "@headlessui/vue";
 
-import type { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
+import { SettingsFile } from "@bitsy-ai/printnanny-asyncapi-models";
+
+const props = defineProps({
+  app: {
+    type: String,
+    default: "printnanny"
+  }
+})
 
 const store = useSettingsFileStore();
 
@@ -155,7 +162,7 @@ function applyChanges() {
 
 onMounted(async () => {
   await store.load();
-  selectedFile.value = store.settingsFiles[0];
+  selectedFile.value = store.settingsFiles.find(el => el.app == props.app) || store.settingsFiles[0]
   commitMsg;
 });
 
