@@ -1,23 +1,17 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import type { ConfigFile, WidgetItem } from "@/types";
-import { toRaw } from "vue";
-
-import { JSONCodec, type NatsConnection } from "nats.ws";
 
 import ocotoprintLogo from "@/assets/logos/octoprint/octoprint_logo_rgb_250px.png";
 import mainsailLogo from "@/assets/logos/mainsail/icon-192-maskable.png";
 import printNannyLogo from "@/assets/logos/printnanny/logo.svg";
 import syncThingLogo from "@/assets/logos/syncthing/logo-256.png";
-import moonrakerLogo from "@/assets/logos/moonraker/moonraker-512x512.png";
-import klipperLogo from "@/assets/logos/klipper/klipper.svg";
+// import moonrakerLogo from "@/assets/logos/moonraker/moonraker-512x512.png";
+// import klipperLogo from "@/assets/logos/klipper/klipper.svg";
 import tailscaleLogo from "@/assets/logos/tailscale/tailscale-512.png";
 
-import { useNatsStore } from "./nats";
 import { SystemdUnitStatus, WidgetCategory } from "@/types";
 import { handleError } from "@/utils";
-import { useAlertStore } from "./alerts";
 
-const DEFAULT_NATS_TIMEOUT = 12000;
 
 export const useWidgetStore = defineStore({
   id: "widgets",
@@ -59,10 +53,19 @@ export const useWidgetStore = defineStore({
         description:
           "Mainsail makes Klipper more accessible by adding a lightweight, responsive web user interface.",
         menuItems: [
-          { name: "Mainsail Documentation", href: "https://docs.mainsail.xyz/" },
+          {
+            name: "Mainsail Documentation",
+            href: "https://docs.mainsail.xyz/",
+          },
           { name: "Mainsail Discord", href: "https://discord.gg/skWTwTD" },
-          { name: "Moonraker Documentation", href: "https://moonraker.readthedocs.io/en/latest/" },
-          { name: "Klipper Documentation", href: "https://moonraker.readthedocs.io/en/latest/" },
+          {
+            name: "Moonraker Documentation",
+            href: "https://moonraker.readthedocs.io/en/latest/",
+          },
+          {
+            name: "Klipper Documentation",
+            href: "https://moonraker.readthedocs.io/en/latest/",
+          },
           { name: "/r/klippers", href: "https://www.reddit.com/r/klippers/" },
         ],
       } as WidgetItem,
@@ -225,72 +228,6 @@ export const useWidgetStore = defineStore({
         }
       }
     },
-
-    // async startService(item: WidgetItem) {
-    //   const natsStore = useNatsStore();
-    //   const alertStore = useAlertStore();
-    //   if (natsStore.natsConnection === undefined) {
-    //     console.warn("startService called before NATS connection initialized");
-    //     return;
-    //   }
-    //   const natsClient = toRaw(natsStore.natsConnection);
-    //   const req = {
-    //     service: item.service,
-    //     command: SystemctlCommand.Start,
-    //     subject: NatsSubjectPattern.SystemctlCommand,
-    //   } as NatsRequest;
-    //   const requestCodec = JSONCodec<NatsRequest>();
-    //   console.log(`Starting ${item.service}`);
-    //   const resMsg = await natsClient
-    //     ?.request(req.subject, requestCodec.encode(req), {
-    //       timeout: DEFAULT_NATS_TIMEOUT,
-    //     })
-    //     .catch((e) => {
-    //       handleError(`Error starting ${item.service}`, e);
-    //     });
-
-    //   if (resMsg) {
-    //     const successAlert: UiStickyAlert = {
-    //       message: `${item.service} will start automatically.`,
-    //       header: `Enabled ${item.service}`,
-    //       actions: [],
-    //     };
-    //     alertStore.pushAlert(successAlert);
-    //   }
-    // },
-    // async stopService(item: WidgetItem) {
-    //   const natsStore = useNatsStore();
-    //   const alertStore = useAlertStore();
-
-    //   if (natsStore.natsConnection === undefined) {
-    //     console.warn("stopService called before NATS connection initialized");
-    //     return;
-    //   }
-    //   const natsClient = toRaw(natsStore.natsConnection);
-    //   const req = {
-    //     service: item.service,
-    //     command: SystemctlCommand.Stop,
-    //     subject: NatsSubjectPattern.SystemctlCommand,
-    //   } as NatsRequest;
-    //   const requestCodec = JSONCodec<NatsRequest>();
-    //   console.log(`Stopping ${item.service}`);
-    //   const resMsg = await natsClient
-    //     ?.request(req.subject, requestCodec.encode(req), {
-    //       timeout: DEFAULT_NATS_TIMEOUT,
-    //     })
-    //     .catch((e) => {
-    //       handleError(`Error stopping ${item.service}`, e);
-    //     });
-
-    //   if (resMsg) {
-    //     const successAlert: UiStickyAlert = {
-    //       message: `${item.service} will no longer start automatically.`,
-    //       header: `Disabled ${item.service}`,
-    //       actions: [],
-    //     };
-    //     alertStore.pushAlert(successAlert);
-    //   }
-    // },
   },
 });
 
