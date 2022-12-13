@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-
+import { CheckIcon, ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert } from "@/types";
 
 export const useAlertStore = defineStore({
@@ -18,6 +18,42 @@ export const useAlertStore = defineStore({
     },
   },
 });
+
+export function success(header: string, message: string) {
+  const store = useAlertStore();
+  const alert = {
+    header,
+    message,
+    icon: CheckIcon,
+    iconClass: "text-emerald-500",
+    actions: []
+  };
+  store.pushAlert(alert);
+}
+
+export function warning(header: string, message: string) {
+  const store = useAlertStore();
+  const alert = {
+    header,
+    message,
+    icon: ExclamationTriangleIcon,
+    iconClass: "text-amber-500",
+    actions: []
+  };
+  store.pushAlert(alert);
+}
+
+export function error(header: string, message: string) {
+  const store = useAlertStore();
+  const alert = {
+    header,
+    message,
+    icon: ExclamationTriangleIcon,
+    iconClass: "text-red-500",
+    actions: []
+  };
+  store.pushAlert(alert);
+}
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useAlertStore, import.meta.hot));
