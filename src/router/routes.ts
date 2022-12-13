@@ -44,7 +44,7 @@ const SettingsRoutes = [
           SettingsPanel: () =>
             import("@/components/settings/SettingsFileEditor.vue"),
         },
-        props: true
+        props: true,
       },
       {
         path: "device-info",

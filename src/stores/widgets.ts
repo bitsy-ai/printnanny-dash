@@ -13,7 +13,6 @@ import { SystemdUnitStatus, WidgetCategory } from "@/types";
 import { handleError } from "@/utils";
 import { SettingsApp } from "@bitsy-ai/printnanny-asyncapi-models";
 
-
 export const useWidgetStore = defineStore({
   id: "widgets",
   state: () => ({
@@ -115,6 +114,7 @@ export const useWidgetStore = defineStore({
         name: "PrintNanny Vision",
         loaded: false,
         href: "/vision/",
+        settings: SettingsApp.PRINTNANNY,
         service: "printnanny-vision.service",
         logo: printNannyLogo,
         category: WidgetCategory.PrintNannyApps,
@@ -127,6 +127,7 @@ export const useWidgetStore = defineStore({
       {
         name: "PrintNanny Cloud",
         loaded: false,
+        settings: SettingsApp.PRINTNANNY,
         href: "https://printnanny.ai/devices",
         service: "printnanny-cloud.target",
         logo: printNannyLogo,

@@ -120,7 +120,7 @@ const subNavigation = ref([
   },
   {
     name: "Edit Settings",
-    link: { name: "edit-settings-files", params: {app: "printnanny"} },
+    link: { name: "edit-settings-files", params: { app: "printnanny" } },
     icon: CogIcon,
     current: computed(
       () => router.currentRoute.value.name === "edit-settings-files"
