@@ -29,6 +29,7 @@ import {
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
+import { success } from "./alerts";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
@@ -203,6 +204,10 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             this.$patch({ error });
           } else {
             res = res as SystemdManagerStartUnitReply;
+            success(
+              `Started ${widget.service}`,
+              `${widget.name} is now available.`
+            );
             console.log(`Started ${widget.service}, start job id:`, res.job);
           }
         }
@@ -248,6 +253,10 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             this.$patch({ error });
           } else {
             res = res as SystemdManagerStartUnitReply;
+            success(
+              `Stopped ${widget.service}`,
+              `${widget.name} is no longer running.`
+            );
             console.log(`Started ${widget.service}, start job id:`, res.job);
           }
         }

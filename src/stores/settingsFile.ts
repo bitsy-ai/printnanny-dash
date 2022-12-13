@@ -52,7 +52,10 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
         const res = resCodec.decode(resMsg?.data);
         console.log("Sucessfully applied settings:", res);
         await this.load();
-        success(`Updated ${file.app} settings`, `${file.app} services were automatically restarted.`);
+        success(
+          `Updated ${file.app} settings`,
+          `${file.app} services were automatically restarted.`
+        );
       }
     },
     async load() {

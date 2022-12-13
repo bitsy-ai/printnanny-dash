@@ -26,7 +26,7 @@ export function success(header: string, message: string) {
     message,
     icon: CheckIcon,
     iconClass: "text-emerald-500",
-    actions: []
+    actions: [],
   };
   store.pushAlert(alert);
 }
@@ -38,7 +38,7 @@ export function warning(header: string, message: string) {
     message,
     icon: ExclamationTriangleIcon,
     iconClass: "text-amber-500",
-    actions: []
+    actions: [],
   };
   store.pushAlert(alert);
 }
@@ -50,7 +50,7 @@ export function error(header: string, message: string) {
     message,
     icon: ExclamationTriangleIcon,
     iconClass: "text-red-500",
-    actions: []
+    actions: [],
   };
   store.pushAlert(alert);
 }

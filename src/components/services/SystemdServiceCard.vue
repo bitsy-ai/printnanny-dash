@@ -96,11 +96,13 @@ watch(
       newValue === true &&
       store.unit?.unit_file_state != SystemdUnitFileState.ENABLED
     ) {
+      debugger;
       await store.enableService();
     } else if (
       newValue === false &&
       store.unit?.unit_file_state != SystemdUnitFileState.DISABLED
     ) {
+      debugger;
       await store.disableService();
     }
   }

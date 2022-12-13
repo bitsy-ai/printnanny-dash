@@ -137,21 +137,36 @@ export const useVideoStore = defineStore({
         0.1
       );
       if (!nozzleDetected) {
-        warning("Calibration: Nozzle", "Calibration needed to improve nozzle monitoring.");
+        warning(
+          "Calibration: Nozzle",
+          "Calibration needed to improve nozzle monitoring."
+        );
       }
       if (!printDetected) {
-        warning("Calibration: Printer", "Calibration needed to improve print object detection.");
+        warning(
+          "Calibration: Printer",
+          "Calibration needed to improve print object detection."
+        );
       }
 
       if (!raftDetected) {
-        warning("Calibration: Raft", "Calibration needed to improve raft detection. Ignore this message if you are not printing with a raft.");
+        warning(
+          "Calibration: Raft",
+          "Calibration needed to improve raft detection. Ignore this message if you are not printing with a raft."
+        );
       }
 
       if (adhesionFailureDetected) {
-        error("Failure: Bed Adhesion", "Critical failures detected: print bed ahesion");
+        error(
+          "Failure: Bed Adhesion",
+          "Critical failures detected: print bed ahesion"
+        );
       }
       if (spaghettiFailureDetected) {
-        error("Failure: Spaghetti", "Critical failures detected: filament spagehetti");
+        error(
+          "Failure: Spaghetti",
+          "Critical failures detected: filament spagehetti"
+        );
       }
     },
 
