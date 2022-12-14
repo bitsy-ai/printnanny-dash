@@ -36,10 +36,10 @@ onBeforeRouteLeave((_to, _from) => {
 
 <template>
   <div
-    class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1"
+    class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
   >
-    <div div class="col-span-2">
-      <h3 class="text-lg font-bold text-gray-900 prose pb-2">Cameras</h3>
+    <div div class="col-span-3 pb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-2">Cameras</h3>
       <div
         class="rounded-md bg-yellow-50 p-4"
         v-if="store.cameras.length === 0"
@@ -78,12 +78,12 @@ onBeforeRouteLeave((_to, _from) => {
           ]"
         >
           <img :src="VideoPaused" class="w-full" />
-          <h3 class="text-md font-medium leading-6 text-gray-900 text-center">
+          <h3 class="text-base font-medium text-gray-900 text-center">
             {{ stream.label }}
           </h3>
         </a>
       </div>
-      <h3 class="text-lg font-bold text-gray-900 prose py-2">Demo Videos</h3>
+      <h3 class="text-base font-medium text-gray-900 py-2">Demo Videos</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <a
           v-for="(stream, idx) in DEMO_VIDEOS"
@@ -95,17 +95,64 @@ onBeforeRouteLeave((_to, _from) => {
           ]"
         >
           <img :src="stream.cover" class="w-full" />
-          <h3 class="text-md font-medium leading-6 text-gray-900 text-center">
+          <h3 class="text-base font-medium text-gray-900 text-center">
             {{ stream.name }}
           </h3>
         </a>
       </div>
     </div>
-    <div class="col-span-3">
-      <h3 class="text-lg font-bold text-gray-900 prose pb-2 text-center">
+    <div class="col-span-2 flex">
+      <fieldset>
+        <legend class="sr-only">Video Options</legend>
+        <div class="text-base font-medium text-gray-900" aria-hidden="true">
+          Video Options
+        </div>
+        <div class="mt-4 space-y-4">
+          <div class="relative flex items-start">
+            <div class="flex h-5 items-center">
+              <input
+                id="showOverlay"
+                v-model="store.showOverlay"
+                name="showOverlay"
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+            </div>
+            <div class="ml-3 text-sm">
+              <label for="showOverlay" class="font-medium text-gray-700"
+                >Show Detections</label
+              >
+              <p class="text-gray-500">Draw boxes around detected objects.</p>
+            </div>
+          </div>
+          <!--
+              <div class="relative flex items-start">
+                <div class="flex h-5 items-center">
+                  <input id="candidates" name="candidates" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="candidates" class="font-medium text-gray-700">Candidates</label>
+                  <p class="text-gray-500">Get notified when a candidate applies for a job.</p>
+                </div>
+              </div>
+              <div class="relative flex items-start">
+                <div class="flex h-5 items-center">
+                  <input id="offers" name="offers" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="offers" class="font-medium text-gray-700">Offers</label>
+                  <p class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
+                </div>
+              </div>
+              -->
+        </div>
+      </fieldset>
+    </div>
+    <div class="col-span-6 sm:border-t sm:border-gray-200">
+      <h3 class="text-base font-medium text-gray-900 py-2 text-center m-auto">
         Video Stream
       </h3>
-
+      <VideoStatus />
       <video
         @click="startStream"
         id="janus-video"
@@ -115,8 +162,6 @@ onBeforeRouteLeave((_to, _from) => {
         aria-placeholder="Video stream is loading"
         poster="@/assets/video-paused.svg"
       />
-
-      <VideoStatus />
     </div>
   </div>
 </template>

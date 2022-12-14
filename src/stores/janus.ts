@@ -34,6 +34,7 @@ export const useJanusStore = defineStore({
     selectedStream: undefined as undefined | JanusStream,
     streamList: [] as Array<JanusStream>,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
+    showOverlay: true as boolean,
   }),
 
   actions: {
@@ -239,36 +240,42 @@ export const useJanusStore = defineStore({
         event.track.onended = (evt) => {
           console.log("track.onended", evt);
         };
-
         const videoStream = new MediaStream([event.track]);
 
-        // const overlayStream = event.streams[1];
-        const opts = {
-          x: 0, // position of the topleft corner
-          y: 0,
-          width: merger.width,
-          height: merger.height,
-          muted: true, // we don't want sound from the screen (if there is any)
-          index: 0,
-          draw: null as null | DrawFunction,
-        } as AddStreamOptions;
-        if (event.transceiver.mid !== undefined) {
-          opts.index = parseInt(
-            event.transceiver.mid?.replace("v", "") as string
-          );
+        // if showOverlay is true
+        if (this.showOverlay) {
+          const opts = {
+            x: 0, // position of the topleft corner
+            y: 0,
+            width: merger.width,
+            height: merger.height,
+            mute: true,
+            muted: true, // we don't want sound from the screen (if there is any)
+            index: 0,
+            draw: null as null | DrawFunction,
+          } as AddStreamOptions;
+          if (event.transceiver.mid !== undefined) {
+            opts.index = parseInt(
+              event.transceiver.mid?.replace("v", "") as string
+            );
 
-          // remove black background from overlay video
-          if (opts.index == 2) {
-            opts.draw = (ctx, frame, done) => {
-              ctx.globalCompositeOperation = "screen";
-              ctx.drawImage(frame, 0, 0, merger.width, merger.height);
-              done();
-            };
+            // remove black background from overlay video
+            if (opts.index == 2) {
+              opts.draw = (ctx, frame, done) => {
+                ctx.globalCompositeOperation = "screen";
+                ctx.drawImage(frame, 0, 0, merger.width, merger.height);
+                done();
+              };
+            }
           }
+          console.log("Merging stream with opts:", opts, event);
+          merger.addStream(videoStream, opts);
         }
-
-        console.log("Merging stream with opts:", opts, event);
-        merger.addStream(videoStream, opts);
+        // otherwise, just add main video stream and ignore bounding box track
+        else if (event.transceiver.mid == "v1") {
+          console.log("Adding stream with mid v1");
+          merger.addStream(videoStream, undefined);
+        }
       };
 
       this.$patch({ janusPeerConnection: pc });
@@ -300,7 +307,8 @@ export const useJanusStore = defineStore({
         console.error("Error setting video player.play()", e);
       });
     },
-    async startJanusStream() {
+    async startJanusStream(showOverlay: boolean) {
+      this.$patch({ showOverlay });
       if (this.selectedStream == undefined) {
         console.warn(
           "startJanusStream() was called, but no stream is selected"

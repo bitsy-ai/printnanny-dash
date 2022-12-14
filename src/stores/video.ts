@@ -61,6 +61,7 @@ export const useVideoStore = defineStore({
     selectedCameraStream: 0,
     playingStream: -1,
     error: null as null | Error,
+    showOverlay: true,
   }),
   getters: {
     meter_x(state): Array<number> {
@@ -238,7 +239,7 @@ export const useVideoStore = defineStore({
       //   })
       //   .catch((e) => handleError("Command Failed", e));
       // console.debug(`NATS response:`, res);
-      janusStore.startJanusStream();
+      janusStore.startJanusStream(toRaw(this.showOverlay));
     },
     async stopStream() {
       this.$patch({

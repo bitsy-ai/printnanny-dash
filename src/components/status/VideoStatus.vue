@@ -27,7 +27,7 @@
           aria-hidden="true"
         ></div>
         <span class="text-grey-600"
-          >Click video player ☝️ to start the selected stream</span
+          >Click video player 👇 to start the selected stream</span
         >
       </div>
 
@@ -40,7 +40,7 @@
           aria-hidden="true"
         ></div>
         <span class="text-grey-600"
-          >Connected to {{ hostname }}. Click video player ☝️ to stop
+          >Connected to {{ hostname }}. Click video player 👇 to stop
           stream.</span
         >
       </div>
@@ -53,7 +53,7 @@
           aria-hidden="true"
         ></div>
         <span class="text-grey-600"
-          >Error connecting to {{ hostname }}. Click video player ☝️ to
+          >Error connecting to {{ hostname }}. Click video player 👇 to
           retry.</span
         >
       </div>

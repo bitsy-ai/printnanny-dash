@@ -18,7 +18,7 @@ import type {
   SystemdManagerStopUnitError,
   SystemdManagerGetUnitFileStateReply,
   SystemdManagerGetUnitFileStateError,
-  SystemdUnitFileState
+  SystemdUnitFileState,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
