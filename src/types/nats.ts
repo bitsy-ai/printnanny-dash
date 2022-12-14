@@ -10,9 +10,9 @@ export enum NatsSubjectPattern {
   SystemdManagerEnableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
   SystemdManagerStartUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StartUnit",
   SystemdManagerStopUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StopUnit",
-  SettingsLoad = "pi.{pi_id}.settings.vcs.load",
-  SettingsApply = "pi.{pi_id}.settings.vcs.apply",
-  SettingsRevert = "pi.{pi_id}.settings.vcs.revert",
+  SettingsLoad = "pi.{pi_id}.settings.file.load",
+  SettingsApply = "pi.{pi_id}.settings.file.apply",
+  SettingsRevert = "pi.{pi_id}.settings.file.revert",
   PrintNannyCloudAuth = "pi.{pi_id}.settings.printnanny.cloud.auth",
 }
 
