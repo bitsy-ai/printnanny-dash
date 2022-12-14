@@ -18,8 +18,8 @@ import type {
   SystemdManagerStopUnitError,
   SystemdManagerGetUnitFileStateReply,
   SystemdManagerGetUnitFileStateError,
+  SystemdUnitFileState
 } from "@bitsy-ai/printnanny-asyncapi-models";
-import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
   NatsSubjectPattern,
