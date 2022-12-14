@@ -349,13 +349,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
         }
       },
       async load() {
-        const unitFileState = await this.loadUnitFileState();
-        console.log(
-          `${this.widget.service} GetUnitFileState: ${unitFileState}`
-        );
-        if (unitFileState === SystemdUnitFileState.ENABLED) {
-          await this.loadUnit();
-        }
+        await this.loadUnit();
         this.$patch({ loading: false });
       },
     },
