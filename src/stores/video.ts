@@ -31,38 +31,30 @@ function atLeast(arr: Array<boolean>, threshold: number): boolean {
   return arr.filter((el) => el === true).length / arr.length >= threshold;
 }
 
-export const DEMO_VIDEOS: Array<VideoStream> = [
+export const DEMO_VIDEOS: Array<PlaybackVideo> = [
   {
-    src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
-    src_type: VideoSrcType.Uri,
+    uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
+    src_type: PlaybackSourceType.URI,
     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_1.png",
-    name: "Demo Video #1",
-    description: "",
-    udp_port: 20001,
+    display_name: "Demo Video #1",
   },
   {
-    src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
-    src_type: VideoSrcType.Uri,
+    uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
+    src_type: PlaybackSourceType.URI,
     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_2.png",
-    name: "Demo Video #2",
-    description: "",
-    udp_port: 20001,
+    display_name: "Demo Video #2",
   },
 ];
 
 export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
-    cameras: [] as Array<Camera>,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
-    videoStreams: DEMO_VIDEOS,
-    sources: [] as Array<Camera | PlaybackVideo>,
+    sources: DEMO_VIDEOS as Array<Camera | PlaybackVideo>,
     selectedVideoSource: null as null | Camera | PlaybackVideo,
-    // selectedVideoStream: -1,
-    // selectedCameraStream: 0,
-    playingStream: -1,
+    playingStream: null as null | Camera | PlaybackVideo,
     error: null as null | Error,
     showOverlay: true,
   }),
@@ -112,7 +104,7 @@ export const useVideoStore = defineStore({
       if (resMsg) {
         const resCodec = JSONCodec<CamerasLoadReply>();
         const res = resCodec.decode(resMsg?.data);
-        this.$patch({ cameras: res.cameras });
+        this.sources.concat(res.cameras);
         return res.cameras;
       }
       return [];
@@ -253,7 +245,7 @@ export const useVideoStore = defineStore({
     async stopStream() {
       this.$patch({
         status: ConnectionStatus.ConnectionClosing,
-        playingStream: -1,
+        playingStream: null
       });
 
       console.log("Attempting to stop all active streams");
@@ -290,14 +282,10 @@ export const useVideoStore = defineStore({
     },
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
-      if (this.playingStream > -1) {
+      if (this.playingStream !== null) {
         return this.stopStream();
       } else {
-        const selectedVideoStream =
-          toRaw(this.selectedVideoStream) === -1
-            ? toRaw(this.selectedVideoStream)
-            : toRaw(this.selectedCameraStream);
-        this.$patch({ playingStream: selectedVideoStream });
+        this.$patch({ playingStream: toRaw(this.selectedVideoSource) });
         await this.startStream();
       }
     },
