@@ -1,7 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
 import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
-import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import {
   type CamerasLoadReply,
   type Camera,
@@ -15,11 +14,8 @@ import {
 import {
   ConnectionStatus,
   NatsSubjectPattern,
-  VideoSrcType,
   renderNatsSubjectPattern,
   type QcDataframeRow,
-  type GstPipelineSettingsRequest,
-  type VideoStream,
 } from "@/types";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
@@ -62,10 +58,18 @@ export const useVideoStore = defineStore({
   }),
   getters: {
     cameras(state): Array<Camera> {
-      return state.sources.filter(v => v.src_type === CameraSourceType.CSI || v.src_type === CameraSourceType.USB) as Array<Camera>
+      return state.sources.filter(
+        (v) =>
+          v.src_type === CameraSourceType.CSI ||
+          v.src_type === CameraSourceType.USB
+      ) as Array<Camera>;
     },
     videos(state): Array<PlaybackVideo> {
-      return state.sources.filter(v => v.src_type === PlaybackSourceType.FILE || v.src_type === PlaybackSourceType.URI) as Array<PlaybackVideo>
+      return state.sources.filter(
+        (v) =>
+          v.src_type === PlaybackSourceType.FILE ||
+          v.src_type === PlaybackSourceType.URI
+      ) as Array<PlaybackVideo>;
     },
     meter_x(state): Array<number> {
       return state.df.map((el) => el.rt);
@@ -219,7 +223,9 @@ export const useVideoStore = defineStore({
         await natsStore.getNatsConnection();
 
       const requestCodec = JSONCodec<WebrtcSettingsApplyRequest>();
-      const req = { video_src: this.selectedVideoSource } as WebrtcSettingsApplyRequest;
+      const req = {
+        video_src: this.selectedVideoSource,
+      } as WebrtcSettingsApplyRequest;
       const subject = renderNatsSubjectPattern(
         NatsSubjectPattern.WebrtcSettingsApply
       );
@@ -233,10 +239,8 @@ export const useVideoStore = defineStore({
           handleError(msg, e);
         });
       if (resMsg) {
-        const resCodec = JSONCodec<
-          WebrtcSettingsApplyReply
-        >();
-        let res = resCodec.decode(resMsg?.data);
+        const resCodec = JSONCodec<WebrtcSettingsApplyReply>();
+        const res = resCodec.decode(resMsg?.data);
         console.log(`Received reply to ${subject}`, res);
       }
       janusStore.startJanusStream(toRaw(this.showOverlay));
@@ -244,7 +248,7 @@ export const useVideoStore = defineStore({
     async stopStream() {
       this.$patch({
         status: ConnectionStatus.ConnectionClosing,
-        playingStream: null
+        playingStream: null,
       });
 
       console.log("Attempting to stop all active streams");

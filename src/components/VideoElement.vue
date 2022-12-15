@@ -5,7 +5,7 @@ import { onBeforeRouteLeave } from "vue-router";
 import VideoPaused from "@/assets/video-paused.svg";
 import type {
   Camera,
-  PlaybackVideo
+  PlaybackVideo,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";

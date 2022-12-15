@@ -7,7 +7,7 @@ import {
   type ConstructorOptions,
 } from "video-stream-merger";
 
-import { type JanusStream, ConnectionStatus, type VideoStream } from "@/types";
+import { type JanusStream, ConnectionStatus } from "@/types";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";

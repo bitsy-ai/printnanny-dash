@@ -2,8 +2,6 @@ import { JSONCodec, type NatsConnection } from "nats.ws";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
-import type { UiStickyAlert } from "@/types";
-import { CheckIcon } from "@heroicons/vue/20/solid";
 import type {
   SettingsApplyRequest,
   SettingsFile,
@@ -11,7 +9,7 @@ import type {
   SettingsApplyReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { useAlertStore, success } from "./alerts";
+import { success } from "./alerts";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
