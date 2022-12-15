@@ -39,7 +39,7 @@ onBeforeRouteLeave((_to, _from) => {
     class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
   >
     <div div class="col-span-3 pb-4">
-      <h3 class="text-base font-medium text-gray-900 mb-2">Cameras</h3>
+      <h3 class="text-base font-medium text-gray-900 mb-2">Select a Camera:</h3>
       <div
         class="rounded-md bg-yellow-50 p-4"
         v-if="store.cameras.length === 0"
@@ -67,7 +67,7 @@ onBeforeRouteLeave((_to, _from) => {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" v-else>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" v-else>
         <a
           v-for="(stream, idx) in store.cameras"
           :key="idx"
@@ -84,7 +84,7 @@ onBeforeRouteLeave((_to, _from) => {
         </a>
       </div>
       <h3 class="text-base font-medium text-gray-900 py-2">Demo Videos</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <a
           v-for="(stream, idx) in DEMO_VIDEOS"
           :key="idx"

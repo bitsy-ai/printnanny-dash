@@ -2,9 +2,12 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
 import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
 import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import type {
-  CamerasLoadReply,
-  Camera,
+import {
+  type CamerasLoadReply,
+  type Camera,
+  type PlaybackVideo,
+  CameraSourceType,
+  PlaybackSourceType,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
@@ -13,7 +16,6 @@ import {
   VideoSrcType,
   renderNatsSubjectPattern,
   type QcDataframeRow,
-  type UiStickyAlert,
   type GstPipelineSettingsRequest,
   type VideoStream,
 } from "@/types";
@@ -21,7 +23,6 @@ import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
 import { error, useAlertStore, warning } from "./alerts";
-import VideoPaused from "@/assets/video-paused.svg";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
@@ -57,13 +58,21 @@ export const useVideoStore = defineStore({
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
     videoStreams: DEMO_VIDEOS,
-    selectedVideoStream: -1,
-    selectedCameraStream: 0,
+    sources: [] as Array<Camera | PlaybackVideo>,
+    selectedVideoSource: null as null | Camera | PlaybackVideo,
+    // selectedVideoStream: -1,
+    // selectedCameraStream: 0,
     playingStream: -1,
     error: null as null | Error,
     showOverlay: true,
   }),
   getters: {
+    cameras(state): Array<Camera> {
+      return state.sources.filter(v => v.src_type === CameraSourceType.CSI || v.src_type === CameraSourceType.USB) as Array<Camera>
+    },
+    videos(state): Array<PlaybackVideo> {
+      return state.sources.filter(v => v.src_type === PlaybackSourceType.FILE || v.src_type === PlaybackSourceType.URI) as Array<PlaybackVideo>
+    },
     meter_x(state): Array<number> {
       return state.df.map((el) => el.rt);
     },
@@ -214,7 +223,7 @@ export const useVideoStore = defineStore({
       const natsClient = toRaw(natsStore.natsConnection);
       const jsonCodec = JSONCodec<GstPipelineSettingsRequest>();
 
-      // apply any video stream configuration changes
+
 
       // TODO
 
