@@ -3,19 +3,18 @@ import { onMounted } from "vue";
 import { useVideoStore, DEMO_VIDEOS } from "@/stores/video";
 import { onBeforeRouteLeave } from "vue-router";
 import VideoPaused from "@/assets/video-paused.svg";
-
+import type {
+  Camera,
+  PlaybackVideo,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
 
 const store = useVideoStore();
 store.subscribeQcDataframes();
 
-function selectVideoStream(idx: number) {
-  store.$patch({ selectedVideoStream: idx });
-}
-
-function selectCameraStream(idx: number) {
-  store.$patch({ selectedCameraStream: idx });
+function selectStream(stream: Camera | PlaybackVideo) {
+  store.$patch({ selectedVideoSource: stream });
 }
 
 async function startStream() {
@@ -39,7 +38,7 @@ onBeforeRouteLeave((_to, _from) => {
     class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
   >
     <div div class="col-span-3 pb-4">
-      <h3 class="text-base font-medium text-gray-900 mb-2">Cameras</h3>
+      <h3 class="text-base font-medium text-gray-900 mb-2">Select a Camera:</h3>
       <div
         class="rounded-md bg-yellow-50 p-4"
         v-if="store.cameras.length === 0"
@@ -67,13 +66,13 @@ onBeforeRouteLeave((_to, _from) => {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" v-else>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" v-else>
         <a
           v-for="(stream, idx) in store.cameras"
           :key="idx"
-          @click="() => selectCameraStream(idx)"
+          @click="() => selectStream(stream)"
           :class="[
-            store.selectedCameraStream == idx ? 'ring ring-indigo-500' : '',
+            store.selectedVideoSource == stream ? 'ring ring-indigo-500' : '',
             'cursor-pointer w-full bg-gray-200 rounded-md p-4 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg',
           ]"
         >
@@ -84,19 +83,19 @@ onBeforeRouteLeave((_to, _from) => {
         </a>
       </div>
       <h3 class="text-base font-medium text-gray-900 py-2">Demo Videos</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <a
-          v-for="(stream, idx) in DEMO_VIDEOS"
+          v-for="(stream, idx) in store.videos"
           :key="idx"
-          @click="() => selectVideoStream(idx)"
+          @click="() => selectStream(stream)"
           :class="[
-            store.selectedVideoStream == idx ? 'ring ring-indigo-500' : '',
+            store.selectedVideoSource == stream ? 'ring ring-indigo-500' : '',
             'cursor-pointer w-full bg-gray-200 rounded-md p-4 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg',
           ]"
         >
           <img :src="stream.cover" class="w-full" />
           <h3 class="text-base font-medium text-gray-900 text-center">
-            {{ stream.name }}
+            {{ stream.display_name }}
           </h3>
         </a>
       </div>

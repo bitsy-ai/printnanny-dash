@@ -6,8 +6,9 @@ import { handleError } from "@/utils";
 import {
   ConnectionStatus,
   NatsSubjectPattern,
-  type ConnectCloudAccountRequest,
+  renderNatsSubjectPattern,
 } from "@/types";
+import type { PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-models";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
@@ -77,21 +78,24 @@ export const useNatsStore = defineStore({
     async connectCloudAccount(
       email: string,
       api_token: string,
-      api_uri: string
+      api_url: string
     ) {
-      const req: ConnectCloudAccountRequest = {
-        subject: NatsSubjectPattern.PrintNannyCloudAuth,
+      const req: PrintNannyCloudAuthRequest = {
         email,
         api_token,
-        api_uri,
+        api_url,
       };
 
-      const natsClient = toRaw(this.natsConnection);
-      const jsonCodec = JSONCodec<ConnectCloudAccountRequest>();
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.PrintNannyCloudAuth
+      );
 
-      console.debug("Publishing NATS ConnectCloudAccountRequest:", req);
+      const natsClient = toRaw(this.natsConnection);
+      const jsonCodec = JSONCodec<PrintNannyCloudAuthRequest>();
+
+      console.debug("Publishing NATS PrintNannyCloudAuthRequest:", req);
       const res = await natsClient
-        ?.request(req.subject, jsonCodec.encode(req), {
+        ?.request(subject, jsonCodec.encode(req), {
           timeout: 120000, // 120 seconds
         })
         .catch((e) => handleError("Failed to sync with PrintNanny Cloud", e));

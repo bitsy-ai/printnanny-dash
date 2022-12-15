@@ -1,27 +1,26 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
 import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
-import { ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import type {
-  CamerasLoadReply,
-  Camera,
+import {
+  type CamerasLoadReply,
+  type Camera,
+  type PlaybackVideo,
+  type WebrtcSettingsApplyRequest,
+  type WebrtcSettingsApplyReply,
+  CameraSourceType,
+  PlaybackSourceType,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
   ConnectionStatus,
   NatsSubjectPattern,
-  VideoSrcType,
   renderNatsSubjectPattern,
   type QcDataframeRow,
-  type UiStickyAlert,
-  type GstPipelineSettingsRequest,
-  type VideoStream,
 } from "@/types";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
 import { error, useAlertStore, warning } from "./alerts";
-import VideoPaused from "@/assets/video-paused.svg";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
@@ -30,40 +29,48 @@ function atLeast(arr: Array<boolean>, threshold: number): boolean {
   return arr.filter((el) => el === true).length / arr.length >= threshold;
 }
 
-export const DEMO_VIDEOS: Array<VideoStream> = [
+export const DEMO_VIDEOS: Array<PlaybackVideo> = [
   {
-    src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
-    src_type: VideoSrcType.Uri,
+    uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
+    src_type: PlaybackSourceType.URI,
     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_1.png",
-    name: "Demo Video #1",
-    description: "",
-    udp_port: 20001,
+    display_name: "Demo Video #1",
   },
   {
-    src: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
-    src_type: VideoSrcType.Uri,
+    uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
+    src_type: PlaybackSourceType.URI,
     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_2.png",
-    name: "Demo Video #2",
-    description: "",
-    udp_port: 20001,
+    display_name: "Demo Video #2",
   },
 ];
 
 export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
-    cameras: [] as Array<Camera>,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
-    videoStreams: DEMO_VIDEOS,
-    selectedVideoStream: -1,
-    selectedCameraStream: 0,
-    playingStream: -1,
+    sources: DEMO_VIDEOS as Array<Camera | PlaybackVideo>,
+    selectedVideoSource: null as null | Camera | PlaybackVideo,
+    playingStream: null as null | Camera | PlaybackVideo,
     error: null as null | Error,
     showOverlay: true,
   }),
   getters: {
+    cameras(state): Array<Camera> {
+      return state.sources.filter(
+        (v) =>
+          v.src_type === CameraSourceType.CSI ||
+          v.src_type === CameraSourceType.USB
+      ) as Array<Camera>;
+    },
+    videos(state): Array<PlaybackVideo> {
+      return state.sources.filter(
+        (v) =>
+          v.src_type === PlaybackSourceType.FILE ||
+          v.src_type === PlaybackSourceType.URI
+      ) as Array<PlaybackVideo>;
+    },
     meter_x(state): Array<number> {
       return state.df.map((el) => el.rt);
     },
@@ -103,7 +110,7 @@ export const useVideoStore = defineStore({
       if (resMsg) {
         const resCodec = JSONCodec<CamerasLoadReply>();
         const res = resCodec.decode(resMsg?.data);
-        this.$patch({ cameras: res.cameras });
+        this.sources.concat(res.cameras);
         return res.cameras;
       }
       return [];
@@ -205,75 +212,50 @@ export const useVideoStore = defineStore({
         status: ConnectionStatus.ConnectionLoading,
       });
 
-      const natsStore = useNatsStore();
       const janusStore = useJanusStore();
 
       await janusStore.connectJanus();
       janusStore.selectJanusStreamByPort();
 
-      const natsClient = toRaw(natsStore.natsConnection);
-      const jsonCodec = JSONCodec<GstPipelineSettingsRequest>();
+      // get nats connection (awaits until NATS server is available)
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
 
-      // apply any video stream configuration changes
-
-      // TODO
-
-      // const cmdRequest: SystemctlCommandRequest = {
-      //   subject: NatsSubjectPattern.SystemctlCommand,
-      //   service: "printnanny-vision.service",
-      //   command: SystemctlCommand.Restart,
-      // };
-      // const natsRequest: GstPipelineSettingsRequest = {
-      //   subject: NatsSubjectPattern.GstPipelineSettings,
-      //   json: JSON.stringify({
-      //     video_src: selectedStream.src,
-      //     video_src_type: selectedStream.src_type,
-      //   }),
-      //   post_save: [cmdRequest],
-      //   pre_save: [],
-      // };
-      // console.debug("Publishing NATS request:", natsRequest);
-      // const res = await natsClient
-      //   ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
-      //     timeout: 8000,
-      //   })
-      //   .catch((e) => handleError("Command Failed", e));
-      // console.debug(`NATS response:`, res);
+      const requestCodec = JSONCodec<WebrtcSettingsApplyRequest>();
+      const req = {
+        video_src: this.selectedVideoSource,
+      } as WebrtcSettingsApplyRequest;
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.WebrtcSettingsApply
+      );
+      console.log(`Sending request to ${subject}`, req);
+      const resMsg = await natsConnection
+        ?.request(subject, requestCodec.encode(req), {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          const msg = `Error appling webrtc settings ${req}`;
+          handleError(msg, e);
+        });
+      if (resMsg) {
+        const resCodec = JSONCodec<WebrtcSettingsApplyReply>();
+        const res = resCodec.decode(resMsg?.data);
+        console.log(`Received reply to ${subject}`, res);
+      }
       janusStore.startJanusStream(toRaw(this.showOverlay));
     },
     async stopStream() {
       this.$patch({
         status: ConnectionStatus.ConnectionClosing,
-        playingStream: -1,
+        playingStream: null,
       });
 
       console.log("Attempting to stop all active streams");
-      const natsStore = useNatsStore();
       const janusStore = useJanusStore();
       await janusStore.stopAllStreams().catch((e: any) => {
         console.error("Error hanging up Janus connection:", e);
       });
-      const natsClient = toRaw(natsStore.natsConnection);
-
-      // TODO
-      // const natsRequest: SystemctlCommandRequest = {
-      //   subject: NatsSubjectPattern.SystemctlCommand,
-      //   service: "printnanny-vision.service",
-      //   command: SystemctlCommand.Stop,
-      // };
-      // const jsonCodec = JSONCodec<SystemctlCommandRequest>();
-
-      // const res = await natsClient
-      //   ?.request(natsRequest.subject, jsonCodec.encode(natsRequest), {
-      //     timeout: 8000,
-      //   })
-      //   .catch((e) => handleError("Command Failed", e));
-      // console.debug(`NATS response:`, res);
-      // console.log("Draining NATS subscription");
-      // if (this.natsSubscription !== undefined) {
-      //   const sub = toRaw(this.natsSubscription);
-      //   await sub.drain();
-      // }
       this.$patch({
         status: ConnectionStatus.ConnectionNotStarted,
         df: [],
@@ -281,14 +263,10 @@ export const useVideoStore = defineStore({
     },
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
-      if (this.playingStream > -1) {
+      if (this.playingStream !== null) {
         return this.stopStream();
       } else {
-        const selectedVideoStream =
-          toRaw(this.selectedVideoStream) === -1
-            ? toRaw(this.selectedVideoStream)
-            : toRaw(this.selectedCameraStream);
-        this.$patch({ playingStream: selectedVideoStream });
+        this.$patch({ playingStream: toRaw(this.selectedVideoSource) });
         await this.startStream();
       }
     },

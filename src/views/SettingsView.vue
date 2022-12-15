@@ -91,21 +91,11 @@
 import { ref, computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { Disclosure } from "@headlessui/vue";
-import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid";
 import {
-  Bars3Icon,
-  BellIcon,
   CogIcon,
-  CreditCardIcon,
-  KeyIcon,
-  SquaresPlusIcon,
   UserCircleIcon,
-  XMarkIcon,
-  ArrowUpRightIcon,
   InformationCircleIcon,
 } from "@heroicons/vue/24/outline";
-
-import CloudAccountLogin from "@/components/settings/CloudAccountLogin.vue";
 
 const router = useRouter();
 
@@ -136,13 +126,4 @@ const subNavigation = ref([
   // { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
   // { name: 'Integrations', href: '#', icon: SquaresPlusIcon, current: false },
 ]);
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
-const availableToHire = ref(true);
-const privateAccount = ref(false);
-const allowCommenting = ref(true);
-const allowMentions = ref(true);
 </script>

@@ -14,6 +14,7 @@ export enum NatsSubjectPattern {
   SettingsApply = "pi.{pi_id}.settings.file.apply",
   SettingsRevert = "pi.{pi_id}.settings.file.revert",
   PrintNannyCloudAuth = "pi.{pi_id}.settings.printnanny.cloud.auth",
+  WebrtcSettingsApply = "pi.{pi_id}.settings.webrtc.apply",
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {
@@ -46,60 +47,7 @@ export enum SystemctlCommand {
   ListEnabled = "list_enabled",
 }
 
-export interface SystemctlCommandRequest {
-  subject: string;
-  service: string;
-  command: SystemctlCommand;
-}
-
 export enum ResponseStatus {
   Ok = "ok",
   Error = "error",
 }
-
-export interface SystemctlCommandResponse {
-  subject: string;
-  status: ResponseStatus;
-  request?: SystemctlCommandRequest;
-  detail: string;
-  data: { [key: string]: any };
-}
-
-export interface GstPipelineSettingsRequest {
-  subject: string;
-  json: string; //
-  pre_save: Array<SystemctlCommandRequest>;
-  post_save: Array<SystemctlCommandRequest>;
-}
-
-export interface GstPipelineSettingsResponse {
-  subject: string;
-  status: ResponseStatus;
-  request?: GstPipelineSettingsRequest;
-  detail: string;
-  pre_save: Array<SystemctlCommandResponse>;
-  post_save: Array<SystemctlCommandResponse>;
-}
-
-export interface ConnectCloudAccountRequest {
-  subject: string;
-  api_uri: string;
-  api_token: string;
-  email: string;
-}
-
-export interface ConnectCloudAccountResponse {
-  subject: string;
-  status: ResponseStatus;
-  detail: string;
-  request?: ConnectCloudAccountRequest;
-}
-
-export type NatsRequest =
-  | SystemctlCommandRequest
-  | GstPipelineSettingsRequest
-  | ConnectCloudAccountRequest;
-export type NatsResponse =
-  | SystemctlCommandResponse
-  | GstPipelineSettingsResponse
-  | ConnectCloudAccountResponse;
