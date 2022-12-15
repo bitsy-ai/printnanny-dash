@@ -14,6 +14,7 @@ export enum NatsSubjectPattern {
   SettingsApply = "pi.{pi_id}.settings.file.apply",
   SettingsRevert = "pi.{pi_id}.settings.file.revert",
   PrintNannyCloudAuth = "pi.{pi_id}.settings.printnanny.cloud.auth",
+  WebrtcSettingsApply = "pi.{pi_id}.settings.webrtc.apply",
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {

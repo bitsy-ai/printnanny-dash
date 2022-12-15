@@ -1,18 +1,3 @@
-export enum VideoSrcType {
-  Device = "Device",
-  Uri = "Uri",
-  File = "File",
-}
-
-export interface VideoStream {
-  src: string;
-  src_type: VideoSrcType;
-  cover: string;
-  name: string;
-  description: string;
-  udp_port: number;
-}
-
 export interface QcDataframeRow {
   adhesion__count: number;
   adhesion__mean: number;
