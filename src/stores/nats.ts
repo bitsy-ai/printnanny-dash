@@ -6,14 +6,15 @@ import { handleError } from "@/utils";
 import {
   ConnectionStatus,
   NatsSubjectPattern,
-  renderNatsSubjectPattern
+  renderNatsSubjectPattern,
 } from "@/types";
 import type { PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-models";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   return uri;
 }
 
