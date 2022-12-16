@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useVideoStore, DEMO_VIDEOS } from "@/stores/video";
+import { useVideoStore } from "@/stores/video";
 import { onBeforeRouteLeave } from "vue-router";
 import VideoPaused from "@/assets/video-paused.svg";
 import type {
@@ -10,6 +10,7 @@ import type {
 import TextSpinner from "@/components/TextSpinner.vue";
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
+import PlotlyElement from "@/components/PlotlyElement.vue";
 
 const store = useVideoStore();
 store.subscribeQcDataframes();
@@ -121,50 +122,61 @@ onBeforeRouteLeave((_to, _from) => {
                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
               />
             </div>
-            <div class="ml-3 text-sm">
+            <div class="ml-3 text-sm w-full">
               <label for="showOverlay" class="font-medium text-gray-700"
-                >Show Detections</label
+                >Show Detection Overlay</label
               >
-              <p class="text-gray-500">Draw boxes around detected objects.</p>
+              <p class="text-gray-500">
+                Draw boxes around detected objects. May cause some
+                delays/stuttering in live video feed.
+              </p>
             </div>
           </div>
-          <!--
-              <div class="relative flex items-start">
-                <div class="flex h-5 items-center">
-                  <input id="candidates" name="candidates" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                </div>
-                <div class="ml-3 text-sm">
-                  <label for="candidates" class="font-medium text-gray-700">Candidates</label>
-                  <p class="text-gray-500">Get notified when a candidate applies for a job.</p>
-                </div>
-              </div>
-              <div class="relative flex items-start">
-                <div class="flex h-5 items-center">
-                  <input id="offers" name="offers" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                </div>
-                <div class="ml-3 text-sm">
-                  <label for="offers" class="font-medium text-gray-700">Offers</label>
-                  <p class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
-                </div>
-              </div>
-              -->
+          <div class="relative flex items-start">
+            <div class="flex h-5 items-center">
+              <input
+                id="showOverlay"
+                v-model="store.showGraph"
+                name="showOverlay"
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+            </div>
+            <div class="ml-3 text-sm w-full">
+              <label for="showOverlay" class="font-medium text-gray-700"
+                >Show Detection Graphs</label
+              >
+              <p class="text-gray-500">
+                Show a graph last 30 seconds of detection history.
+              </p>
+            </div>
+          </div>
         </div>
       </fieldset>
     </div>
-    <div class="col-span-6 sm:border-t sm:border-gray-200">
-      <h3 class="text-base font-medium text-gray-900 py-2 text-center m-auto">
-        Video Stream
-      </h3>
-      <VideoStatus />
-      <video
-        @click="startStream"
-        id="janus-video"
-        muted
-        controls
-        class="cursor-pointer aspect-video rounded-md h-80 mx-auto my-4 border-1 border-dashed border-gray-200 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg"
-        aria-placeholder="Video stream is loading"
-        poster="@/assets/video-paused.svg"
-      />
+    <div
+      class="col-span-6 sm:border-t sm:border-gray-200 grid grid-cols-1 md:grid-cols-2"
+    >
+      <div class="w-full">
+        <h3
+          class="text-base font-medium text-gray-900 py-2 text-center m-auto w-full"
+        >
+          Video Stream
+        </h3>
+        <VideoStatus />
+        <video
+          @click="startStream"
+          id="janus-video"
+          muted
+          controls
+          class="cursor-pointer aspect-video rounded-md h-80 mx-auto my-4 border-1 border-dashed border-gray-200 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg"
+          aria-placeholder="Video stream is loading"
+          poster="@/assets/video-paused.svg"
+        />
+      </div>
+      <div class="w-full" v-if="store.showGraph">
+        <PlotlyElement />
+      </div>
     </div>
   </div>
 </template>

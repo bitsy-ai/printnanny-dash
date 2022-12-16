@@ -16,7 +16,7 @@ const props = defineProps({
 });
 
 const plotlyLayout = {
-  title: "PrintNanny Vision",
+  title: "Detections",
   margin: {
     l: 50,
     r: 50,
@@ -27,7 +27,7 @@ const plotlyLayout = {
   font: { size: 12 },
   yaxis: {
     //  autorange: true,
-    range: [0.4, 1],
+    range: [0.5, 1],
     type: "linear",
   },
 } as Plotly.Layout;
