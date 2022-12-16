@@ -110,7 +110,13 @@ export const useVideoStore = defineStore({
       if (resMsg) {
         const resCodec = JSONCodec<CamerasLoadReply>();
         const res = resCodec.decode(resMsg?.data);
-        this.sources.concat(res.cameras);
+        console.log("Detected cameras, adding to available sources:", res.cameras);
+        this.$patch({
+          sources: [
+            ...this.sources,
+            ...res.cameras
+          ]
+        });
         return res.cameras;
       }
       return [];
