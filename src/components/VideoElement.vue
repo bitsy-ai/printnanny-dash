@@ -10,6 +10,7 @@ import type {
 import TextSpinner from "@/components/TextSpinner.vue";
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
+import PlotlyElement from "@/components/PlotlyElement.vue";
 
 const store = useVideoStore();
 store.subscribeQcDataframes();
@@ -123,9 +124,9 @@ onBeforeRouteLeave((_to, _from) => {
             </div>
             <div class="ml-3 text-sm">
               <label for="showOverlay" class="font-medium text-gray-700"
-                >Show Detections</label
+                >Show Detection Overlay</label
               >
-              <p class="text-gray-500">Draw boxes around detected objects.</p>
+              <p class="text-gray-500">Draw boxes around detected objects. May cause some delays/stuttering in live video feed.</p>
             </div>
           </div>
           <!--
@@ -151,20 +152,27 @@ onBeforeRouteLeave((_to, _from) => {
         </div>
       </fieldset>
     </div>
-    <div class="col-span-6 sm:border-t sm:border-gray-200">
-      <h3 class="text-base font-medium text-gray-900 py-2 text-center m-auto">
-        Video Stream
-      </h3>
-      <VideoStatus />
-      <video
-        @click="startStream"
-        id="janus-video"
-        muted
-        controls
-        class="cursor-pointer aspect-video rounded-md h-80 mx-auto my-4 border-1 border-dashed border-gray-200 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg"
-        aria-placeholder="Video stream is loading"
-        poster="@/assets/video-paused.svg"
-      />
+    <div class="col-span-6 sm:border-t sm:border-gray-200 grid grid-cols-1 md:grid-cols-2">
+      <div class="w-full">
+        <h3 class="text-base font-medium text-gray-900 py-2 text-center m-auto w-full">
+          Video Stream
+        </h3>
+        <VideoStatus />
+        <video
+          @click="startStream"
+          id="janus-video"
+          muted
+          controls
+          class="cursor-pointer aspect-video rounded-md h-80 mx-auto my-4 border-1 border-dashed border-gray-200 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:shadow-lg"
+          aria-placeholder="Video stream is loading"
+          poster="@/assets/video-paused.svg"
+        />
+      </div>
+      <div class="w-full">
+
+        <PlotlyElement />
+
+      </div>
     </div>
   </div>
 </template>
