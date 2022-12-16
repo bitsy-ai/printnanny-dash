@@ -56,6 +56,7 @@ export const useVideoStore = defineStore({
     playingStream: null as null | Camera | PlaybackVideo,
     error: null as null | Error,
     showOverlay: true,
+    showGraph: true,
   }),
   getters: {
     cameras(state): Array<Camera> {
@@ -126,8 +127,6 @@ export const useVideoStore = defineStore({
       return [];
     },
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
-      const alertStore = useAlertStore();
-
       if (df.length < 10) {
         console.warn(
           "Skipping getDetectionAlerts(), less than 10 datapoints available"
