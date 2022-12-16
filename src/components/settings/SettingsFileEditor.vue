@@ -18,7 +18,7 @@
       >
         <div class="py-6 px-4 sm:p-6 lg:pb-8">
           <h2 class="text-lg font-medium leading-6 text-gray-900 py-4">
-            Edit Settings
+            Edit Settings Files
           </h2>
 
           <Listbox as="div" v-model="selectedFile" class="md:w-3/4">

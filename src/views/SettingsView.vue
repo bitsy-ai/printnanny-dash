@@ -92,9 +92,10 @@ import { ref, computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { Disclosure } from "@headlessui/vue";
 import {
-  CogIcon,
   UserCircleIcon,
   InformationCircleIcon,
+  PencilSquareIcon,
+  VideoCameraIcon,
 } from "@heroicons/vue/24/outline";
 
 const router = useRouter();
@@ -109,9 +110,17 @@ const subNavigation = ref([
     ),
   },
   {
-    name: "Edit Settings",
+    name: "Camera",
+    link: { name: "camera-settings" },
+    icon: VideoCameraIcon,
+    current: computed(
+      () => router.currentRoute.value.name === "camera-settings"
+    ),
+  },
+  {
+    name: "Edit Settings Files",
     link: { name: "edit-settings-files", params: { app: "printnanny" } },
-    icon: CogIcon,
+    icon: PencilSquareIcon,
     current: computed(
       () => router.currentRoute.value.name === "edit-settings-files"
     ),

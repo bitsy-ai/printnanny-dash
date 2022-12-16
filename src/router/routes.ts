@@ -38,6 +38,14 @@ const SettingsRoutes = [
         },
       },
       {
+        path: "camera",
+        name: "camera-settings",
+        components: {
+          SettingsPanel: () =>
+            import("@/components/settings/PrintNannyAccountPanel.vue"),
+        },
+      },
+      {
         path: "files/:app",
         name: "edit-settings-files",
         components: {
