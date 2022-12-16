@@ -7,6 +7,7 @@ import type {
   Camera,
   PlaybackVideo,
 } from "@bitsy-ai/printnanny-asyncapi-models";
+import TextSpinner from "@/components/TextSpinner.vue";
 import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
 
@@ -39,9 +40,12 @@ onBeforeRouteLeave((_to, _from) => {
   >
     <div div class="col-span-3 pb-4">
       <h3 class="text-base font-medium text-gray-900 mb-2">Select a Camera:</h3>
+      <div v-if="store.loadingCameras">
+        <text-spinner text="Looking for cameras..."></text-spinner>
+      </div>
       <div
         class="rounded-md bg-yellow-50 p-4"
-        v-if="store.cameras.length === 0"
+        v-else-if="store.cameras.length === 0"
       >
         <div class="flex">
           <div class="flex-shrink-0">

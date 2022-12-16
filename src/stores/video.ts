@@ -47,6 +47,7 @@ export const DEMO_VIDEOS: Array<PlaybackVideo> = [
 export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
+    loadingCameras: true,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
@@ -93,6 +94,7 @@ export const useVideoStore = defineStore({
   },
   actions: {
     async loadCameras(): Promise<Camera[]> {
+      this.$patch({ loadingCameras: true });
       const natsStore = useNatsStore();
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
@@ -110,15 +112,17 @@ export const useVideoStore = defineStore({
       if (resMsg) {
         const resCodec = JSONCodec<CamerasLoadReply>();
         const res = resCodec.decode(resMsg?.data);
-        console.log("Detected cameras, adding to available sources:", res.cameras);
+        console.log(
+          "Detected cameras, adding to available sources:",
+          res.cameras
+        );
         this.$patch({
-          sources: [
-            ...this.sources,
-            ...res.cameras
-          ]
+          sources: [...this.sources, ...res.cameras],
+          loadingCameras: false,
         });
         return res.cameras;
       }
+      this.$patch({ loadingCameras: false });
       return [];
     },
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
