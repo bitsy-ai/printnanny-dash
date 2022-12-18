@@ -5,8 +5,6 @@ import {
   type CamerasLoadReply,
   type Camera,
   type PlaybackVideo,
-  type WebrtcSettingsApplyRequest,
-  type WebrtcSettingsApplyReply,
   CameraSourceType,
   PlaybackSourceType,
 } from "@bitsy-ai/printnanny-asyncapi-models";
