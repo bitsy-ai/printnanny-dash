@@ -42,7 +42,7 @@ const SettingsRoutes = [
         name: "camera-settings",
         components: {
           SettingsPanel: () =>
-            import("@/components/settings/PrintNannyAccountPanel.vue"),
+            import("@/components/settings/CameraSettingsForm.vue"),
         },
       },
       {

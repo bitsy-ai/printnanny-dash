@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 export const useCameraSettingsStore = defineStore({
     "id": "cameraSettings",
     state: () => ({
-        cameras: [] as Array<Camera>
+        cameras: [] as Array<Camera>,
+        selectedCamera: null as null | Camera
     })
 })
