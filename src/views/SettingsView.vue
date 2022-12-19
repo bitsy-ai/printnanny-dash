@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="lg:h-[32rem] 2xl:h-[62rem]">
     <Disclosure
       as="div"
       class="relative overflow-hidden bg-sky-700 pb-32"
@@ -44,11 +44,11 @@
       </header>
     </Disclosure>
 
-    <main class="relative -mt-32">
-      <div class="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16">
-        <div class="overflow-hidden rounded-lg bg-white shadow">
+    <main class="relative -mt-32 h-full">
+      <div class="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16 h-full">
+        <div class="overflow-hidden rounded-lg bg-white shadow h-5/6">
           <div
-            class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x"
+            class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x h-full"
           >
             <aside class="py-6 lg:col-span-3">
               <nav class="space-y-1">

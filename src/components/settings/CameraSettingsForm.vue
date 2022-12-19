@@ -1,10 +1,14 @@
 <template>
-  <Form class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4" :validation-schema="schema">
-    <div class="space-y-8 divide-y divide-gray-200">
+  <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
+  <Form class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4 h-full" :validation-schema="schema">
+    <div v-if="store.loading" class="flex h-5/6">
+      <TextSpinner v-if="store.loading" class="m-auto"/>
+    </div>
+    <div class="space-y-8 divide-y divide-gray-200" v-else>
       <div class="">
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Camera</h3>
-          <p class="mt-1 text-sm text-gray-500">Configure camera settings.</p>
+          <p class="mt-1 text-sm text-gray-500">Configure PrintNanny Cam settings.</p>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div class="sm:col-span-3">
@@ -204,13 +208,25 @@
       </div>
     </div>
   </Form>
+  </Transition>
 </template>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
-
+import TextSpinner from "@/components/TextSpinner.vue";
 import { useCameraSettingsStore } from '@/stores/cameraSettings';
 import {
   Listbox,
@@ -229,8 +245,6 @@ const schema = yup.object({
   hls_enabled: yup.boolean().required().default(true),
   video_height: yup.number().required().default(480),
   video_width: yup.number().required().default(640),
-  
-
 })
 
 
