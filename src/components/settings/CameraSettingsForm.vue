@@ -82,6 +82,70 @@
           </Listbox>
           </div>
 
+          <div class="sm:col-span-3">
+            <Listbox as="div" v-model="selectedCaps">
+            <ListboxLabel class="block text-sm font-medium text-gray-700"
+              >Select camera resolution:</ListboxLabel
+            >
+            <div class="relative mt-1">
+              <ListboxButton
+                class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+              >
+                <span class="block truncate">width={{ selectedCaps.width }} height={{ selectedCaps.height }} format={{ selectedCaps.format }}</span>
+                <span
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                >
+                  <ChevronUpDownIcon
+                    class="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </span>
+              </ListboxButton>
+
+              <transition
+                leave-active-class="transition ease-in duration-100"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+              >
+                <ListboxOptions
+                  class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                >
+                  <ListboxOption
+                    as="template"
+                    v-for="caps, idx in selectedCamera?.availableCaps"
+                    :key="idx"
+                    :value="caps"
+                    v-slot="{ active, selected }"
+                  >
+                    <li
+                      :class="[
+                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                        'relative cursor-default select-none py-2 pl-3 pr-9',
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          selected ? 'font-semibold' : 'font-normal',
+                          'block truncate',
+                        ]"
+                        >width={{ caps.width }} height={{ caps.height }} format={{ caps.format }}</span>
+
+                      <span
+                        v-if="selected"
+                        :class="[
+                          active ? 'text-white' : 'text-indigo-600',
+                          'absolute inset-y-0 right-0 flex items-center pr-4',
+                        ]"
+                      >
+                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    </li>
+                  </ListboxOption>
+                </ListboxOptions>
+              </transition>
+            </div>
+          </Listbox>
+          </div>
 
           <div class="sm:col-span-3">
             <label for="video_framerate" class="block text-sm font-medium text-gray-700">Video Framerate</label>
@@ -90,13 +154,7 @@
             </div>
           </div>
 
-          <div class="sm:col-span-3">
-            <label for="last-name" class="block text-sm font-medium text-gray-700">Video Resolution</label>
-            <div class="mt-1">
-              <input type="number" name="video_framerate" id="video_height" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
 
-            </div>
-          </div>
 
           <div class="sm:col-span-4">
             <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
@@ -245,12 +303,13 @@ import {
   ListboxLabel,
 } from "@headlessui/vue";
 import * as yup from 'yup';
-import type { Camera} from '@bitsy-ai/printnanny-asyncapi-models';
+import type { Camera, GstreamerCaps } from '@bitsy-ai/printnanny-asyncapi-models';
 
 
 const store = useCameraSettingsStore();
 
 const selectedCamera = ref(undefined as undefined | Camera);
+const selectedCaps = ref(undefined as undefined | GstreamerCaps)
 
 const schema = yup.object({
   video_framerate: yup.number().required().default(16),
@@ -263,6 +322,7 @@ onMounted(async () => {
   await store.load();
   if (store.form && store.form.selectedCamera){
     selectedCamera.value = store.form.selectedCamera
+    selectedCaps.value = store.form.selectedCamera.selectedCaps
   }
 });
 
