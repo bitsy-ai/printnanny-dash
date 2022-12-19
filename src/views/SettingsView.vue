@@ -104,7 +104,7 @@ const router = useRouter();
 
 const subNavigation = ref([
   {
-    name: "PrintNanny Account",
+    name: "Account",
     link: { name: "printnanny-account" },
     icon: UserCircleIcon,
     current: computed(
