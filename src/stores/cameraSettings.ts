@@ -3,11 +3,20 @@ import { JSONCodec, type NatsConnection } from "nats.ws";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
 import type {
-    PrintNannyCameraSettings
+    PrintNannyCameraSettings,
+    GstreamerCaps,
+    Camera,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
+
+export interface CameraSettingsForm {
+    framerate: number,
+    hls_enabled: boolean,
+    caps: GstreamerCaps,
+    camera: Camera
+}
 
 export const useCameraSettingsStore = defineStore({
     "id": "cameraSettings",
