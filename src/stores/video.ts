@@ -229,12 +229,12 @@ export const useVideoStore = defineStore({
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
 
-      const requestCodec = JSONCodec<WebrtcSettingsApplyRequest>();
+      const requestCodec = JSONCodec<WebrtcSettingsFileApplyRequest>();
       const req = {
         video_src: this.selectedVideoSource,
-      } as WebrtcSettingsApplyRequest;
+      } as WebrtcSettingsFileApplyRequest;
       const subject = renderNatsSubjectPattern(
-        NatsSubjectPattern.WebrtcSettingsApply
+        NatsSubjectPattern.WebrtcSettingsFileApply
       );
       console.log(`Sending request to ${subject}`, req);
       const resMsg = await natsConnection
@@ -246,7 +246,7 @@ export const useVideoStore = defineStore({
           handleError(msg, e);
         });
       if (resMsg) {
-        const resCodec = JSONCodec<WebrtcSettingsApplyReply>();
+        const resCodec = JSONCodec<WebrtcSettingsFileApplyReply>();
         const res = resCodec.decode(resMsg?.data);
         console.log(`Received reply to ${subject}`, res);
       }

@@ -1,10 +1,16 @@
 <template>
-  <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
-  <Form class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4 h-full" :validation-schema="schema">
-    <div v-if="store.loading" class="flex h-5/6">
-      <TextSpinner v-if="store.loading" class="m-auto"/>
+    <Transition
+      name="fade"
+      mode="out-in"
+
+    >
+    <div class="flex w-full h-full align-items-center justify-center lg:col-span-9" v-if="store.loading" >
+      <TextSpinner class="m-auto"/>
+
     </div>
-    <div class="space-y-8 divide-y divide-gray-200" v-else>
+
+    <Form class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4 h-full" :validation-schema="schema" v-else>
+    <div class="space-y-8 divide-y divide-gray-200">
       <div class="">
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Camera</h3>
@@ -223,6 +229,7 @@
 </style>
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import { onMounted } from "vue";
 
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
@@ -245,7 +252,11 @@ const schema = yup.object({
   hls_enabled: yup.boolean().required().default(true),
   video_height: yup.number().required().default(480),
   video_width: yup.number().required().default(640),
-})
+});
+
+onMounted(() => {
+  store.load()
+});
 
 
 </script>

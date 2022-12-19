@@ -3,10 +3,10 @@ import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import type {
-  SettingsApplyRequest,
+  SettingsFileApplyRequest,
   SettingsFile,
-  SettingsLoadReply,
-  SettingsApplyReply,
+  SettingsFileLoadReply,
+  SettingsFileApplyReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { success } from "./alerts";
@@ -17,7 +17,7 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
   state: () => ({
     loading: true,
     settingsFiles: [] as Array<SettingsFile>,
-    loadReply: null as null | SettingsLoadReply,
+    loadReply: null as null | SettingsFileLoadReply,
     error: null as null | Error,
   }),
 
@@ -28,10 +28,10 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
       const subject = renderNatsSubjectPattern(
-        NatsSubjectPattern.SettingsApply
+        NatsSubjectPattern.SettingsFileApply
       );
-      const resCodec = JSONCodec<SettingsApplyRequest>();
-      const res: SettingsApplyRequest = {
+      const resCodec = JSONCodec<SettingsFileApplyRequest>();
+      const res: SettingsFileApplyRequest = {
         file: file,
         git_head_commit: this.loadReply?.git_head_commit as string,
         git_commit_msg: commitMsg,
@@ -46,7 +46,7 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
           handleError(msg, e);
         });
       if (resMsg) {
-        const resCodec = JSONCodec<SettingsApplyReply>();
+        const resCodec = JSONCodec<SettingsFileApplyReply>();
         const res = resCodec.decode(resMsg?.data);
         console.log("Sucessfully applied settings:", res);
         await this.load();
@@ -62,7 +62,7 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
       const natsStore = useNatsStore();
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
-      const subject = renderNatsSubjectPattern(NatsSubjectPattern.SettingsLoad);
+      const subject = renderNatsSubjectPattern(NatsSubjectPattern.SettingsFileLoad);
 
       const resMsg = await natsConnection
         ?.request(subject, undefined, {
@@ -74,7 +74,7 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
           handleError(msg, e);
         });
       if (resMsg) {
-        const resCodec = JSONCodec<SettingsLoadReply>();
+        const resCodec = JSONCodec<SettingsFileLoadReply>();
         const res = resCodec.decode(resMsg?.data);
         console.log("Loaded settingsFiles:", res);
 
