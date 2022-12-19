@@ -62,7 +62,9 @@ export const useSettingsFileStore = defineStore(`settingsFiles`, {
       const natsStore = useNatsStore();
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
-      const subject = renderNatsSubjectPattern(NatsSubjectPattern.SettingsFileLoad);
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.SettingsFileLoad
+      );
 
       const resMsg = await natsConnection
         ?.request(subject, undefined, {

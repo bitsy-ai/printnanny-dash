@@ -45,7 +45,9 @@
     </Disclosure>
 
     <main class="relative -mt-32 h-full">
-      <div class="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16 h-full">
+      <div
+        class="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16 h-full"
+      >
         <div class="overflow-hidden rounded-lg bg-white shadow h-5/6">
           <div
             class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x h-full"
