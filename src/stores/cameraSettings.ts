@@ -9,6 +9,7 @@ import {
   CameraSourceType,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
+import { success } from "./alerts";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
@@ -135,6 +136,10 @@ export const useCameraSettingsStore = defineStore({
         } as CameraSettingsForm;
 
         this.$patch({ form, settings });
+        success(
+          `Updated Camera Settings`,
+          `PrintNanny Cam was automatically restarted`
+        );
       }
       this.$patch({ saving: false });
     },
