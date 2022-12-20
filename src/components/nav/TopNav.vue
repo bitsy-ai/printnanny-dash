@@ -28,9 +28,13 @@
               ]"
               :aria-current="item.current ? 'page' : undefined"
               >{{ item.name }}
-              <VideoStatus v-if="item.name === 'PrintNanny Cam'" :compact="true" :show-loading="false" class="ml-2"/>
-              </RouterLink
-            >
+              <VideoStatus
+                v-if="item.name === 'PrintNanny Cam'"
+                :compact="true"
+                :show-loading="false"
+                class="ml-2"
+              />
+            </RouterLink>
 
             <a
               v-for="item in externalLinks"
