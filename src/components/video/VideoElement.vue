@@ -34,6 +34,9 @@ onMounted(async () => {
   await store.load();
 });
 
+const pageTitle =
+  "📷 PrintNanny Cam";
+
 // stop video stream before leaving route
 onBeforeRouteLeave((_to, _from) => {
   return store.stopStream();
@@ -41,8 +44,17 @@ onBeforeRouteLeave((_to, _from) => {
 </script>
 
 <template>
+  <div>
+    <header>
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-gray-900 prose">{{ pageTitle }}</h1>
+      </div>
+    </header>
+    <main>
+
+
   <div
-    class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
+    class="overflow-hidden rounded-lg mt-4 bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
   >
     <div class="col-span-6">
       <div class="flex grid grid-cols-1">
@@ -76,4 +88,6 @@ onBeforeRouteLeave((_to, _from) => {
       <PlotlyElement />
     </div>
   </div>
+</main>
+</div>
 </template>

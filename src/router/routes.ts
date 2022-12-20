@@ -12,7 +12,7 @@ const TopBarRoutes = [
   },
   {
     path: "/cam",
-    name: "PrintNanny Cam",
+    name: "Camera",
     components: {
       default: () => import("@/views/VideoView.vue"),
       TopNav: TopNav,

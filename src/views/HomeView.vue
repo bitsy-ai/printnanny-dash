@@ -7,11 +7,11 @@
     </header>
     <main>
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
-        <h2 class="text-xl font-bold text-gray-900 prose">
-          3D Printer Management
+        <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">
+          3D Printer
         </h2>
         <div
-          class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly"
         >
           <SystemdServiceCard
             v-for="item in widgets.printerManagementItems"
@@ -20,7 +20,7 @@
           />
           <!-- repetier coming soon -->
           <div
-            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
+            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-2xl"
           >
             <div class="flex justify-end px-4 pt-4">
               <div class="h-4"></div>
@@ -55,11 +55,11 @@
       </div>
       <!-- printnanny services -->
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
-        <h2 class="text-xl font-bold text-gray-900 prose">
+        <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">
           PrintNanny Services
         </h2>
         <div
-          class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly"
         >
           <SystemdServiceCard
             v-for="item in widgets.printNannyAppItems"
@@ -71,9 +71,9 @@
 
       <!-- other apps -->
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
-        <h2 class="text-xl font-bold text-gray-900 prose">Other Services</h2>
+        <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">Other Services</h2>
         <div
-          class="rounded-lg border-4 border-dashed border-gray-200 grid grid-cols-1 md:grid-cols-3 p-4 gap-4 justify-evenly"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly"
         >
           <SystemdServiceCard
             v-for="item in widgets.otherAppItems"
@@ -82,7 +82,7 @@
           />
           <!-- zapier coming soon -->
           <div
-            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
+            class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-2xl"
           >
             <div class="flex justify-end px-4 pt-4">
               <div class="h-4"></div>
@@ -133,5 +133,5 @@ const cloud = useCloudStore();
 cloud.fetchUser();
 
 const pageTitle =
-  "👋 Welcome to PrintNanny OS, the Personal Assistant for 3D Printers.";
+  "🚀 Mission Control";
 </script>
