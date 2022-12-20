@@ -18,10 +18,16 @@ export interface CameraSettingsForm {
   hlsEnabled: boolean;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
+  showDetectionOverlay: boolean;
+  showDetectionGraphs: boolean;
 }
 
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
+  // persist option provided by: https://github.com/prazdevs/pinia-plugin-persistedstate
+  persist: {
+    storage: localStorage, // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
+  },
   state: () => ({
     loading: true,
     saving: false,

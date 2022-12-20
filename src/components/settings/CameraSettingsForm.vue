@@ -216,6 +216,75 @@
             </div>
           </div>
         </div>
+
+        <div class="pt-8">
+          <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">
+              Detection Settings
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Adjust PrintNanny's quality monitoring and failure detection
+              settings.
+            </p>
+          </div>
+          <div class="mt-6">
+            <fieldset>
+              <legend class="sr-only">Video Feed</legend>
+              <div
+                class="text-base font-medium text-gray-900"
+                aria-hidden="true"
+              >
+                Video Feed
+              </div>
+              <div class="mt-4 space-y-4">
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <input
+                      id="showDetectionOverlay"
+                      name="showDetectionOverlay"
+                      type="checkbox"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="showDetectionOverlay"
+                      class="font-medium text-gray-700"
+                      >Show Detection Overlay</label
+                    >
+                    <p class="text-gray-500">
+                      Draw boxes around detected objects. Enable to debug
+                      PrintNanny's AI. Disable to improve video stream
+                      performance.
+                    </p>
+                  </div>
+                </div>
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <input
+                      id="showDetectionGraphs"
+                      name="showDetectionGraphs"
+                      type="checkbox"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="showDetectionGraphs"
+                      class="font-medium text-gray-700"
+                      >Show Detection Graphs</label
+                    >
+                    <p class="text-gray-500">
+                      Graph last 30 seconds of detections. Enable to debug
+                      PrintNanny's AI. Disable to improve video stream
+                      performance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
         <!--
       <div class="pt-8">
         <div>
