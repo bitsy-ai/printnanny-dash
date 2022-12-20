@@ -19,7 +19,10 @@ export interface WidgetItem {
   menuItems: Array<WidgetMenuItem>;
   service: string;
   category: WidgetCategory;
-  settings?: SettingsApp;
+  settings?: {
+    name: string;
+    params: any;
+  };
   error?: Error;
 }
 

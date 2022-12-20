@@ -11,8 +11,8 @@ const TopBarRoutes = [
     },
   },
   {
-    path: "/vision",
-    name: "PrintNanny Vision",
+    path: "/cam",
+    name: "PrintNanny Cam",
     components: {
       default: () => import("@/views/VideoView.vue"),
       TopNav: TopNav,

@@ -22,7 +22,10 @@ export const useWidgetStore = defineStore({
     items: [
       {
         name: "OctoPrint",
-        settings: SettingsApp.OCTOPRINT,
+        settings: {
+          name: "edit-settings-files",
+          params: { app: SettingsApp.OCTOPRINT },
+        },
         loaded: false,
         href: "/octoprint/",
         service: "octoprint.service",
@@ -44,7 +47,10 @@ export const useWidgetStore = defineStore({
       } as WidgetItem,
       {
         name: "Mainsail",
-        settings: SettingsApp.KLIPPER,
+        settings: {
+          name: "edit-settings-files",
+          params: { app: SettingsApp.KLIPPER },
+        },
         href: "/mainsail/",
         loaded: false,
         service: "mainsail.target",
@@ -111,10 +117,13 @@ export const useWidgetStore = defineStore({
       //   ],
       // } as WidgetItem,
       {
-        name: "PrintNanny Vision",
+        name: "PrintNanny Cam",
         loaded: false,
         href: "/vision/",
-        settings: SettingsApp.PRINTNANNY,
+        settings: {
+          name: "camera-settings",
+          params: { app: SettingsApp.PRINTNANNY },
+        },
         service: "printnanny-vision.service",
         logo: printNannyLogo,
         category: WidgetCategory.PrintNannyApps,
@@ -127,7 +136,10 @@ export const useWidgetStore = defineStore({
       {
         name: "PrintNanny Cloud",
         loaded: false,
-        settings: SettingsApp.PRINTNANNY,
+        settings: {
+          name: "camera-settings",
+          params: { app: SettingsApp.PRINTNANNY },
+        },
         href: "https://printnanny.ai/devices",
         service: "printnanny-cloud.target",
         logo: printNannyLogo,
