@@ -111,10 +111,10 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      >width={{ selectedCaps.width }} height={{
-                        selectedCaps.height
+                      >width={{ selectedCaps?.width }} height={{
+                        selectedCaps?.height
                       }}
-                      format={{ selectedCaps.format }}</span
+                      format={{ selectedCaps?.format }}</span
                     >
                     <span
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -352,7 +352,7 @@ async function submitForm(values: any) {
   console.log("Form submitted:", values);
   await store.save(
     selectedCamera.value as Camera,
-    selectedCaps.value,
+    selectedCaps.value as GstreamerCaps,
     parseInt(values.videoFramerate),
     values.hlsEnabled
   );
