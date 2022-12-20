@@ -91,6 +91,8 @@ export const useCameraSettingsStore = defineStore({
           hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
           selectedCaps: camera.selectedCaps,
+          showDetectionOverlay: settings.detection.overlay,
+          showDetectionGraphs: settings.detection.graphs,
         } as CameraSettingsForm;
 
         this.$patch({ form, settings });
@@ -101,7 +103,9 @@ export const useCameraSettingsStore = defineStore({
       selectedCamera: Camera,
       selectedCaps: GstreamerCaps,
       framerate: number,
-      hlsEnabled: boolean
+      hlsEnabled: boolean,
+      showDetectionGraphs: boolean,
+      showDetectionOverlay: boolean
     ) {
       this.$patch({ saving: true });
 
@@ -120,6 +124,8 @@ export const useCameraSettingsStore = defineStore({
       req.video_framerate = framerate;
       req.video_src = selectedCamera;
       req.video_src.selectedCaps = selectedCaps;
+      req.detection.graphs = showDetectionGraphs;
+      req.detection.overlay = showDetectionOverlay;
 
       const resMsg = await natsConnection?.request(
         subject,
@@ -139,6 +145,8 @@ export const useCameraSettingsStore = defineStore({
           hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
           selectedCaps: camera.selectedCaps,
+          showDetectionOverlay: settings.detection.overlay,
+          showDetectionGraphs: settings.detection.graphs,
         } as CameraSettingsForm;
 
         this.$patch({ form, settings });

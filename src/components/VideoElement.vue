@@ -42,9 +42,7 @@ onBeforeRouteLeave((_to, _from) => {
   <div
     class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
   >
-    <div
-      class="col-span-6 grid grid-cols-1 md:grid-cols-2"
-    >
+    <div class="col-span-6 grid grid-cols-1 md:grid-cols-2">
       <div class="w-full">
         <h3
           class="text-base font-medium text-gray-900 py-2 text-center m-auto w-full"
@@ -63,8 +61,11 @@ onBeforeRouteLeave((_to, _from) => {
         />
       </div>
     </div>
-    <div class="col-span-6 flex w-full sm:border-t sm:border-gray-200" v-if="cameraSettings.form?.showDetectionGraphs">
-        <PlotlyElement />
+    <div
+      class="col-span-6 flex w-full sm:border-t sm:border-gray-200"
+      v-if="cameraSettings.form?.showDetectionGraphs"
+    >
+      <PlotlyElement />
     </div>
   </div>
 </template>

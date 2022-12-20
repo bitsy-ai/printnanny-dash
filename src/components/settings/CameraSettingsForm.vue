@@ -412,9 +412,8 @@ const selectedCaps = ref(undefined as undefined | GstreamerCaps);
 const schema = yup.object({
   videoFramerate: yup.number().required(),
   hlsEnabled: yup.boolean().required().default(true),
-
-  video_height: yup.number().required().default(480),
-  video_width: yup.number().required().default(640),
+  showDetectionGraphs: yup.boolean(),
+  showDetectionOverlay: yup.boolean(),
 });
 
 async function submitForm(values: any) {
@@ -423,7 +422,9 @@ async function submitForm(values: any) {
     selectedCamera.value as Camera,
     selectedCaps.value as GstreamerCaps,
     parseInt(values.videoFramerate),
-    values.hlsEnabled
+    values.hlsEnabled,
+    values.showDetectionGraphs,
+    values.showDetectionOverlay
   );
 }
 
