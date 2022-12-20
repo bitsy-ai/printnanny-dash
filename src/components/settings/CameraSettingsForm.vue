@@ -1,211 +1,221 @@
 <template>
-    <Transition
-      name="fade"
-      mode="out-in"
-
+  <Transition name="fade" mode="out-in">
+    <div
+      class="flex w-full h-full align-items-center justify-center lg:col-span-9"
+      v-if="store.loading"
     >
-    <div class="flex w-full h-full align-items-center justify-center lg:col-span-9" v-if="store.loading" >
-      <TextSpinner class="m-auto"/>
-
+      <TextSpinner class="m-auto" />
     </div>
 
-    <Form class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4 h-full" :validation-schema="schema" v-else :initial-values="store.form">
-    <div class="space-y-8 divide-y divide-gray-200">
-      <div class="">
-        <div>
-          <h3 class="text-lg font-medium leading-6 text-gray-900">Camera</h3>
-          <p class="mt-1 text-sm text-gray-500">Configure PrintNanny Cam settings.</p>
-        </div>
-        <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-          <div class="sm:col-span-3">
-          <Listbox as="div" v-model="selectedCamera">
-            <ListboxLabel class="block text-sm font-medium text-gray-700"
-              >Select a camera:</ListboxLabel
-            >
-            <div class="relative mt-1">
-              <ListboxButton
-                class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-              >
-                <span class="block truncate"><strong>{{ store.form?.selectedCamera.src_type.toUpperCase() }}</strong> {{ store.form?.selectedCamera.device_name }}</span>
-                <span
-                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+    <Form
+      class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4 h-full"
+      :validation-schema="schema"
+      v-else
+      :initial-values="store.form"
+    >
+      <div class="space-y-8 divide-y divide-gray-200">
+        <div class="">
+          <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Camera</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Configure PrintNanny Cam settings.
+            </p>
+          </div>
+          <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div class="sm:col-span-3">
+              <Listbox as="div" v-model="selectedCamera">
+                <ListboxLabel class="block text-sm font-medium text-gray-700"
+                  >Select a camera:</ListboxLabel
                 >
-                  <ChevronUpDownIcon
-                    class="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </span>
-              </ListboxButton>
-
-              <transition
-                leave-active-class="transition ease-in duration-100"
-                leave-from-class="opacity-100"
-                leave-to-class="opacity-0"
-              >
-                <ListboxOptions
-                  class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                >
-                  <ListboxOption
-                    as="template"
-                    v-for="camera in store.cameras"
-                    :key="camera.device_name"
-                    :value="camera"
-                    v-slot="{ active, selected }"
+                <div class="relative mt-1">
+                  <ListboxButton
+                    class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
-                    <li
-                      :class="[
-                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                        'relative cursor-default select-none py-2 pl-3 pr-9',
-                      ]"
+                    <span class="block truncate"
+                      ><strong>{{
+                        store.form?.selectedCamera.src_type.toUpperCase()
+                      }}</strong>
+                      {{ store.form?.selectedCamera.label }}
+                      {{ store.form?.selectedCamera.device_name }}</span
                     >
-                      <span
-                        :class="[
-                          selected ? 'font-semibold' : 'font-normal',
-                          'block truncate',
-                        ]"
-                        ><strong>{{ camera.src_type.toUpperCase() }}</strong> {{ camera.device_name }}</span>
+                    <span
+                      class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                    >
+                      <ChevronUpDownIcon
+                        class="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </ListboxButton>
 
-                      <span
-                        v-if="selected"
-                        :class="[
-                          active ? 'text-white' : 'text-indigo-600',
-                          'absolute inset-y-0 right-0 flex items-center pr-4',
-                        ]"
-                      >
-                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                      </span>
-                    </li>
-                  </ListboxOption>
-                </ListboxOptions>
-              </transition>
-            </div>
-          </Listbox>
-          </div>
-
-          <div class="sm:col-span-3">
-            <Listbox as="div" v-model="selectedCaps">
-            <ListboxLabel class="block text-sm font-medium text-gray-700"
-              >Select camera resolution:</ListboxLabel
-            >
-            <div class="relative mt-1">
-              <ListboxButton
-                class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-              >
-                <span class="block truncate">width={{ selectedCaps.width }} height={{ selectedCaps.height }} format={{ selectedCaps.format }}</span>
-                <span
-                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
-                >
-                  <ChevronUpDownIcon
-                    class="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </span>
-              </ListboxButton>
-
-              <transition
-                leave-active-class="transition ease-in duration-100"
-                leave-from-class="opacity-100"
-                leave-to-class="opacity-0"
-              >
-                <ListboxOptions
-                  class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                >
-                  <ListboxOption
-                    as="template"
-                    v-for="caps, idx in selectedCamera?.availableCaps"
-                    :key="idx"
-                    :value="caps"
-                    v-slot="{ active, selected }"
+                  <transition
+                    leave-active-class="transition ease-in duration-100"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
                   >
-                    <li
-                      :class="[
-                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                        'relative cursor-default select-none py-2 pl-3 pr-9',
-                      ]"
+                    <ListboxOptions
+                      class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     >
-                      <span
-                        :class="[
-                          selected ? 'font-semibold' : 'font-normal',
-                          'block truncate',
-                        ]"
-                        >width={{ caps.width }} height={{ caps.height }} format={{ caps.format }}</span>
-
-                      <span
-                        v-if="selected"
-                        :class="[
-                          active ? 'text-white' : 'text-indigo-600',
-                          'absolute inset-y-0 right-0 flex items-center pr-4',
-                        ]"
+                      <ListboxOption
+                        as="template"
+                        v-for="camera in store.cameras"
+                        :key="camera.device_name"
+                        :value="camera"
+                        v-slot="{ active, selected }"
                       >
-                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                      </span>
-                    </li>
-                  </ListboxOption>
-                </ListboxOptions>
-              </transition>
+                        <li
+                          :class="[
+                            active
+                              ? 'text-white bg-indigo-600'
+                              : 'text-gray-900',
+                            'relative cursor-default select-none py-2 pl-3 pr-9',
+                          ]"
+                        >
+                          <span
+                            :class="[
+                              selected ? 'font-semibold' : 'font-normal',
+                              'block truncate',
+                            ]"
+                            ><strong>{{
+                              camera.src_type.toUpperCase()
+                            }}</strong>
+                            {{ store.form?.selectedCamera.label }}
+                            {{ camera.device_name }}</span
+                          >
+
+                          <span
+                            v-if="selected"
+                            :class="[
+                              active ? 'text-white' : 'text-indigo-600',
+                              'absolute inset-y-0 right-0 flex items-center pr-4',
+                            ]"
+                          >
+                            <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        </li>
+                      </ListboxOption>
+                    </ListboxOptions>
+                  </transition>
+                </div>
+              </Listbox>
             </div>
-          </Listbox>
-          </div>
 
-          <div class="sm:col-span-3">
-            <label for="video_framerate" class="block text-sm font-medium text-gray-700">Video Framerate</label>
-            <div class="mt-1">
-              <input type="number" name="video_framerate" id="video_framerate" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+            <div class="sm:col-span-3">
+              <Listbox as="div" v-model="selectedCaps">
+                <ListboxLabel class="block text-sm font-medium text-gray-700"
+                  >Select camera resolution:</ListboxLabel
+                >
+                <div class="relative mt-1">
+                  <ListboxButton
+                    class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <span class="block truncate"
+                      >width={{ selectedCaps.width }} height={{
+                        selectedCaps.height
+                      }}
+                      format={{ selectedCaps.format }}</span
+                    >
+                    <span
+                      class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                    >
+                      <ChevronUpDownIcon
+                        class="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </ListboxButton>
+
+                  <transition
+                    leave-active-class="transition ease-in duration-100"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
+                  >
+                    <ListboxOptions
+                      class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                    >
+                      <ListboxOption
+                        as="template"
+                        v-for="(caps, idx) in selectedCamera?.availableCaps"
+                        :key="idx"
+                        :value="caps"
+                        v-slot="{ active, selected }"
+                      >
+                        <li
+                          :class="[
+                            active
+                              ? 'text-white bg-indigo-600'
+                              : 'text-gray-900',
+                            'relative cursor-default select-none py-2 pl-3 pr-9',
+                          ]"
+                        >
+                          <span
+                            :class="[
+                              selected ? 'font-semibold' : 'font-normal',
+                              'block truncate',
+                            ]"
+                            >width={{ caps.width }} height={{
+                              caps.height
+                            }}
+                            format={{ caps.format }}</span
+                          >
+
+                          <span
+                            v-if="selected"
+                            :class="[
+                              active ? 'text-white' : 'text-indigo-600',
+                              'absolute inset-y-0 right-0 flex items-center pr-4',
+                            ]"
+                          >
+                            <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        </li>
+                      </ListboxOption>
+                    </ListboxOptions>
+                  </transition>
+                </div>
+              </Listbox>
             </div>
-          </div>
 
-
-
-          <div class="sm:col-span-4">
-            <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-            <div class="mt-1">
-              <input id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+            <div class="sm:col-span-1">
+              <label
+                for="videoFramerate"
+                class="block text-sm font-medium text-gray-700"
+                >Video Framerate</label
+              >
+              <div class="mt-1">
+                <Field
+                  type="number"
+                  name="videoFramerate"
+                  id="videoFramerate"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
             </div>
-          </div>
 
-
-
-          <div class="sm:col-span-3">
-            <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-            <div class="mt-1">
-              <select id="country" name="country" autocomplete="country-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                <option>United States</option>
-                <option>Canada</option>
-                <option>Mexico</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="sm:col-span-6">
-            <label for="street-address" class="block text-sm font-medium text-gray-700">Street address</label>
-            <div class="mt-1">
-              <input type="text" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-            <div class="mt-1">
-              <input type="text" name="city" id="city" autocomplete="address-level2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
-            <div class="mt-1">
-              <input type="text" name="region" id="region" autocomplete="address-level1" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP / Postal code</label>
-            <div class="mt-1">
-              <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+            <div class="sm:col-span-4">
+              <div class="relative flex items-start">
+                <div class="flex h-5 items-center">
+                  <Field
+                    id="hlsEnabled"
+                    name="hlsEnabled"
+                    type="checkbox"
+                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="hlsEnabled" class="font-medium text-gray-700"
+                    >Enable HLS Compatibility</label
+                  >
+                  <p class="text-gray-500">
+                    Required for compatibility with OctoPrint camera plugins.
+                    Disable to improve performance.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
+        <!--
       <div class="pt-8">
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Notifications</h3>
@@ -264,16 +274,27 @@
             </div>
           </fieldset>
         </div>
+        
       </div>
-    </div>
+      --></div>
 
-    <div class="pt-5">
-      <div class="flex justify-end">
-        <button type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
-        <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
+      <div class="pt-5">
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Save
+          </button>
+        </div>
       </div>
-    </div>
-  </Form>
+    </Form>
   </Transition>
 </template>
 <style>
@@ -288,13 +309,13 @@
 }
 </style>
 <script setup lang="ts">
-import { Form, Field, ErrorMessage } from 'vee-validate';
-import { onMounted, ref} from "vue";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { onMounted, ref } from "vue";
 
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
 import TextSpinner from "@/components/TextSpinner.vue";
-import { useCameraSettingsStore } from '@/stores/cameraSettings';
+import { useCameraSettingsStore } from "@/stores/cameraSettings";
 import {
   Listbox,
   ListboxButton,
@@ -302,14 +323,16 @@ import {
   ListboxOption,
   ListboxLabel,
 } from "@headlessui/vue";
-import * as yup from 'yup';
-import type { Camera, GstreamerCaps } from '@bitsy-ai/printnanny-asyncapi-models';
-
+import * as yup from "yup";
+import type {
+  Camera,
+  GstreamerCaps,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 
 const store = useCameraSettingsStore();
 
 const selectedCamera = ref(undefined as undefined | Camera);
-const selectedCaps = ref(undefined as undefined | GstreamerCaps)
+const selectedCaps = ref(undefined as undefined | GstreamerCaps);
 
 const schema = yup.object({
   video_framerate: yup.number().required().default(16),
@@ -320,11 +343,9 @@ const schema = yup.object({
 
 onMounted(async () => {
   await store.load();
-  if (store.form && store.form.selectedCamera){
-    selectedCamera.value = store.form.selectedCamera
-    selectedCaps.value = store.form.selectedCamera.selectedCaps
+  if (store.form && store.form.selectedCamera) {
+    selectedCamera.value = store.form.selectedCamera;
+    selectedCaps.value = store.form.selectedCamera.selectedCaps;
   }
 });
-
-
 </script>
