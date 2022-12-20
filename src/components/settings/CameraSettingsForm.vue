@@ -136,7 +136,7 @@
                     >
                       <ListboxOption
                         as="template"
-                        v-for="(caps, idx) in selectedCamera?.availableCaps"
+                        v-for="(caps, idx) in selectedCamera?.available_caps"
                         :key="idx"
                         :value="caps"
                         v-slot="{ active, selected }"
@@ -417,26 +417,19 @@ const schema = yup.object({
   videoFramerate: yup.number().required(),
   hlsEnabled: yup.boolean().required().default(true),
   showDetectionGraphs: yup.boolean(),
-  showDetectionOverlay: yup.boolean()
+  showDetectionOverlay: yup.boolean(),
 });
 
 async function submitForm(values: any) {
   console.log("Form submitted:", values);
-  await store.save(
-    selectedCamera.value as Camera,
-    selectedCaps.value as GstreamerCaps,
-    parseInt(values.videoFramerate),
-    values.hlsEnabled,
-    values.showDetectionGraphs,
-    values.showDetectionOverlay
-  );
+  await store.save();
 }
 
 onMounted(async () => {
   await store.load();
   if (store.form && store.form.selectedCamera) {
     selectedCamera.value = store.form.selectedCamera;
-    selectedCaps.value = store.form.selectedCamera.selectedCaps;
+    selectedCaps.value = store.form.selectedCamera.selected_caps;
   }
 });
 </script>

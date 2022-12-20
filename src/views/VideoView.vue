@@ -14,5 +14,4 @@
 
 <script setup lang="ts">
 import VideoElement from "@/components/VideoElement.vue";
-import PlotlyElement from "@/components/PlotlyElement.vue";
 </script>
