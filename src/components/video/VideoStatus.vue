@@ -22,7 +22,7 @@
         class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
         aria-hidden="true"
       ></div>
-      <span class="text-grey-600">Camera is Offline</span>
+      <span class="text-grey-600" v-if="!compact">Camera is Offline</span>
     </div>
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
@@ -32,7 +32,7 @@
         class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
         aria-hidden="true"
       ></div>
-      <span class="text-grey-600">Camera is Active</span>
+      <span class="text-grey-600" v-if="!compact">Camera is Active</span>
     </div>
   </Transition>
 </template>
@@ -50,6 +50,7 @@
 <script setup lang="ts">
 import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
+import TextSpinner from "@/components/TextSpinner.vue";
 
 const store = useVideoStore();
 const props = defineProps({

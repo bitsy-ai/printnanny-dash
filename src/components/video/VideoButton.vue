@@ -10,16 +10,18 @@
 
       <button
         v-if="store.status == ConnectionStatus.ConnectionLoading"
-        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        disabled
+        class="ml-3 inline-flex disabled:opacity-25 justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
       >
-        <TextSpinner text="Loading..." />
+        Loading...
       </button>
 
       <button
+        disabled
         v-else-if="store.status == ConnectionStatus.ConnectionClosing"
-        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        class="ml-3 inline-flex disabled:opacity-25 justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
       >
-        <TextSpinner text="Stopping..." />
+      Stopping...
       </button>
 
       <!-- camera service is offline -->
@@ -58,7 +60,6 @@
 <script setup lang="ts">
 import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
-import TextSpinner from "@/components/TextSpinner.vue";
 import { VideoCameraIcon } from "@heroicons/vue/20/solid";
 
 const hostname = window.location.hostname;

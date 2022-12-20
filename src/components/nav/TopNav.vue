@@ -27,7 +27,9 @@
                 'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
               ]"
               :aria-current="item.current ? 'page' : undefined"
-              >{{ item.name }}</RouterLink
+              >{{ item.name }}
+              <VideoStatus v-if="item.name === 'PrintNanny Cam'" :compact="true" :show-loading="false" class="ml-2"/>
+              </RouterLink
             >
 
             <a
@@ -105,6 +107,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import { Cog6ToothIcon } from "@heroicons/vue/24/solid";
 import NatsConnectionStatus from "@/components/status/NatsConnectionStatus.vue";
+import VideoStatus from "@/components/video/VideoStatus.vue";
 import { useRouter, RouterLink } from "vue-router";
 
 import { TopBarRoutes } from "@/router/routes";
