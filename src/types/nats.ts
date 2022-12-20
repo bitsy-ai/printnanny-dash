@@ -1,4 +1,8 @@
 export enum NatsSubjectPattern {
+  CameraSettingsLoad = "pi.{pi_id}.settings.camera.load",
+  CameraSettingsApply = "pi.{pi_id}.settings.camera.apply",
+  CameraSettingsRevert = "pi.{pi_id}.settings.camera.revert",
+
   CamerasLoad = "pi.{pi_id}.cameras.load",
   DeviceInfoLoad = "pi.{pi_id}.device_info.load",
   DataframeRow = "pi.qc.df",
@@ -10,11 +14,10 @@ export enum NatsSubjectPattern {
   SystemdManagerEnableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
   SystemdManagerStartUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StartUnit",
   SystemdManagerStopUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StopUnit",
-  SettingsLoad = "pi.{pi_id}.settings.file.load",
-  SettingsApply = "pi.{pi_id}.settings.file.apply",
-  SettingsRevert = "pi.{pi_id}.settings.file.revert",
+  SettingsFileLoad = "pi.{pi_id}.settings.file.load",
+  SettingsFileApply = "pi.{pi_id}.settings.file.apply",
+  SettingsApplyRevert = "pi.{pi_id}.settings.file.revert",
   PrintNannyCloudAuth = "pi.{pi_id}.settings.printnanny.cloud.auth",
-  WebrtcSettingsApply = "pi.{pi_id}.settings.webrtc.apply",
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {

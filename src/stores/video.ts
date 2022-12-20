@@ -5,8 +5,6 @@ import {
   type CamerasLoadReply,
   type Camera,
   type PlaybackVideo,
-  type WebrtcSettingsApplyRequest,
-  type WebrtcSettingsApplyReply,
   CameraSourceType,
   PlaybackSourceType,
 } from "@bitsy-ai/printnanny-asyncapi-models";
@@ -225,33 +223,6 @@ export const useVideoStore = defineStore({
 
       await janusStore.connectJanus();
       janusStore.selectJanusStreamByPort();
-
-      // get nats connection (awaits until NATS server is available)
-      const natsStore = useNatsStore();
-      const natsConnection: NatsConnection =
-        await natsStore.getNatsConnection();
-
-      const requestCodec = JSONCodec<WebrtcSettingsApplyRequest>();
-      const req = {
-        video_src: this.selectedVideoSource,
-      } as WebrtcSettingsApplyRequest;
-      const subject = renderNatsSubjectPattern(
-        NatsSubjectPattern.WebrtcSettingsApply
-      );
-      console.log(`Sending request to ${subject}`, req);
-      const resMsg = await natsConnection
-        ?.request(subject, requestCodec.encode(req), {
-          timeout: DEFAULT_NATS_TIMEOUT,
-        })
-        .catch((e) => {
-          const msg = `Error appling webrtc settings ${req}`;
-          handleError(msg, e);
-        });
-      if (resMsg) {
-        const resCodec = JSONCodec<WebrtcSettingsApplyReply>();
-        const res = resCodec.decode(resMsg?.data);
-        console.log(`Received reply to ${subject}`, res);
-      }
       janusStore.startJanusStream(toRaw(this.showOverlay));
     },
     async stopStream() {
