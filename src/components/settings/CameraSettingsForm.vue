@@ -136,7 +136,7 @@
                     >
                       <ListboxOption
                         as="template"
-                        v-for="(caps, idx) in selectedCamera?.availableCaps"
+                        v-for="(caps, idx) in selectedCamera?.available_caps"
                         :key="idx"
                         :value="caps"
                         v-slot="{ active, selected }"
@@ -188,6 +188,7 @@
                   type="number"
                   name="videoFramerate"
                   id="videoFramerate"
+                  :value="store.form?.videoFramerate"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -200,6 +201,7 @@
                     id="hlsEnabled"
                     name="hlsEnabled"
                     type="checkbox"
+                    :value="store.form?.hlsEnabled"
                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                 </div>
@@ -214,6 +216,77 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="pt-8">
+          <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">
+              Detection Settings
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Adjust PrintNanny's quality monitoring and failure detection
+              settings.
+            </p>
+          </div>
+          <div class="mt-6">
+            <fieldset>
+              <legend class="sr-only">Video Feed</legend>
+              <div
+                class="text-base font-medium text-gray-900"
+                aria-hidden="true"
+              >
+                Video Feed
+              </div>
+              <div class="mt-4 space-y-4">
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <Field
+                      id="showDetectionOverlay"
+                      name="showDetectionOverlay"
+                      type="checkbox"
+                      :value="store.form?.showDetectionOverlay"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="showDetectionOverlay"
+                      class="font-medium text-gray-700"
+                      >Show Detection Overlay</label
+                    >
+                    <p class="text-gray-500">
+                      Draw boxes around detected objects. Enable to debug
+                      PrintNanny's AI. Disable to improve video stream
+                      performance.
+                    </p>
+                  </div>
+                </div>
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <Field
+                      id="showDetectionGraphs"
+                      name="showDetectionGraphs"
+                      type="checkbox"
+                      :value="store.form?.showDetectionGraphs"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="showDetectionGraphs"
+                      class="font-medium text-gray-700"
+                      >Show Detection Graphs</label
+                    >
+                    <p class="text-gray-500">
+                      Graph last 30 seconds of detections. Enable to debug
+                      PrintNanny's AI. Disable to improve video stream
+                      performance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
           </div>
         </div>
         <!--
@@ -343,26 +416,20 @@ const selectedCaps = ref(undefined as undefined | GstreamerCaps);
 const schema = yup.object({
   videoFramerate: yup.number().required(),
   hlsEnabled: yup.boolean().required().default(true),
-
-  video_height: yup.number().required().default(480),
-  video_width: yup.number().required().default(640),
+  showDetectionGraphs: yup.boolean(),
+  showDetectionOverlay: yup.boolean(),
 });
 
 async function submitForm(values: any) {
   console.log("Form submitted:", values);
-  await store.save(
-    selectedCamera.value as Camera,
-    selectedCaps.value as GstreamerCaps,
-    parseInt(values.videoFramerate),
-    values.hlsEnabled
-  );
+  await store.save();
 }
 
 onMounted(async () => {
   await store.load();
   if (store.form && store.form.selectedCamera) {
     selectedCamera.value = store.form.selectedCamera;
-    selectedCaps.value = store.form.selectedCamera.selectedCaps;
+    selectedCaps.value = store.form.selectedCamera.selected_caps;
   }
 });
 </script>

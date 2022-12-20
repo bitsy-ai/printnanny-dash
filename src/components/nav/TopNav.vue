@@ -116,7 +116,7 @@ const externalLinks = [
   { name: "Update System", href: "/update/" },
   { name: "PrintNanny Cloud", href: "https://printnanny.ai" },
   {
-    name: "Documentation",
+    name: "Docs",
     href: "https://printnanny.ai/docs/docs/category/quick-start/",
   },
 ];

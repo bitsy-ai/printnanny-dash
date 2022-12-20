@@ -18,6 +18,8 @@ export interface CameraSettingsForm {
   hlsEnabled: boolean;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
+  showDetectionOverlay: boolean;
+  showDetectionGraphs: boolean;
 }
 
 export const useCameraSettingsStore = defineStore({
@@ -31,7 +33,7 @@ export const useCameraSettingsStore = defineStore({
         device_name: "/base/soc/i2c0mux/i2c@1/imx219@10",
         label: "imx219",
         src_type: CameraSourceType.CSI,
-        selectedCaps: {
+        selected_caps: {
           media_type: "video/x-raw",
           format: "YUY2",
           width: 640,
@@ -84,19 +86,16 @@ export const useCameraSettingsStore = defineStore({
           videoFramerate: settings.video_framerate,
           hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
-          selectedCaps: camera.selectedCaps,
+          selectedCaps: camera.selected_caps,
+          showDetectionOverlay: settings.detection.overlay,
+          showDetectionGraphs: settings.detection.graphs,
         } as CameraSettingsForm;
 
         this.$patch({ form, settings });
       }
     },
 
-    async save(
-      selectedCamera: Camera,
-      selectedCaps: GstreamerCaps,
-      framerate: number,
-      hlsEnabled: boolean
-    ) {
+    async save() {
       this.$patch({ saving: true });
 
       const natsStore = useNatsStore();
@@ -110,11 +109,14 @@ export const useCameraSettingsStore = defineStore({
       const reqCodec = JSONCodec<PrintNannyCameraSettings>();
 
       const req = toRaw(this.settings) as PrintNannyCameraSettings;
-      req.hls.hls_enabled = hlsEnabled;
-      req.video_framerate = framerate;
-      req.video_src = selectedCamera;
-      req.video_src.selectedCaps = selectedCaps;
+      req.hls.hls_enabled = this.form?.hlsEnabled;
+      req.video_framerate = this.form?.videoFramerate as number;
+      req.video_src = this.form?.selectedCamera as Camera;
+      req.video_src.selected_caps = this.form?.selectedCaps as GstreamerCaps;
+      req.detection.graphs = this.form?.showDetectionGraphs as boolean;
+      req.detection.overlay = this.form?.showDetectionOverlay as boolean;
 
+      console.log("Submitting camera settings request:", req);
       const resMsg = await natsConnection?.request(
         subject,
         reqCodec.encode(req),
@@ -132,7 +134,9 @@ export const useCameraSettingsStore = defineStore({
           videoFramerate: settings.video_framerate,
           hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
-          selectedCaps: camera.selectedCaps,
+          selectedCaps: camera.selected_caps,
+          showDetectionOverlay: settings.detection.overlay,
+          showDetectionGraphs: settings.detection.graphs,
         } as CameraSettingsForm;
 
         this.$patch({ form, settings });
