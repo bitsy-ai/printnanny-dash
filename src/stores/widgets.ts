@@ -119,7 +119,7 @@ export const useWidgetStore = defineStore({
       {
         name: "PrintNanny Cam",
         loaded: false,
-        href: "/vision/",
+        href: "/cam/",
         settings: {
           name: "camera-settings",
           params: { app: SettingsApp.PRINTNANNY },
