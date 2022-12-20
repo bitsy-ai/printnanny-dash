@@ -1,3 +1,4 @@
+import { toRaw } from "vue";
 import { JSONCodec, type NatsConnection } from "nats.ws";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
@@ -22,6 +23,7 @@ export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
     loading: true,
+    saving: false,
     cameras: [
       {
         index: 0,
@@ -37,6 +39,7 @@ export const useCameraSettingsStore = defineStore({
       },
     ] as Array<Camera>,
     form: undefined as undefined | CameraSettingsForm,
+    settings: undefined as undefined | PrintNannyCameraSettings,
   }),
   actions: {
     async loadCameras() {
@@ -71,20 +74,69 @@ export const useCameraSettingsStore = defineStore({
       });
 
       if (resMsg) {
-        const data = resCodec.decode(resMsg?.data);
-        console.log("Loaded camera settings:", data);
+        const settings = resCodec.decode(resMsg?.data);
+        console.log("Loaded camera settings:", settings);
 
-        const camera = data.video_src as Camera;
+        const camera = settings.video_src as Camera;
 
         const form = {
-          videoFramerate: data.video_framerate,
-          hlsEnabled: data.hls.hls_enabled,
+          videoFramerate: settings.video_framerate,
+          hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
           selectedCaps: camera.selectedCaps,
         } as CameraSettingsForm;
 
-        this.$patch({ form });
+        this.$patch({ form, settings });
       }
+    },
+
+    async save(
+      selectedCamera: Camera,
+      selectedCaps: GstreamerCaps,
+      framerate: number,
+      hlsEnabled: boolean
+    ) {
+      this.$patch({ saving: true });
+
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.CameraSettingsApply
+      );
+
+      const reqCodec = JSONCodec<PrintNannyCameraSettings>();
+
+      const req = toRaw(this.settings) as PrintNannyCameraSettings;
+      req.hls.hls_enabled = hlsEnabled;
+      req.video_framerate = framerate;
+      req.video_src = selectedCamera;
+      req.video_src.selectedCaps = selectedCaps;
+
+      const resMsg = await natsConnection?.request(
+        subject,
+        reqCodec.encode(req),
+        {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        }
+      );
+      if (resMsg) {
+        const resCodec = JSONCodec<PrintNannyCameraSettings>();
+        const settings = resCodec.decode(resMsg?.data);
+        console.log("Applied camera settings:", settings);
+
+        const camera = settings.video_src as Camera;
+        const form = {
+          videoFramerate: settings.video_framerate,
+          hlsEnabled: settings.hls.hls_enabled,
+          selectedCamera: camera,
+          selectedCaps: camera.selectedCaps,
+        } as CameraSettingsForm;
+
+        this.$patch({ form, settings });
+      }
+      this.$patch({ saving: false });
     },
 
     async load() {

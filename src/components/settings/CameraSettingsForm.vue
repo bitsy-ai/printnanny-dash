@@ -12,6 +12,7 @@
       :validation-schema="schema"
       v-else
       :initial-values="store.form"
+      @submit="submitForm"
     >
       <div class="space-y-8 divide-y divide-gray-200">
         <div class="">
@@ -280,6 +281,11 @@
 
       <div class="pt-5">
         <div class="flex justify-end">
+          <TextSpinner
+            class="m-auto"
+            text="Saving your settings..."
+            v-if="store.saving"
+          />
           <button
             type="button"
             class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -335,11 +341,22 @@ const selectedCamera = ref(undefined as undefined | Camera);
 const selectedCaps = ref(undefined as undefined | GstreamerCaps);
 
 const schema = yup.object({
-  video_framerate: yup.number().required().default(16),
-  hls_enabled: yup.boolean().required().default(true),
+  videoFramerate: yup.number().required(),
+  hlsEnabled: yup.boolean().required().default(true),
+
   video_height: yup.number().required().default(480),
   video_width: yup.number().required().default(640),
 });
+
+async function submitForm(values: any) {
+  console.log("Form submitted:", values);
+  await store.save(
+    selectedCamera.value as Camera,
+    selectedCaps.value,
+    parseInt(values.videoFramerate),
+    values.hlsEnabled
+  );
+}
 
 onMounted(async () => {
   await store.load();
