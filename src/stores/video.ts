@@ -7,6 +7,7 @@ import {
   type PlaybackVideo,
   CameraSourceType,
   PlaybackSourceType,
+  SystemdUnitActiveState,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
@@ -15,10 +16,13 @@ import {
   renderNatsSubjectPattern,
   type QcDataframeRow,
 } from "@/types";
+import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
 import { error, useAlertStore, warning } from "./alerts";
+import { useSystemdServiceStore } from "./systemdService";
+import { useWidgetStore } from "./widgets";
 
 const DEFAULT_NATS_TIMEOUT = 12000;
 
@@ -92,38 +96,6 @@ export const useVideoStore = defineStore({
     meter_y_spaghetti_std: (state) => state.df.map((el) => el.spaghetti__std),
   },
   actions: {
-    async loadCameras(): Promise<Camera[]> {
-      this.$patch({ loadingCameras: true });
-      const natsStore = useNatsStore();
-      const natsConnection: NatsConnection =
-        await natsStore.getNatsConnection();
-
-      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CamerasLoad);
-
-      const resMsg = await natsConnection
-        ?.request(subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT })
-        .catch((e) => {
-          const msg = `Error loading cameras`;
-          this.$patch({ error: e });
-          handleError(msg, e);
-        });
-
-      if (resMsg) {
-        const resCodec = JSONCodec<CamerasLoadReply>();
-        const res = resCodec.decode(resMsg?.data);
-        console.log(
-          "Detected cameras, adding to available sources:",
-          res.cameras
-        );
-        this.$patch({
-          sources: [...this.sources, ...res.cameras],
-          loadingCameras: false,
-        });
-        return res.cameras;
-      }
-      this.$patch({ loadingCameras: false });
-      return [];
-    },
     getDetectionAlerts(df: Array<QcDataframeRow>): void {
       if (df.length < 10) {
         console.warn(
@@ -212,6 +184,21 @@ export const useVideoStore = defineStore({
         }
         console.log(`subscription ${sub.getSubject()} drained.`);
       })(sub);
+    },
+
+    async load() {
+      // is printnanny-vision service enabled?
+      const widgetStore = useWidgetStore();
+      const systemdServices = useSystemdServiceStore(widgetStore.cameraWidget);
+      await systemdServices.load();
+      if (systemdServices.unit?.active_state === SystemdUnitActiveState.ACTIVE) {
+        await this.startStream();
+
+      } else {
+        console.warn("printnanny-vision.service is not active");
+        this.$patch({ status: ConnectionStatus.ServiceNotStarted })
+      }
+
     },
 
     async startStream() {
