@@ -29,7 +29,7 @@
               :aria-current="item.current ? 'page' : undefined"
               >{{ item.name }}
               <VideoStatus
-                v-if="item.name === 'PrintNanny Cam'"
+                v-if="item.name === 'Camera'"
                 :compact="true"
                 :show-loading="false"
                 class="ml-2"

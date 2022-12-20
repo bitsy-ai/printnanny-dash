@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md"
+    class="w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-2xl"
   >
     <div class="flex px-4 pt-4 grid grid-cols-2">
       <!-- toggle-->
