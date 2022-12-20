@@ -33,6 +33,7 @@ export enum SystemdUnitStatus {
 }
 
 export enum ConnectionStatus {
+  ServiceNotStarted,
   ConnectionNotStarted,
   ConnectionLoading,
   ConnectionReady,

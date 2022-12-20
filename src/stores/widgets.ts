@@ -223,6 +223,11 @@ export const useWidgetStore = defineStore({
         (x) => x.category === WidgetCategory.OtherApps
       );
     },
+    cameraWidget(state): WidgetItem {
+      return Object.values(state.items).filter(
+        (x) => x.service === "printnanny-vision.service"
+      )[0];
+    },
   },
 
   actions: {

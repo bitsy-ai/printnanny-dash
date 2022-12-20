@@ -13,5 +13,5 @@
 </template>
 
 <script setup lang="ts">
-import VideoElement from "@/components/VideoElement.vue";
+import VideoElement from "@/components/video/VideoElement.vue";
 </script>
