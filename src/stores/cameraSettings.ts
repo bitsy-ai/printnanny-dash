@@ -33,7 +33,7 @@ export const useCameraSettingsStore = defineStore({
         device_name: "/base/soc/i2c0mux/i2c@1/imx219@10",
         label: "imx219",
         src_type: CameraSourceType.CSI,
-        selectedCaps: {
+        selected_caps: {
           media_type: "video/x-raw",
           format: "YUY2",
           width: 640,
@@ -86,7 +86,7 @@ export const useCameraSettingsStore = defineStore({
           videoFramerate: settings.video_framerate,
           hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
-          selectedCaps: camera.selectedCaps,
+          selectedCaps: camera.selected_caps,
           showDetectionOverlay: settings.detection.overlay,
           showDetectionGraphs: settings.detection.graphs,
         } as CameraSettingsForm;
@@ -112,7 +112,7 @@ export const useCameraSettingsStore = defineStore({
       req.hls.hls_enabled = this.form?.hlsEnabled;
       req.video_framerate = this.form?.videoFramerate as number;
       req.video_src = this.form?.selectedCamera as Camera;
-      req.video_src.selectedCaps = this.form?.selectedCaps as GstreamerCaps;
+      req.video_src.selected_caps = this.form?.selectedCaps as GstreamerCaps;
       req.detection.graphs = this.form?.showDetectionGraphs as boolean;
       req.detection.overlay = this.form?.showDetectionOverlay as boolean;
 
@@ -134,7 +134,7 @@ export const useCameraSettingsStore = defineStore({
           videoFramerate: settings.video_framerate,
           hlsEnabled: settings.hls.hls_enabled,
           selectedCamera: camera,
-          selectedCaps: camera.selectedCaps,
+          selectedCaps: camera.selected_caps,
           showDetectionOverlay: settings.detection.overlay,
           showDetectionGraphs: settings.detection.graphs,
         } as CameraSettingsForm;
