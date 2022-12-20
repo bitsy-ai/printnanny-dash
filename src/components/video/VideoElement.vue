@@ -47,6 +47,17 @@ onBeforeRouteLeave((_to, _from) => {
     <div class="col-span-6">
       <div class="flex grid grid-cols-1">
         <VideoStatus />
+        <div class="flex w-full items-center justify-center">
+          <VideoButton class="m-2" />
+          <router-link :to="{ name: 'camera-settings' }">
+            <button
+              class="rounded-md border inline-flex border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <Cog6ToothIcon class="w-5 h-5 mr-2"></Cog6ToothIcon>
+              Settings
+            </button>
+          </router-link>
+        </div>
         <video
           @click="startStream"
           id="janus-video"
@@ -56,19 +67,6 @@ onBeforeRouteLeave((_to, _from) => {
           aria-placeholder="Video stream is loading"
           poster="@/assets/video-paused.svg"
         />
-      </div>
-      <div class="w-full flex">
-        <VideoButton />
-
-        <router-link :to="{ name: 'camera-settings' }" class="m-auto">
-          <button
-            class="rounded-md border inline-flex border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            <Cog6ToothIcon class="w-5 h-5 mr-2"></Cog6ToothIcon>
-            Settings
-          </button>
-        </router-link>
-
       </div>
     </div>
     <div

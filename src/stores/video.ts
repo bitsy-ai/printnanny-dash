@@ -52,7 +52,7 @@ export const useVideoStore = defineStore({
     loadingCameras: true,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
-    status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
+    status: ConnectionStatus.ConnectionLoading as ConnectionStatus,
     sources: DEMO_VIDEOS as Array<Camera | PlaybackVideo>,
     selectedVideoSource: null as null | Camera | PlaybackVideo,
     playingStream: null as null | Camera | PlaybackVideo,
@@ -191,14 +191,14 @@ export const useVideoStore = defineStore({
       const widgetStore = useWidgetStore();
       const systemdServices = useSystemdServiceStore(widgetStore.cameraWidget);
       await systemdServices.load();
-      if (systemdServices.unit?.active_state === SystemdUnitActiveState.ACTIVE) {
+      if (
+        systemdServices.unit?.active_state === SystemdUnitActiveState.ACTIVE
+      ) {
         await this.startStream();
-
       } else {
         console.warn("printnanny-vision.service is not active");
-        this.$patch({ status: ConnectionStatus.ServiceNotStarted })
+        this.$patch({ status: ConnectionStatus.ServiceNotStarted });
       }
-
     },
 
     async startStream() {

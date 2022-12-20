@@ -6,69 +6,41 @@
       mode="out-in"
       :duration="{ enter: 800, leave: 500 }"
     >
-      <div
-        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
+      <!-- various loading states -->
+
+      <button
         v-if="store.status == ConnectionStatus.ConnectionLoading"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        <TextSpinner text="Loading video stream" />
-      </div>
-      <div
-        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
+        <TextSpinner text="Loading..." />
+      </button>
+
+      <button
         v-else-if="store.status == ConnectionStatus.ConnectionClosing"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        <TextSpinner text="Stopping video stream" />
-      </div>
-      <div
-        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
+        <TextSpinner text="Stopping..." />
+      </button>
+
+      <!-- camera service is offline -->
+      <button
+        @click="store.startStream"
         v-else-if="store.status == ConnectionStatus.ServiceNotStarted"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        <button
-            class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
-            Start Camera
-        </button>
+        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
+        Start Camera
+      </button>
 
-      </div>
-      <div
-        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
-        v-else-if="store.status == ConnectionStatus.ConnectionNotStarted"
-      >
-        <div
-          class="bg-amber-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
-          aria-hidden="true"
-        ></div>
-        <span class="text-grey-600"
-          >Click video player 👇 to start the selected stream</span
-        >
-      </div>
-
-      <div
-        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
+      <!-- camera service is active -->
+      <button
+        @click="store.stopStream"
         v-else-if="store.status == ConnectionStatus.ConnectionReady"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        <div
-          class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
-          aria-hidden="true"
-        ></div>
-        <span class="text-grey-600"
-          >Connected to {{ hostname }}. Click video player 👇 to stop
-          stream.</span
-        >
-      </div>
-      <div
-        class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
-        v-else-if="store.status == ConnectionStatus.ConnectionError"
-      >
-        <div
-          class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full m-auto"
-          aria-hidden="true"
-        ></div>
-        <span class="text-grey-600"
-          >Error connecting to {{ hostname }}. Click video player 👇 to
-          retry.</span
-        >
-      </div>
+        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
+        Stop Camera
+      </button>
     </Transition>
   </div>
 </template>
