@@ -12,6 +12,7 @@ import VideoStatus from "@/components/status/VideoStatus.vue";
 import { handleError } from "@/utils";
 import PlotlyElement from "@/components/PlotlyElement.vue";
 import { useCameraSettingsStore } from "@/stores/cameraSettings";
+import { Cog6ToothIcon } from "@heroicons/vue/20/solid";
 
 const cameraSettings = useCameraSettingsStore();
 
@@ -42,13 +43,17 @@ onBeforeRouteLeave((_to, _from) => {
   <div
     class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6 col-span-2 grid md:grid-cols-5 grid-cols-1 gap-4"
   >
-    <div class="col-span-6 grid grid-cols-1 md:grid-cols-2">
+    <div class="col-span-6">
       <div class="w-full">
-        <h3
-          class="text-base font-medium text-gray-900 py-2 text-center m-auto w-full"
-        >
-          Video Stream
-        </h3>
+        <router-link :to="{ name: 'camera-settings' }">
+          <button
+            class="rounded-md border inline-flex justify-center border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            <Cog6ToothIcon class="w-5 h-5 mr-2"></Cog6ToothIcon>
+            Settings
+          </button>
+        </router-link>
+
         <VideoStatus />
         <video
           @click="startStream"
