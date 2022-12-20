@@ -10,9 +10,7 @@
         <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">
           3D Printer
         </h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly"
-        >
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly">
           <SystemdServiceCard
             v-for="item in widgets.printerManagementItems"
             :key="item.name"
@@ -58,9 +56,7 @@
         <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">
           PrintNanny Services
         </h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly"
-        >
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly">
           <SystemdServiceCard
             v-for="item in widgets.printNannyAppItems"
             :key="item.name"
@@ -71,10 +67,10 @@
 
       <!-- other apps -->
       <div class="mx-auto max-w-7xl sm:p-6 lg:p-8">
-        <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">Other Services</h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly"
-        >
+        <h2 class="text-lg font-medium leading-6 text-gray-900 mb-2">
+          Other Services
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-evenly">
           <SystemdServiceCard
             v-for="item in widgets.otherAppItems"
             :key="item.name"
@@ -132,6 +128,5 @@ const cloud = useCloudStore();
 
 cloud.fetchUser();
 
-const pageTitle =
-  "🚀 Mission Control";
+const pageTitle = "🚀 Mission Control";
 </script>
