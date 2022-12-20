@@ -188,6 +188,7 @@
                   type="number"
                   name="videoFramerate"
                   id="videoFramerate"
+                  :value="store.form?.videoFramerate"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -200,6 +201,7 @@
                     id="hlsEnabled"
                     name="hlsEnabled"
                     type="checkbox"
+                    :value="store.form?.hlsEnabled"
                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                 </div>
@@ -239,10 +241,11 @@
               <div class="mt-4 space-y-4">
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
-                    <input
+                    <Field
                       id="showDetectionOverlay"
                       name="showDetectionOverlay"
                       type="checkbox"
+                      :value="store.form?.showDetectionOverlay"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
@@ -261,10 +264,11 @@
                 </div>
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
-                    <input
+                    <Field
                       id="showDetectionGraphs"
                       name="showDetectionGraphs"
                       type="checkbox"
+                      :value="store.form?.showDetectionGraphs"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
@@ -413,7 +417,7 @@ const schema = yup.object({
   videoFramerate: yup.number().required(),
   hlsEnabled: yup.boolean().required().default(true),
   showDetectionGraphs: yup.boolean(),
-  showDetectionOverlay: yup.boolean(),
+  showDetectionOverlay: yup.boolean()
 });
 
 async function submitForm(values: any) {
