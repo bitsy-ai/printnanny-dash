@@ -34,10 +34,10 @@
                   >
                     <span class="block truncate"
                       ><strong>{{
-                        store.form?.selectedCamera.src_type.toUpperCase()
+                        selectedCamera?.src_type.toUpperCase()
                       }}</strong>
-                      {{ store.form?.selectedCamera.label }}
-                      {{ store.form?.selectedCamera.device_name }}</span
+                      {{ selectedCamera?.label }}
+                      {{ selectedCamera?.device_name }}</span
                     >
                     <span
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -80,7 +80,7 @@
                             ><strong>{{
                               camera.src_type.toUpperCase()
                             }}</strong>
-                            {{ store.form?.selectedCamera.label }}
+                            {{ camera.label }}
                             {{ camera.device_name }}</span
                           >
 
