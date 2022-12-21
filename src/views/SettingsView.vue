@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:h-[32rem] 2xl:h-[62rem]">
+  <div class="h-auto">
     <Disclosure
       as="div"
       class="relative overflow-hidden bg-sky-700 pb-32"

@@ -231,13 +231,17 @@
           </div>
           <div class="mt-6">
             <fieldset>
-              <legend class="sr-only">Video Feed</legend>
+              <legend class="sr-only">Debug Settings</legend>
               <div
                 class="text-base font-medium text-gray-900"
                 aria-hidden="true"
               >
-                Video Feed
+                Debug Utilities
               </div>
+              <p class="text-gray-500 text-sm">
+                These settings let you inspect PrintNanny's detection system,
+                but may impact video stream performance.
+              </p>
               <div class="mt-4 space-y-4">
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
@@ -256,9 +260,7 @@
                       >Show Detection Overlay</label
                     >
                     <p class="text-gray-500">
-                      Draw boxes around detected objects. Enable to debug
-                      PrintNanny's AI. Disable to improve video stream
-                      performance.
+                      Draw boxes around detected objects.
                     </p>
                   </div>
                 </div>
@@ -279,9 +281,7 @@
                       >Show Detection Graphs</label
                     >
                     <p class="text-gray-500">
-                      Graph last 30 seconds of detections. Enable to debug
-                      PrintNanny's AI. Disable to improve video stream
-                      performance.
+                      Graph last 30 seconds of detections.
                     </p>
                   </div>
                 </div>
