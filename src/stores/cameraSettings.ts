@@ -22,26 +22,37 @@ export interface CameraSettingsForm {
   showDetectionGraphs: boolean;
 }
 
+const DEFAULT_CAPS = {
+  media_type: "video/x-raw",
+  format: "YUY2",
+  width: 640,
+  height: 480,
+} as GstreamerCaps;
+
+const DEFAULT_CAMERA = {
+  index: 0,
+  device_name: "/base/soc/i2c0mux/i2c@1/imx219@10",
+  label: "imx219",
+  src_type: CameraSourceType.CSI,
+  selected_caps: DEFAULT_CAPS,
+} as Camera;
+
+const DEFAULT_FORM = {
+  hlsEnabled: true,
+  videoFramerate: 16,
+  selectedCaps: DEFAULT_CAPS,
+  selectedCamera: DEFAULT_CAMERA,
+  showDetectionOverlay: false,
+  showDetectionGraphs: false,
+} as CameraSettingsForm;
+
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
     loading: true,
     saving: false,
-    cameras: [
-      {
-        index: 0,
-        device_name: "/base/soc/i2c0mux/i2c@1/imx219@10",
-        label: "imx219",
-        src_type: CameraSourceType.CSI,
-        selected_caps: {
-          media_type: "video/x-raw",
-          format: "YUY2",
-          width: 640,
-          height: 480,
-        } as GstreamerCaps,
-      },
-    ] as Array<Camera>,
-    form: undefined as undefined | CameraSettingsForm,
+    cameras: [] as Array<Camera>,
+    form: DEFAULT_FORM,
     settings: undefined as undefined | PrintNannyCameraSettings,
   }),
   actions: {
