@@ -60,7 +60,7 @@ export const useCameraSettingsStore = defineStore({
       if (resMsg) {
         const data = resCodec.decode(resMsg?.data);
         console.log("Loaded available cameras", data);
-        this.$patch({ cameras: data.cameras })
+        this.$patch({ cameras: data.cameras });
       }
     },
     async loadSettings() {
