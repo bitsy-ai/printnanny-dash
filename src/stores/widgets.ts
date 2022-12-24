@@ -198,8 +198,12 @@ export const useWidgetStore = defineStore({
         service: "tailscaled.service",
         menuItems: [
           {
+            name: "Add Device to Network",
+            href: "/tailscale/",
+          },
+          {
             name: "Quick Start",
-            href: "https://printnanny.ai/docs/docs/quick-start/tailscale/",
+            href: "https://printnanny.ai/docs/docs/addons/tailscale/",
           },
           { name: "Tailscale Docs", href: "https://tailscale.com/kb/" },
         ],
