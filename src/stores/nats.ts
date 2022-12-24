@@ -12,9 +12,8 @@ import type { PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-m
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   return uri;
 }
 
@@ -90,7 +89,7 @@ export const useNatsStore = defineStore({
         NatsSubjectPattern.PrintNannyCloudAuth
       );
 
-      const natsClient = toRaw(this.natsConnection);
+      const natsClient = await this.getNatsConnection();
       const jsonCodec = JSONCodec<PrintNannyCloudAuthRequest>();
 
       console.debug("Publishing NATS PrintNannyCloudAuthRequest:", req);
