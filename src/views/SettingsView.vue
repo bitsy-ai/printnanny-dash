@@ -13,8 +13,8 @@
         ]"
       >
         <div class="absolute inset-0 flex">
-          <div class="h-full w-1/2" style="background-color: #1f2937" />
-          <div class="h-full w-1/2" style="background-color: #1f2937" />
+          <div class="h-full w-1/2" style="background-color: #111827" />
+          <div class="h-full w-1/2" style="background-color: #111827" />
         </div>
         <div class="relative flex justify-center">
           <svg
@@ -26,13 +26,13 @@
           >
             <path
               d="M284.161 308H1465.84L875.001 182.413 284.161 308z"
-              fill="#1f2937"
+              fill="#111827"
             />
-            <path d="M1465.84 308L16.816 0H1750v308h-284.16z" fill="#1f2937" />
-            <path d="M1733.19 0L284.161 308H0V0h1733.19z" fill="#1f2937" />
+            <path d="M1465.84 308L16.816 0H1750v308h-284.16z" fill="#111827" />
+            <path d="M1733.19 0L284.161 308H0V0h1733.19z" fill="#111827" />
             <path
               d="M875.001 182.413L1733.19 0H16.816l858.185 182.413z"
-              fill="#334155"
+              fill="#1f2937"
             />
           </svg>
         </div>
