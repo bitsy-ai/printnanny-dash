@@ -22,7 +22,7 @@
               Configure PrintNanny Cam settings.
             </p>
           </div>
-          <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div class="sm:col-span-3">
               <Listbox as="div" v-model="store.form.selectedCamera">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
