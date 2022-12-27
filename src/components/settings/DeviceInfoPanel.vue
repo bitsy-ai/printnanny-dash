@@ -13,7 +13,7 @@
       />
       <ErrorPanel v-else-if="store.error" :errors="[store.error]"> </ErrorPanel>
       <div v-else>
-        <div class="py-6 px-4 sm:p-6 lg:pb-8">
+        <div class="pt-4 px-4 sm:p-4">
           <div>
             <h2 class="text-lg font-medium leading-6 text-gray-900">
               Device Information
@@ -29,14 +29,14 @@
             </p>
           </div>
         </div>
-        <div class="py-6 px-4 sm:p-6 lg:pb-8">
+        <div class="pt-4 px-4 sm:p-6 lg:pb-8 text-xs">
           <pre>
 /etc/issue
 
 {{ store.deviceInfo?.issue }}</pre
           >
         </div>
-        <div class="py-6 px-4 sm:p-6 lg:pb-8">
+        <div class="pt-4 px-4 sm:p-6 lg:pb-8 text-xs">
           <pre>
 /etc/os-release
 
