@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import StickyAlerts from "./components/StickyAlerts.vue";
+import StickyAlerts from "@/components/alerts/StickyAlerts.vue";
 import FooterNav from "@/components/nav/FooterNav.vue";
 
 // only enable tidio in production
