@@ -12,6 +12,7 @@ export const useAlertStore = defineStore({
     alerts: [] as Array<UiStickyAlert>,
     crashReportAlert: undefined as undefined | UiStickyAlert,
     showCrashReportForm: false,
+    showCrashReportConfirm: false,
   }),
 
   actions: {
