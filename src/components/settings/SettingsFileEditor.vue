@@ -12,17 +12,12 @@
         v-if="store.loading"
       />
 
-      <div
-        v-else-if="selectedFile"
-        class="divide-y divide-gray-200 w-full"
-      >
+      <div v-else-if="selectedFile" class="divide-y divide-gray-200 w-full">
         <div class="p-4">
           <h2 class="text-lg font-medium leading-6 text-gray-900">
             Edit Settings Files
           </h2>
-          <p class="mt-1 text-sm text-gray-500">
-            Customize add-on settings.
-          </p>
+          <p class="mt-1 text-sm text-gray-500">Customize add-on settings.</p>
           <Listbox as="div" v-model="selectedFile" class="md:w-3/4 mt-4">
             <ListboxLabel class="block text-sm font-medium text-gray-700"
               >Select a file:</ListboxLabel

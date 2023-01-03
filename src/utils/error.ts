@@ -4,6 +4,7 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 
 function handleError(header: string, e: Error | AxiosError) {
+  const store = useAlertStore();
   console.error(header, e);
   let message = e.message || e.toString();
   const actions = [
@@ -14,7 +15,7 @@ function handleError(header: string, e: Error | AxiosError) {
       hoverTextColor: "text-white",
       text: "Send Crash Report",
       onClick: () => {
-        window.location.reload();
+        store.openCrashReport(header);
       },
     },
     {
@@ -53,7 +54,6 @@ function handleError(header: string, e: Error | AxiosError) {
     actions,
     error: e,
   };
-  const store = useAlertStore();
   store.pushAlert(alert);
 }
 

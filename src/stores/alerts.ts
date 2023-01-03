@@ -3,14 +3,15 @@ import { CheckIcon, ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert } from "@/types";
 
 window.onerror = function (msg, url, lineNo, columnNo, error) {
-  console.log(msg, url, lineNo, columnNo, error)
-}
+  console.log(msg, url, lineNo, columnNo, error);
+};
 
 export const useAlertStore = defineStore({
   id: "alerts",
   state: () => ({
     alerts: [] as Array<UiStickyAlert>,
-    showCrashReportForm: false
+    crashReportAlert: undefined as undefined | UiStickyAlert,
+    showCrashReportForm: false,
   }),
 
   actions: {
@@ -20,6 +21,17 @@ export const useAlertStore = defineStore({
       if (alreadyShown.length === 0) {
         this.alerts.push(alert);
       }
+    },
+    clear() {
+      this.$patch({ alerts: [] });
+    },
+
+    openCrashReport(header: string) {
+      const crashReportAlert: undefined | UiStickyAlert = this.alerts.find(
+        (a) => a.header == header
+      );
+      this.clear();
+      this.$patch({ crashReportAlert, showCrashReportForm: true });
     },
   },
 });

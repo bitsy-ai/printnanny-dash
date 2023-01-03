@@ -1,6 +1,8 @@
 <!-- Alert with one or two action -->
 <template>
-  <div class="flex w-full bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+  <div
+    class="flex w-full bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+  >
     <span v-for="(action, index) in actions" :key="index">
       <router-link
         v-if="action.routeName !== undefined"
