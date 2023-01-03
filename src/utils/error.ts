@@ -8,7 +8,20 @@ function handleError(header: string, e: Error | AxiosError) {
   let message = e.message || e.toString();
   const actions = [
     {
-      color: "red",
+      bgColor: "bg-red-500",
+      hoverBgColor: "bg-red-700",
+      textColor: "text-white",
+      hoverTextColor: "text-white",
+      text: "Send Crash Report",
+      onClick: () => {
+        window.location.reload();
+      },
+    },
+    {
+      bgColor: "bg-white",
+      hoverBgColor: "bg-gray-50",
+      textColor: "text-gray-700",
+      hoverTextColor: "text-gray-700",
       text: "Refresh",
       onClick: () => {
         window.location.reload();
