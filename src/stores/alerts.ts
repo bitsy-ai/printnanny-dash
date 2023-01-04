@@ -1,11 +1,19 @@
+import { toRaw } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { CheckIcon, ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert } from "@/types";
+
+window.onerror = function (msg, url, lineNo, columnNo, error) {
+  console.log(msg, url, lineNo, columnNo, error);
+};
 
 export const useAlertStore = defineStore({
   id: "alerts",
   state: () => ({
     alerts: [] as Array<UiStickyAlert>,
+    reportedAlerts: [] as Array<UiStickyAlert>,
+    showCrashReportForm: false,
+    showCrashReportConfirm: false,
   }),
 
   actions: {
@@ -15,6 +23,20 @@ export const useAlertStore = defineStore({
       if (alreadyShown.length === 0) {
         this.alerts.push(alert);
       }
+    },
+    clear() {
+      this.$patch({ alerts: [] });
+    },
+
+    openCrashReport(header: string) {
+      const crashReportAlert: undefined | UiStickyAlert = toRaw(this.alerts).find(
+        (a) => a.header == header
+      );
+      this.clear();
+      if (crashReportAlert) {
+        this.reportedAlerts.push(crashReportAlert)
+      }
+      this.$patch({ showCrashReportForm: true })
     },
   },
 });

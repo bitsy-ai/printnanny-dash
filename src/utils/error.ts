@@ -4,11 +4,25 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 
 function handleError(header: string, e: Error | AxiosError) {
+  const store = useAlertStore();
   console.error(header, e);
   let message = e.message || e.toString();
   const actions = [
     {
-      color: "red",
+      bgColor: "bg-red-500",
+      hoverBgColor: "bg-red-700",
+      textColor: "text-white",
+      hoverTextColor: "text-white",
+      text: "Send Crash Report",
+      onClick: () => {
+        store.openCrashReport(header);
+      },
+    },
+    {
+      bgColor: "bg-white",
+      hoverBgColor: "bg-gray-50",
+      textColor: "text-gray-700",
+      hoverTextColor: "text-gray-700",
       text: "Refresh",
       onClick: () => {
         window.location.reload();
@@ -40,15 +54,17 @@ function handleError(header: string, e: Error | AxiosError) {
     actions,
     error: e,
   };
-  const store = useAlertStore();
   store.pushAlert(alert);
 }
 
 function alertMessage(header: string, message: string) {
   const actions = [
     {
-      color: "amber",
-      text: "Refresh Page",
+      bgColor: "bg-white",
+      hoverBgColor: "bg-gray-50",
+      textColor: "text-gray-700",
+      hoverTextColor: "text-gray-700",
+      text: "Refresh",
       onClick: () => {
         window.location.reload();
       },

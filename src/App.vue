@@ -5,6 +5,7 @@
     <router-view
       class="view main-content lg:min-h-[32rem] 2xl:min-h-[62rem] h-auto"
     ></router-view>
+    <CrashReport />
     <router-view class="view right-sidebar" name="FooterNav">
       <FooterNav />
     </router-view>
@@ -13,8 +14,9 @@
 
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import StickyAlerts from "./components/StickyAlerts.vue";
+import StickyAlerts from "@/components/alerts/StickyAlerts.vue";
 import FooterNav from "@/components/nav/FooterNav.vue";
+import CrashReport from "@/components/alerts/CrashReport.vue";
 
 // only enable tidio in production
 const tidioScript = import.meta.env.VITE_TIDIO_SCRIPT_URI;

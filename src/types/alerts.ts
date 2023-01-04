@@ -1,7 +1,11 @@
 import type { FunctionalComponent, HTMLAttributes, VNodeProps } from "vue";
 
 export interface AlertAction {
-  color: string;
+  bgColor: string;
+  hoverBgColor: string;
+  textColor: string;
+  hoverTextColor: string;
+
   text: string;
   onClick: () => void;
   routeName?: string;

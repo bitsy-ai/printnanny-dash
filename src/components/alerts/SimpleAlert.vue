@@ -24,7 +24,6 @@
             <p class="mt-1 text-sm text-gray-500">
               {{ message }}
             </p>
-            <AlertActionFooter vf-if="actions.length" :actions="actions" />
           </div>
           <div class="ml-4 flex-shrink-0 flex">
             <button
@@ -38,6 +37,7 @@
           </div>
         </div>
       </div>
+      <AlertActionFooter vf-if="actions.length" :actions="actions" />
     </div>
   </transition>
 </template>
