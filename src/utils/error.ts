@@ -60,8 +60,11 @@ function handleError(header: string, e: Error | AxiosError) {
 function alertMessage(header: string, message: string) {
   const actions = [
     {
-      color: "amber",
-      text: "Refresh Page",
+      bgColor: "bg-white",
+      hoverBgColor: "bg-gray-50",
+      textColor: "text-gray-700",
+      hoverTextColor: "text-gray-700",
+      text: "Refresh",
       onClick: () => {
         window.location.reload();
       },
