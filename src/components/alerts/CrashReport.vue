@@ -33,31 +33,41 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+              class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl"
             >
               <div
                 class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
-                v-if="store.showCrashReportConfirm"
+                v-if="store.showCrashReportConfirm == true"
               >
                 <div class="sm:flex sm:items-start">
                   <div
-                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+                    class="mx-auto flex h-36 w-36 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-36 sm:w-36"
                   >
-                    <ExclamationTriangleIcon
-                      class="h-6 w-6 text-red-600"
-                      aria-hidden="true"
+                    <img
+                      src="https://cdn.printnanny.ai/www/logo/logo-square-confused.png"
                     />
                   </div>
-                  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <div
+                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left px-2"
+                  >
                     <DialogTitle
                       as="h3"
                       class="text-lg font-medium leading-6 text-gray-900"
-                      >Send Crash Report</DialogTitle
+                      >Thank you! Your report was received.</DialogTitle
                     >
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
-                        Please provide a detailed description of what you were
-                        doing when the crash occurred.
+                      <p class="text-sm text-gray-500 pt-4">
+                        We'll reach out over email if we need more information.
+                        📧
+                      </p>
+                      <p class="text-sm text-gray-500 pt-4">
+                        If your issue is already known, we'll send you a GitHub
+                        issue link so you can to track the bug fix. 🐛
+                      </p>
+                      <p class="text-sm text-gray-500 pt-4">
+                        <strong
+                          >Thank you for helping make PrintNanny excellent! 💜
+                        </strong>
                       </p>
                     </div>
                   </div>
@@ -88,24 +98,7 @@ import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 
 import { useAlertStore } from "@/stores/alerts";
 import CrashReportForm from "@/components/alerts/CrashReportForm.vue";
+import { CheckCircleIcon } from "@heroicons/vue/20/solid";
 
 const store = useAlertStore();
-
-const browserVersion = ref(window.navigator.userAgent);
-
-const consent = ref(false);
-
-const schema = yup.object({
-  browser: yup.string(),
-  email: yup.string().email().required("Please enter your email address"),
-  description: yup.string().required("Please describe what you were doing"),
-  consent: yup
-    .bool()
-    .required("Please consent to sharing data with PrintNanny Cloud"),
-});
-
-async function submitForm(values: any) {
-  console.log("Form submitted:", values);
-}
 </script>
-P

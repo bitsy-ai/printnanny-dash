@@ -32,7 +32,10 @@ export const useAlertStore = defineStore({
         (a) => a.header == header
       );
       this.clear();
-      this.$patch({ crashReportAlert, showCrashReportForm: true });
+      this.$patch({
+        crashReportAlert: crashReportAlert,
+        showCrashReportForm: true,
+      });
     },
   },
 });
