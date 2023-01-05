@@ -2,10 +2,9 @@ import { toRaw } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { CheckIcon, ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
 import type { UiStickyAlert } from "@/types";
-
-window.onerror = function (msg, url, lineNo, columnNo, error) {
-  console.log(msg, url, lineNo, columnNo, error);
-};
+import * as api from "printnanny-api-client";
+import { useCloudStore } from "./cloud";
+import posthog from "posthog-js";
 
 export const useAlertStore = defineStore({
   id: "alerts",
@@ -38,6 +37,34 @@ export const useAlertStore = defineStore({
       }
       this.$patch({ showCrashReportForm: true })
     },
+
+    async sendCrashReport(browserVersion: string, email: string, description: string) {
+      const cloud = useCloudStore();
+      const crashReportsApi = api.CrashReportsApiFactory(cloud.apiConfig);
+      const osVersion = undefined; // enriched via NATS request
+      const osLogs = undefined // enriched via NATS request
+      const browserLogs = JSON.stringify(console.logs) // see logging.ts for console.logs implementation
+      const serial = undefined; // enriched via NATS reuqest
+      const posthogSession = JSON.stringify(posthog.sessionManager._getSessionId());
+      const status = undefined; // for admin/support use
+      const supportComment = undefined; // for admin/support use
+      const user = undefined; // enriched via NATS reuqest
+      const pi = undefined; // enriched via NATS reuqest
+      await crashReportsApi.
+        crashReportsCreate(
+          description,
+          email,
+          osVersion,
+          osLogs,
+          browserVersion,
+          browserLogs,
+          serial,
+          posthogSession,
+          status,
+          supportComment,
+          user,
+          pi)
+    }
   },
 });
 

@@ -113,19 +113,22 @@
       <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <button
           type="submit"
-          class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-          @click="store.showCrashReportForm"
+          :disabled="loading"
+          class="disabled:opacity-50 disabled:cursor-not-allowed inline-flex w-full justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm enabled:hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
         >
           Submit
         </button>
         <button
           type="button"
-          class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-          @click="store.showCrashReportForm"
+          :disabled="loading"
+          class="disabled:opacity-50 disabled:cursor-not-allowed mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm enabled:hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          @click="store.showCrashReportForm = false"
           ref="cancelButtonRef"
         >
           Cancel
         </button>
+        <text-spinner v-if="loading" class="mr-2" text="Sending..."></text-spinner>
+
       </div>
     </div>
   </Form>
@@ -142,7 +145,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
-
+import TextSpinner from "@/components/TextSpinner.vue";
 import { useAlertStore } from "@/stores/alerts";
 import CrashReportForm from "@/components/alerts/CrashReportForm.vue";
 
@@ -151,6 +154,7 @@ const store = useAlertStore();
 const browserVersion = ref(window.navigator.userAgent);
 
 const consent = ref(false);
+const loading = ref(false);
 
 const schema = yup.object({
   browser: yup.string(),
@@ -162,6 +166,10 @@ const schema = yup.object({
 });
 
 async function submitForm(values: any) {
+  loading.value = true;
   console.log("Form submitted:", values);
+  await store.sendCrashReport(values.browser, values.email, values.description);
+  loading.value = false;
+  store.showCrashReportForm = false;
 }
 </script>
