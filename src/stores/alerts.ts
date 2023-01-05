@@ -24,8 +24,8 @@ export const useAlertStore = defineStore({
     reportedAlerts: [] as Array<UiStickyAlert>,
     showCrashReportForm: false,
     showCrashReportConfirm: false,
-    showCrashReportAdditionalCommand: true,
-    crashReport: undefined as undefined | api.CrashReport
+    showCrashReportAdditionalCommand: false,
+    crashReport: undefined as undefined | api.CrashReport,
   }),
 
   actions: {
@@ -88,11 +88,12 @@ export const useAlertStore = defineStore({
       const crashReportsApi = api.CrashReportsApiFactory(cloud.apiConfig);
       const osVersion = undefined; // enriched via NATS request
       const osLogs = undefined; // enriched via NATS request
-      const browserLogs = browserLogFile() // see logging.ts for console.logs implementation
+      const browserLogs = browserLogFile(); // see logging.ts for console.logs implementation
       const serial = undefined; // enriched via NATS reuqest
-      const posthogSession = posthog.sessionManager !== undefined ? JSON.stringify(
-        posthog.sessionManager._getSessionId()
-      ) : undefined;
+      const posthogSession =
+        posthog.sessionManager !== undefined
+          ? JSON.stringify(posthog.sessionManager._getSessionId())
+          : undefined;
       const status = undefined; // for admin/support use
       const supportComment = undefined; // for admin/support use
       const user = undefined; // enriched via NATS reuqest
@@ -113,11 +114,16 @@ export const useAlertStore = defineStore({
       );
       try {
         await this.enrichCrashReport(res.data);
-        return true
-      }
-      catch (error) {
-        console.error("Error enriching CrashReport with PrintNanny OS system logs", error);
-        this.$patch({ crashReport: res.data, showCrashReportAdditionalCommand: true })
+        return true;
+      } catch (error) {
+        console.error(
+          "Error enriching CrashReport with PrintNanny OS system logs",
+          error
+        );
+        this.$patch({
+          crashReport: res.data,
+          showCrashReportAdditionalCommand: true,
+        });
         return false;
       }
     },

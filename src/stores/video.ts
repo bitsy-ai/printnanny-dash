@@ -1,8 +1,7 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
+import { JSONCodec, type Subscription } from "nats.ws";
 import {
-  type CamerasLoadReply,
   type Camera,
   type PlaybackVideo,
   CameraSourceType,
@@ -13,14 +12,12 @@ import {
 import {
   ConnectionStatus,
   NatsSubjectPattern,
-  renderNatsSubjectPattern,
   type QcDataframeRow,
 } from "@/types";
-import { SystemdUnitFileState } from "@bitsy-ai/printnanny-asyncapi-models";
-import { handleError } from "@/utils";
+
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
-import { error, useAlertStore, warning } from "./alerts";
+import { error, warning } from "./alerts";
 import { useSystemdServiceStore } from "./systemdService";
 import { useWidgetStore } from "./widgets";
 

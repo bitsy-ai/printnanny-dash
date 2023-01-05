@@ -30,7 +30,10 @@ console.error = function () {
 };
 
 function browserLogFile() {
-  return new File([JSON.stringify(console.logs), "application/json"], "browser.log");
+  return new File(
+    [JSON.stringify(console.logs), "application/json"],
+    "browser.log"
+  );
 }
 
 export { browserLogFile };

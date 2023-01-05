@@ -389,8 +389,8 @@
 }
 </style>
 <script setup lang="ts">
-import { Form, Field, ErrorMessage } from "vee-validate";
-import { onMounted, ref } from "vue";
+import { Form, Field } from "vee-validate";
+import { onMounted } from "vue";
 
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
@@ -404,11 +404,6 @@ import {
   ListboxLabel,
 } from "@headlessui/vue";
 import * as yup from "yup";
-import type {
-  Camera,
-  GstreamerCaps,
-} from "@bitsy-ai/printnanny-asyncapi-models";
-
 const store = useCameraSettingsStore();
 const schema = yup.object({
   videoFramerate: yup.number().required(),

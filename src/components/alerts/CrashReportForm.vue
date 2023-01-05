@@ -109,27 +109,36 @@
               name="consent"
             />
           </div>
-          <div class="sm:col-span-4 p-4" v-if="store.showCrashReportAdditionalCommand">
-              <h3 class="text-lg font-medium leading-6 text-gray-900 w-full flex">
-                <ExclamationTriangleIcon class="w-6 h-6 mr-2 text-red-500"/>
-                Action Needed
-              </h3>
-              <p class="text-gray-500 mt-2 text-sm">
-                There was a problem attaching system logs to your report. This can happen if your Raspberry Pi is unreachable.
-              </p>
-              <p class="text-gray-500 mt-2 text-sm">
-                Please try SSHing into your Raspberry Pi, then attach logs manually:
-              </p> 
-<pre class="text-gray-500 mt-2 text-sm text-indigo-500" v-if="store.crashReport">$ printnanny crash-report --id={{ store.crashReport?.id }}
-</pre>
-<pre class="text-gray-500 mt-2 text-sm text-indigo-500" v-else>$ printnanny crash-report
-</pre>
+          <div
+            class="sm:col-span-4 p-4"
+            v-if="store.showCrashReportAdditionalCommand"
+          >
+            <h3 class="text-lg font-medium leading-6 text-gray-900 w-full flex">
+              <ExclamationTriangleIcon class="w-6 h-6 mr-2 text-red-500" />
+              Action Needed
+            </h3>
+            <p class="text-gray-500 mt-2 text-sm">
+              There was a problem attaching system logs to your report. This can
+              happen if your Raspberry Pi is unreachable.
+            </p>
+            <p class="text-gray-500 mt-2 text-sm">
+              Please try SSHing into your Raspberry Pi, then attach logs
+              manually:
+            </p>
+            <pre
+              class="text-gray-500 mt-2 text-sm text-indigo-500"
+              v-if="store.crashReport"
+            >
+$ printnanny crash-report --id={{ store.crashReport?.id }}
+</pre
+            >
+            <pre class="text-gray-500 mt-2 text-sm text-indigo-500" v-else>
+$ printnanny crash-report
+</pre
+            >
 
-<p class="text-gray-500 mt-2 text-sm">
-Thank you!
-</p>
-            </div>
-
+            <p class="text-gray-500 mt-2 text-sm">Thank you!</p>
+          </div>
         </div>
       </div>
       <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
@@ -162,17 +171,9 @@ Thank you!
 import { ref } from "vue";
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import TextSpinner from "@/components/TextSpinner.vue";
 import { useAlertStore } from "@/stores/alerts";
-import CrashReportForm from "@/components/alerts/CrashReportForm.vue";
 import { useCloudStore } from "@/stores/cloud";
 
 const store = useAlertStore();
@@ -180,7 +181,7 @@ const account = useCloudStore();
 
 const browserVersion = ref(window.navigator.userAgent);
 
-const initialValues = {email: account.user ? account.user.email : ""};
+const initialValues = { email: account.user ? account.user.email : "" };
 
 const consent = ref(false);
 const loading = ref(false);
@@ -195,11 +196,18 @@ const schema = yup.object({
 });
 
 async function submitForm(values: any) {
+  if (consent.value !== true) {
+    console.warn("Form was submitted but consent field was false");
+  }
   loading.value = true;
   console.log("Form submitted:", values);
-  const ok = await store.sendCrashReport(values.browser, values.email, values.description);
+  const ok = await store.sendCrashReport(
+    values.browser,
+    values.email,
+    values.description
+  );
   loading.value = false;
-  if (ok === true){
+  if (ok === true) {
     store.showCrashReportForm = false;
   }
 }

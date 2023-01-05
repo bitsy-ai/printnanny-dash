@@ -1,5 +1,3 @@
-import type { SettingsApp } from "@bitsy-ai/printnanny-asyncapi-models";
-
 export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
   PrintNannyApps = "PrintNannyApps",
