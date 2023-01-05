@@ -84,9 +84,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import * as yup from "yup";
-import { Form, Field, ErrorMessage } from "vee-validate";
 import {
   Dialog,
   DialogPanel,
@@ -94,11 +91,9 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 
 import { useAlertStore } from "@/stores/alerts";
 import CrashReportForm from "@/components/alerts/CrashReportForm.vue";
-import { CheckCircleIcon } from "@heroicons/vue/20/solid";
 
 const store = useAlertStore();
 </script>

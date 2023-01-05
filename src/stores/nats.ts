@@ -1,6 +1,4 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { toRaw } from "vue";
-
 import { connect, JSONCodec, type NatsConnection } from "nats.ws";
 import { handleError } from "@/utils";
 import {

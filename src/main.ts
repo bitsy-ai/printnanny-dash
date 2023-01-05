@@ -9,6 +9,8 @@ import { StreamLanguage } from "@codemirror/language";
 import { toml } from "@codemirror/legacy-modes/mode/toml";
 import { yaml } from "@codemirror/legacy-modes/mode/yaml";
 
+import "@/utils/logging";
+
 import App from "./App.vue";
 import router from "./router";
 
