@@ -11,10 +11,6 @@ const footerNavigation = {
       name: "Search Open Issues",
       href: "https://github.com/bitsy-ai/printnanny-os/issues",
     },
-    {
-      name: "Create New Issue",
-      href: import.meta.env.VITE_PRINTNANNY_OS_NEW_GITHUB_ISSUE,
-    },
   ],
   intro: [
     {

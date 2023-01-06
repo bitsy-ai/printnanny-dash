@@ -18,15 +18,6 @@
             <h2 class="text-lg font-medium leading-6 text-gray-900">
               Device Information
             </h2>
-            <p class="mt-1 text-sm text-gray-500">
-              Please include the information below when creating a
-              <a
-                target="_blank"
-                :href="githubIssueHref"
-                class="text-indigo-500 hover:text-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-30"
-                >Github Issue.</a
-              >
-            </p>
           </div>
         </div>
         <div class="pt-4 px-4 sm:p-6 lg:pb-8 text-xs">
