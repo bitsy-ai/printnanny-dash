@@ -76,7 +76,15 @@
           >
             <Cog6ToothIcon class="h-6 w-6" />
           </router-link>
-
+          <a
+            @click="alerts.openCrashReport"
+            :class="[
+              'border-transparent text-gray-500 hover:text-gray-700',
+              'inline-flex items-center px-1 pt-1 text-sm font-medium mr-4',
+            ]"
+          >
+            <FireIcon class="h-6 w-6" />
+          </a>
           <NatsConnectionStatus />
         </div>
       </div>
@@ -109,15 +117,18 @@ import {
   XMarkIcon,
   ArrowUpRightIcon,
 } from "@heroicons/vue/24/outline";
-import { Cog6ToothIcon } from "@heroicons/vue/24/solid";
+import { Cog6ToothIcon, FireIcon } from "@heroicons/vue/24/solid";
 import NatsConnectionStatus from "@/components/status/NatsConnectionStatus.vue";
 import VideoStatus from "@/components/video/VideoStatus.vue";
 import { useRouter, RouterLink } from "vue-router";
+import { useAlertStore } from "@/stores/alerts";
 
 import { TopBarRoutes } from "@/router/routes";
 import type { NavItem } from "@/types";
 
 const router = useRouter();
+
+const alerts = useAlertStore();
 
 const externalLinks = [
   { name: "Update System", href: "/update/" },
