@@ -20,7 +20,7 @@
           class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
           aria-hidden="true"
         ></div>
-        <span class="text-grey-600">Connected to {{ hostname }}</span>
+        <span class="text-grey-600">Connected</span>
       </div>
       <div
         class="flex items-center space-x-3 font-medium text-gray-600"
