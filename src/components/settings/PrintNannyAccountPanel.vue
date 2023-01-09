@@ -3,7 +3,11 @@
     <!-- Profile section -->
     <div class="py-6 px-4 sm:p-6 lg:pb-8">
       <div>
-        <h2 class="text-left text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">PrintNanny Cloud</h2>
+        <h2
+          class="text-left text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+        >
+          PrintNanny Cloud
+        </h2>
 
         <p class="mt-1 text-sm text-gray-500">
           Connect your PrintNanny Cloud account to get email alerts and monitor

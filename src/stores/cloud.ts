@@ -58,14 +58,26 @@ export const useCloudStore = defineStore({
 
         console.log(`Success! Authenticated as ${email}`);
         this.$patch({ token, apiConfig });
-        const natsStore = useNatsStore();
-        await natsStore.connectCloudAccount(
-          email,
-          token,
-          import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL
-        );
+        await this.fetchUser();
+        await this.connectCloudAccount();
       }
       return ok;
+    },
+
+    async connectCloudAccount() {
+      if (this.user && this.token) {
+        const natsStore = useNatsStore();
+        await natsStore.connectCloudAccount(
+          this.user.email,
+          this.token,
+          import.meta.env.VITE_PRINTNANNY_CLOUD_API_URL
+        );
+      } else
+        [
+          console.log(
+            "connectCloudAccount called but CloudStore.user is not set"
+          ),
+        ];
     },
 
     async fetchUser() {

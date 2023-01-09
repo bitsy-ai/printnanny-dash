@@ -2,12 +2,10 @@
 import { onMounted } from "vue";
 import { useVideoStore } from "@/stores/video";
 import { onBeforeRouteLeave } from "vue-router";
-import VideoPaused from "@/assets/video-paused.svg";
 import type {
   Camera,
   PlaybackVideo,
 } from "@bitsy-ai/printnanny-asyncapi-models";
-import TextSpinner from "@/components/TextSpinner.vue";
 import VideoButton from "@/components/video/VideoButton.vue";
 import VideoStatus from "@/components/video/VideoStatus.vue";
 import { handleError } from "@/utils";
@@ -19,10 +17,6 @@ const cameraSettings = useCameraSettingsStore();
 
 const store = useVideoStore();
 store.subscribeQcDataframes();
-
-function selectStream(stream: Camera | PlaybackVideo) {
-  store.$patch({ selectedVideoSource: stream });
-}
 
 async function startStream() {
   await store

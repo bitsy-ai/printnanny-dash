@@ -14,8 +14,11 @@
 
       <div v-else-if="selectedFile" class="divide-y divide-gray-200 w-full">
         <div class="p-4">
-          <h2 class="text-left text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">            Edit Settings Files
-</h2>
+          <h2
+            class="text-left text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+          >
+            Edit Settings Files
+          </h2>
 
           <p class="mt-1 text-sm text-gray-500">Customize add-on settings.</p>
           <Listbox as="div" v-model="selectedFile" class="md:w-3/4 mt-4">

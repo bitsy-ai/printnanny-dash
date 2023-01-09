@@ -69,6 +69,7 @@ export const useNatsStore = defineStore({
       }
       const res = await this.connect();
       if (res === undefined) {
+        this.$patch({ status: ConnectionStatus.ConnectionError });
         throw Error("Failed to connect to NATS server");
       }
       return res;

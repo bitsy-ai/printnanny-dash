@@ -20,6 +20,7 @@ import type {
   SystemdManagerGetUnitFileStateError,
   SystemdUnitFileState,
 } from "@bitsy-ai/printnanny-asyncapi-models";
+import { ConnectionStatus } from "@/types";
 
 import {
   NatsSubjectPattern,
@@ -282,6 +283,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           })
           .catch((e) => {
             const msg = `Error loading ${this.widget?.service}`;
+            natsStore.$patch({ status: ConnectionStatus.ConnectionError });
             handleError(msg, e);
           });
 
