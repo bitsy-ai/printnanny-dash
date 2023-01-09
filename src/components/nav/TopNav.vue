@@ -85,7 +85,7 @@
           >
             <FireIcon class="h-6 w-6" />
           </a>
-          <NatsConnectionStatus />
+          <CloudSyncStatus />
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@ import {
   ArrowUpRightIcon,
 } from "@heroicons/vue/24/outline";
 import { Cog6ToothIcon, FireIcon } from "@heroicons/vue/24/solid";
-import NatsConnectionStatus from "@/components/status/NatsConnectionStatus.vue";
+import CloudSyncStatus from "@/components/status/CloudSyncStatus.vue";
 import VideoStatus from "@/components/video/VideoStatus.vue";
 import { useRouter, RouterLink } from "vue-router";
 import { useAlertStore } from "@/stores/alerts";
