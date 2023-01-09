@@ -17,7 +17,11 @@
       <div class="space-y-8 divide-y divide-gray-200">
         <div class="">
           <div>
-            <h2 class="text-left text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Camera</h2>
+            <h2
+              class="text-left text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >
+              Camera
+            </h2>
             <p class="mt-1 text-sm text-gray-500">
               Configure PrintNanny Cam settings.
             </p>

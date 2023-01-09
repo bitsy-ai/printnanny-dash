@@ -7,30 +7,31 @@
       :duration="{ enter: 800, leave: 500 }"
     >
       <TextSpinner
+        text="Syncing..."
         v-if="
-          store.status == ConnectionStatus.ConnectionNotStarted ||
-          store.status == ConnectionStatus.ConnectionLoading
+          nats.status == ConnectionStatus.ConnectionNotStarted ||
+          nats.status == ConnectionStatus.ConnectionLoading
         "
       />
       <div
         class="flex items-center space-x-3 font-medium text-gray-600"
-        v-else-if="store.status == ConnectionStatus.ConnectionReady"
+        v-else-if="nats.status == ConnectionStatus.ConnectionReady"
       >
         <div
           class="bg-emerald-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
           aria-hidden="true"
         ></div>
-        <span class="text-grey-600">Connected</span>
+        <span class="text-grey-600">Synced</span>
       </div>
       <div
         class="flex items-center space-x-3 font-medium text-gray-600"
-        v-else-if="store.status == ConnectionStatus.ConnectionError"
+        v-else-if="nats.status == ConnectionStatus.ConnectionError"
       >
         <div
           class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
           aria-hidden="true"
         ></div>
-        <span class="text-grey-600">Error connecting to {{ hostname }}</span>
+        <span class="text-grey-600">Error</span>
       </div>
     </Transition>
   </div>
@@ -47,11 +48,15 @@
 }
 </style>
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { ConnectionStatus } from "@/types";
-import { useNatsStore } from "@/stores/nats";
 import TextSpinner from "@/components/TextSpinner.vue";
+import { useCloudStore } from "@/stores/cloud";
+import { useNatsStore } from "@/stores/nats";
+const cloud = useCloudStore();
+const nats = useNatsStore();
 
-const hostname = window.location.hostname;
-const store = useNatsStore();
-store.connect();
+onMounted(async () => {
+  await cloud.connectCloudAccount();
+});
 </script>

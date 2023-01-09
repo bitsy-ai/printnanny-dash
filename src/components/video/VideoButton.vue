@@ -62,6 +62,5 @@ import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
 import { VideoCameraIcon } from "@heroicons/vue/20/solid";
 
-const hostname = window.location.hostname;
 const store = useVideoStore();
 </script>
