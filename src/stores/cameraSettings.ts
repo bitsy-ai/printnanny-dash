@@ -40,9 +40,12 @@ const DEFAULT_CAMERA = {
 } as Camera;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 66ffffe (remove intermediary form model)
+=======
+>>>>>>> 575cefe (fix ts build/lint)
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
@@ -111,12 +114,17 @@ export const useCameraSettingsStore = defineStore({
       req.hls.hls_enabled = form.hlsEnabled;
       req.video_framerate = form.videoFramerate as number;
 <<<<<<< HEAD
+<<<<<<< HEAD
       req.camera = form.selectedCamera as Camera;
       req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
 =======
       req.video_src = form.selectedCamera as Camera;
       req.video_src.selected_caps = form.selectedCaps as GstreamerCaps;
 >>>>>>> 66ffffe (remove intermediary form model)
+=======
+      req.camera = form.selectedCamera as Camera;
+      req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
+>>>>>>> 575cefe (fix ts build/lint)
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
@@ -132,12 +140,7 @@ export const useCameraSettingsStore = defineStore({
         const resCodec = JSONCodec<PrintNannyCameraSettings>();
         const settings = resCodec.decode(resMsg?.data);
         console.log("Applied camera settings:", settings);
-
-<<<<<<< HEAD
         const camera = settings.camera as Camera;
-=======
-        const camera = settings.video_src as Camera;
->>>>>>> 66ffffe (remove intermediary form model)
         this.$patch({ settings });
         success(
           `Updated Camera Settings`,
