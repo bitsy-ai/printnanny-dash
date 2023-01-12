@@ -225,6 +225,64 @@
 
         <div class="pt-8">
           <div>
+            <fieldset>
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+              Video Recording Settings
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Save timelapse video recordings.
+
+            </p>
+              <div class="mt-4 space-y-4">
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <Field
+                      id="recordVideo"
+                      name="recordVideo"
+                      type="checkbox"
+                      :value="store.settings.record_video"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="recordVideo"
+                      class="font-medium text-gray-700"
+                      >Record videos</label
+                    >
+                    <p class="text-gray-500">
+                      Save video recordings to your SD card.
+                    </p>
+                  </div>
+                </div>
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <Field
+                      id="backupCloud"
+                      name="backupCloud"
+                      type="checkbox"
+                      :value="store.settings.cloud_backup"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="backupCloud"
+                      class="font-medium text-gray-700"
+                      >Save recordings to PrintNanny Cloud</label
+                    >
+                    <p class="text-gray-500">
+                      Improve PrintNanny's detection algorithm and backup your video recording library to PrintNanny Cloud. 
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="pt-8">
+          <div>
             <h3 class="text-lg font-medium leading-6 text-gray-900">
               Detection Settings
             </h3>
@@ -415,7 +473,8 @@ const schema = yup.object({
   hlsEnabled: yup.boolean().required(),
   showDetectionGraphs: yup.boolean(),
   showDetectionOverlay: yup.boolean(),
-
+  recordVideo: yup.boolean(),
+  backupCloud: yup.boolean()
 });
 
 const initialValues = ref(undefined  as undefined | CameraSettingsForm);
@@ -428,6 +487,8 @@ async function submitForm(form: CameraSettingsForm) {
 onMounted(async () => {
   await store.load();
   initialValues.value = {
+    recordVideo: store.settings?.record_video as boolean,
+    backupCloud: store.settings?.cloud_backup as boolean,
     videoFramerate: store.settings?.video_framerate as number,
     hlsEnabled: store.settings?.hls.hls_enabled as boolean,
     showDetectionGraphs: store.settings?.detection.graphs as boolean,

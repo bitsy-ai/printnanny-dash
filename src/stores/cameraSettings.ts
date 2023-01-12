@@ -16,6 +16,8 @@ const DEFAULT_NATS_TIMEOUT = 12000;
 export interface CameraSettingsForm {
   videoFramerate: number;
   hlsEnabled: boolean;
+  recordVideo: boolean;
+  backupCloud: boolean;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
   showDetectionOverlay: boolean;
