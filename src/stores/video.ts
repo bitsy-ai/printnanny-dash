@@ -3,9 +3,7 @@ import { toRaw } from "vue";
 import { JSONCodec, type Subscription } from "nats.ws";
 import {
   type Camera,
-  type PlaybackVideo,
   CameraSourceType,
-  PlaybackSourceType,
   SystemdUnitActiveState,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
@@ -28,20 +26,21 @@ function atLeast(arr: Array<boolean>, threshold: number): boolean {
   return arr.filter((el) => el === true).length / arr.length >= threshold;
 }
 
-export const DEMO_VIDEOS: Array<PlaybackVideo> = [
-  {
-    uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
-    src_type: PlaybackSourceType.URI,
-    cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_1.png",
-    display_name: "Demo Video #1",
-  },
-  {
-    uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
-    src_type: PlaybackSourceType.URI,
-    cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_2.png",
-    display_name: "Demo Video #2",
-  },
-];
+// TODO move demo videos to marketing site
+// export const DEMO_VIDEOS: Array<PlaybackVideo> = [
+//   {
+//     uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_1.mp4",
+//     src_type: PlaybackSourceType.URI,
+//     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_1.png",
+//     display_name: "Demo Video #1",
+//   },
+//   {
+//     uri: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_2.mp4",
+//     src_type: PlaybackSourceType.URI,
+//     cover: "https://cdn.printnanny.ai/gst-demo-videos/demo_video_cover_2.png",
+//     display_name: "Demo Video #2",
+//   },
+// ];
 
 export const useVideoStore = defineStore({
   id: "videos",
@@ -50,9 +49,9 @@ export const useVideoStore = defineStore({
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionLoading as ConnectionStatus,
-    sources: DEMO_VIDEOS as Array<Camera | PlaybackVideo>,
-    selectedVideoSource: null as null | Camera | PlaybackVideo,
-    playingStream: null as null | Camera | PlaybackVideo,
+    sources: [] as Array<Camera>,
+    selectedVideoSource: null as null | Camera,
+    playingStream: null as null | Camera,
     error: null as null | Error,
     showOverlay: true,
     showGraph: true,
@@ -64,13 +63,6 @@ export const useVideoStore = defineStore({
           v.src_type === CameraSourceType.CSI ||
           v.src_type === CameraSourceType.USB
       ) as Array<Camera>;
-    },
-    videos(state): Array<PlaybackVideo> {
-      return state.sources.filter(
-        (v) =>
-          v.src_type === PlaybackSourceType.FILE ||
-          v.src_type === PlaybackSourceType.URI
-      ) as Array<PlaybackVideo>;
     },
     meter_x(state): Array<number> {
       return state.df.map((el) => el.rt);

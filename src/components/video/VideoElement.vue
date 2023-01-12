@@ -2,10 +2,7 @@
 import { onMounted } from "vue";
 import { useVideoStore } from "@/stores/video";
 import { onBeforeRouteLeave } from "vue-router";
-import type {
-  Camera,
-  PlaybackVideo,
-} from "@bitsy-ai/printnanny-asyncapi-models";
+import type { Camera } from "@bitsy-ai/printnanny-asyncapi-models";
 import VideoButton from "@/components/video/VideoButton.vue";
 import VideoStatus from "@/components/video/VideoStatus.vue";
 import { handleError } from "@/utils";
@@ -74,7 +71,7 @@ onBeforeRouteLeave((_to, _from) => {
         </div>
         <div
           class="col-span-6 flex w-full sm:border-t sm:border-gray-200"
-          v-if="cameraSettings.form?.showDetectionGraphs"
+          v-if="cameraSettings.settings?.detection.graphs"
         >
           <PlotlyElement />
         </div>

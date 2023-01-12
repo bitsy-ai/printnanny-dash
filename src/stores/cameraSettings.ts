@@ -16,6 +16,8 @@ const DEFAULT_NATS_TIMEOUT = 12000;
 export interface CameraSettingsForm {
   videoFramerate: number;
   hlsEnabled: boolean;
+  recordVideo: boolean;
+  backupCloud: boolean;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
   showDetectionOverlay: boolean;
@@ -37,22 +39,12 @@ const DEFAULT_CAMERA = {
   selected_caps: DEFAULT_CAPS,
 } as Camera;
 
-const DEFAULT_FORM = {
-  hlsEnabled: true,
-  videoFramerate: 16,
-  selectedCaps: DEFAULT_CAPS,
-  selectedCamera: DEFAULT_CAMERA,
-  showDetectionOverlay: false,
-  showDetectionGraphs: false,
-} as CameraSettingsForm;
-
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
     loading: true,
     saving: false,
     cameras: [] as Array<Camera>,
-    form: DEFAULT_FORM,
     settings: undefined as undefined | PrintNannyCameraSettings,
   }),
   actions: {
@@ -92,22 +84,13 @@ export const useCameraSettingsStore = defineStore({
         const settings = resCodec.decode(resMsg?.data);
         console.log("Loaded camera settings:", settings);
 
-        const camera = settings.video_src as Camera;
+        const camera = settings.camera as Camera;
 
-        const form = {
-          videoFramerate: settings.video_framerate,
-          hlsEnabled: settings.hls.hls_enabled,
-          selectedCamera: camera,
-          selectedCaps: camera.selected_caps,
-          showDetectionOverlay: settings.detection.overlay,
-          showDetectionGraphs: settings.detection.graphs,
-        } as CameraSettingsForm;
-
-        this.$patch({ form, settings });
+        this.$patch({ settings });
       }
     },
 
-    async save() {
+    async save(form: CameraSettingsForm) {
       this.$patch({ saving: true });
 
       const natsStore = useNatsStore();
@@ -121,12 +104,12 @@ export const useCameraSettingsStore = defineStore({
       const reqCodec = JSONCodec<PrintNannyCameraSettings>();
 
       const req = toRaw(this.settings) as PrintNannyCameraSettings;
-      req.hls.hls_enabled = this.form?.hlsEnabled;
-      req.video_framerate = this.form?.videoFramerate as number;
-      req.video_src = this.form?.selectedCamera as Camera;
-      req.video_src.selected_caps = this.form?.selectedCaps as GstreamerCaps;
-      req.detection.graphs = this.form?.showDetectionGraphs as boolean;
-      req.detection.overlay = this.form?.showDetectionOverlay as boolean;
+      req.hls.hls_enabled = form.hlsEnabled;
+      req.video_framerate = form.videoFramerate as number;
+      req.camera = form.selectedCamera as Camera;
+      req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
+      req.detection.graphs = form.showDetectionGraphs as boolean;
+      req.detection.overlay = form.showDetectionOverlay as boolean;
 
       console.log("Submitting camera settings request:", req);
       const resMsg = await natsConnection?.request(
@@ -141,17 +124,8 @@ export const useCameraSettingsStore = defineStore({
         const settings = resCodec.decode(resMsg?.data);
         console.log("Applied camera settings:", settings);
 
-        const camera = settings.video_src as Camera;
-        const form = {
-          videoFramerate: settings.video_framerate,
-          hlsEnabled: settings.hls.hls_enabled,
-          selectedCamera: camera,
-          selectedCaps: camera.selected_caps,
-          showDetectionOverlay: settings.detection.overlay,
-          showDetectionGraphs: settings.detection.graphs,
-        } as CameraSettingsForm;
-
-        this.$patch({ form, settings });
+        const camera = settings.camera as Camera;
+        this.$patch({ settings });
         success(
           `Updated Camera Settings`,
           `PrintNanny Cam was automatically restarted`

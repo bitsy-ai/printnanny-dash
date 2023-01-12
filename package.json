@@ -15,7 +15,7 @@
     "lint:fix": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@bitsy-ai/printnanny-asyncapi-models": "^0.1.54",
+    "@bitsy-ai/printnanny-asyncapi-models": "^0.2.3",
     "@codemirror/legacy-modes": "^6.3.1",
     "@headlessui/vue": "^1.7.3",
     "@heroicons/vue": "^2.0.12",
@@ -28,7 +28,7 @@
     "pinia-plugin-persistedstate": "^2.3.0",
     "plotly.js-dist-min": "^2.15.0",
     "posthog-js": "^1.33.0",
-    "printnanny-api-client": "^0.121.2",
+    "printnanny-api-client": "^0.122.0",
     "uuid": "^9.0.0",
     "vee-validate": "^4.7.0",
     "video-stream-merger": "^4.0.1",

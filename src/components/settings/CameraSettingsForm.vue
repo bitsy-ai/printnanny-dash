@@ -2,7 +2,7 @@
   <Transition name="fade" mode="out-in">
     <div
       class="flex w-full h-full align-items-center justify-center lg:col-span-9"
-      v-if="store.loading"
+      v-if="store.settings === undefined"
     >
       <TextSpinner class="m-auto" />
     </div>
@@ -11,7 +11,7 @@
       class="space-y-8 divide-y divide-gray-200 lg:col-span-9 p-4 h-full"
       :validation-schema="schema"
       v-else
-      :initial-values="store.form"
+      :initial-values="initialValues"
       @submit="submitForm"
     >
       <div class="space-y-8 divide-y divide-gray-200">
@@ -28,7 +28,7 @@
           </div>
           <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div class="sm:col-span-3">
-              <Listbox as="div" v-model="store.form.selectedCamera">
+              <Listbox as="div" v-model="store.settings.camera">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
                   >Select a camera:</ListboxLabel
                 >
@@ -38,10 +38,10 @@
                   >
                     <span class="block truncate"
                       ><strong>{{
-                        store.form.selectedCamera?.src_type.toUpperCase()
+                        store.settings.camera.src_type.toUpperCase()
                       }}</strong>
-                      {{ store.form.selectedCamera?.label }}
-                      {{ store.form.selectedCamera?.device_name }}</span
+                      {{ store.settings.camera.label }}
+                      {{ store.settings.camera.device_name }}</span
                     >
                     <span
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -106,7 +106,7 @@
             </div>
 
             <div class="sm:col-span-3">
-              <Listbox as="div" v-model="store.form.selectedCaps">
+              <Listbox as="div" v-model="store.settings.camera.selected_caps">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
                   >Select camera resolution:</ListboxLabel
                 >
@@ -115,10 +115,15 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      >width={{ store.form.selectedCaps?.width }} height={{
-                        store.form.selectedCaps?.height
+                      >width={{
+                        store.settings?.camera.selected_caps.width
                       }}
-                      format={{ store.form.selectedCaps?.format }}</span
+                      height={{
+                        store.settings.camera.selected_caps?.height
+                      }}
+                      format={{
+                        store.settings?.camera.selected_caps.format
+                      }}</span
                     >
                     <span
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -140,7 +145,7 @@
                     >
                       <ListboxOption
                         as="template"
-                        v-for="(caps, idx) in store.form.selectedCamera
+                        v-for="(caps, idx) in store.settings.camera
                           .available_caps"
                         :key="idx"
                         :value="caps"
@@ -193,7 +198,7 @@
                   type="number"
                   name="videoFramerate"
                   id="videoFramerate"
-                  :value="store.form.videoFramerate"
+                  :value="store.settings.video_framerate"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -206,7 +211,7 @@
                     id="hlsEnabled"
                     name="hlsEnabled"
                     type="checkbox"
-                    :value="store.form.hlsEnabled"
+                    :value="store.settings.hls.hls_enabled"
                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                 </div>
@@ -221,6 +226,60 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="pt-8">
+          <div>
+            <fieldset>
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                Video Recording Settings
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">
+                Save timelapse video recordings.
+              </p>
+              <div class="mt-4 space-y-4">
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <Field
+                      id="recordVideo"
+                      name="recordVideo"
+                      type="checkbox"
+                      :value="store.settings.record_video"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="recordVideo" class="font-medium text-gray-700"
+                      >Record videos</label
+                    >
+                    <p class="text-gray-500">
+                      Save video recordings to your SD card.
+                    </p>
+                  </div>
+                </div>
+                <div class="relative flex items-start">
+                  <div class="flex h-5 items-center">
+                    <Field
+                      id="backupCloud"
+                      name="backupCloud"
+                      type="checkbox"
+                      :value="store.settings.cloud_backup"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="backupCloud" class="font-medium text-gray-700"
+                      >Save recordings to PrintNanny Cloud</label
+                    >
+                    <p class="text-gray-500">
+                      Improve PrintNanny's detection algorithm and backup your
+                      video recording library to PrintNanny Cloud.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
           </div>
         </div>
 
@@ -254,7 +313,7 @@
                       id="showDetectionOverlay"
                       name="showDetectionOverlay"
                       type="checkbox"
-                      :value="store.form.showDetectionOverlay"
+                      :value="store.settings.detection.overlay"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
@@ -275,7 +334,7 @@
                       id="showDetectionGraphs"
                       name="showDetectionGraphs"
                       type="checkbox"
-                      :value="store.form.showDetectionGraphs"
+                      :value="store.settings.detection.graphs"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
@@ -394,12 +453,15 @@
 </style>
 <script setup lang="ts">
 import { Form, Field } from "vee-validate";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
 import TextSpinner from "@/components/TextSpinner.vue";
-import { useCameraSettingsStore } from "@/stores/cameraSettings";
+import {
+  useCameraSettingsStore,
+  type CameraSettingsForm,
+} from "@/stores/cameraSettings";
 import {
   Listbox,
   ListboxButton,
@@ -408,20 +470,39 @@ import {
   ListboxLabel,
 } from "@headlessui/vue";
 import * as yup from "yup";
+import type {
+  Camera,
+  GstreamerCaps,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 const store = useCameraSettingsStore();
+
 const schema = yup.object({
   videoFramerate: yup.number().required(),
-  hlsEnabled: yup.boolean().required().default(true),
+  hlsEnabled: yup.boolean().required(),
   showDetectionGraphs: yup.boolean(),
   showDetectionOverlay: yup.boolean(),
+  recordVideo: yup.boolean(),
+  backupCloud: yup.boolean(),
 });
 
-async function submitForm(values: any) {
-  console.log("Form submitted:", values);
-  await store.save();
+const initialValues = ref(undefined as undefined | CameraSettingsForm);
+
+async function submitForm(form: any) {
+  console.log("Form submitted:", form);
+  await store.save(form as CameraSettingsForm);
 }
 
 onMounted(async () => {
   await store.load();
+  initialValues.value = {
+    recordVideo: store.settings?.record_video as boolean,
+    backupCloud: store.settings?.cloud_backup as boolean,
+    videoFramerate: store.settings?.video_framerate as number,
+    hlsEnabled: store.settings?.hls.hls_enabled as boolean,
+    showDetectionGraphs: store.settings?.detection.graphs as boolean,
+    showDetectionOverlay: store.settings?.detection.overlay as boolean,
+    selectedCaps: store.settings?.camera.selected_caps as GstreamerCaps,
+    selectedCamera: store.settings?.camera as Camera,
+  };
 });
 </script>
