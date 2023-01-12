@@ -39,7 +39,6 @@ const DEFAULT_CAMERA = {
   selected_caps: DEFAULT_CAPS,
 } as Camera;
 
-
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
@@ -85,18 +84,9 @@ export const useCameraSettingsStore = defineStore({
         const settings = resCodec.decode(resMsg?.data);
         console.log("Loaded camera settings:", settings);
 
-        const camera = settings.video_src as Camera;
+        const camera = settings.camera as Camera;
 
-        const form = {
-          videoFramerate: settings.video_framerate,
-          hlsEnabled: settings.hls.hls_enabled,
-          selectedCamera: camera,
-          selectedCaps: camera.selected_caps,
-          showDetectionOverlay: settings.detection.overlay,
-          showDetectionGraphs: settings.detection.graphs,
-        } as CameraSettingsForm;
-
-        this.$patch({ form, settings });
+        this.$patch({ settings });
       }
     },
 
@@ -116,8 +106,8 @@ export const useCameraSettingsStore = defineStore({
       const req = toRaw(this.settings) as PrintNannyCameraSettings;
       req.hls.hls_enabled = form.hlsEnabled;
       req.video_framerate = form.videoFramerate as number;
-      req.video_src = form.selectedCamera as Camera;
-      req.video_src.selected_caps = form.selectedCaps as GstreamerCaps;
+      req.camera = form.selectedCamera as Camera;
+      req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
@@ -134,7 +124,7 @@ export const useCameraSettingsStore = defineStore({
         const settings = resCodec.decode(resMsg?.data);
         console.log("Applied camera settings:", settings);
 
-        const camera = settings.video_src as Camera;
+        const camera = settings.camera as Camera;
         this.$patch({ settings });
         success(
           `Updated Camera Settings`,

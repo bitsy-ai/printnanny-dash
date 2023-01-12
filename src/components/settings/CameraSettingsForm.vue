@@ -28,7 +28,7 @@
           </div>
           <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div class="sm:col-span-3">
-              <Listbox as="div" v-model="store.settings.video_src">
+              <Listbox as="div" v-model="store.settings.camera">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
                   >Select a camera:</ListboxLabel
                 >
@@ -38,10 +38,10 @@
                   >
                     <span class="block truncate"
                       ><strong>{{
-                        store.settings.video_src.src_type.toUpperCase()
+                        store.settings.camera.src_type.toUpperCase()
                       }}</strong>
-                      {{ store.settings.video_src.label }}
-                      {{ store.settings.video_src.device_name }}</span
+                      {{ store.settings.camera.label }}
+                      {{ store.settings.camera.device_name }}</span
                     >
                     <span
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -106,7 +106,7 @@
             </div>
 
             <div class="sm:col-span-3">
-              <Listbox as="div" v-model="store.settings.video_src.selected_caps">
+              <Listbox as="div" v-model="store.settings.camera.selected_caps">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
                   >Select camera resolution:</ListboxLabel
                 >
@@ -115,10 +115,15 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      >width={{ store.settings.video_src.selected_caps.width }} height={{
-                        store.settings.selectedCaps?.height
+                      >width={{
+                        store.settings?.camera.selected_caps.width
                       }}
-                      format={{ store.settings.video_src.selected_caps.format }}</span
+                      height={{
+                        store.settings.camera.selected_caps?.height
+                      }}
+                      format={{
+                        store.settings?.camera.selected_caps.format
+                      }}</span
                     >
                     <span
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -140,7 +145,8 @@
                     >
                       <ListboxOption
                         as="template"
-                        v-for="(caps, idx) in store.settings.video_src.available_caps"
+                        v-for="(caps, idx) in store.settings.camera
+                          .available_caps"
                         :key="idx"
                         :value="caps"
                         v-slot="{ active, selected }"
@@ -227,12 +233,11 @@
           <div>
             <fieldset>
               <h3 class="text-lg font-medium leading-6 text-gray-900">
-              Video Recording Settings
-            </h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Save timelapse video recordings.
-
-            </p>
+                Video Recording Settings
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">
+                Save timelapse video recordings.
+              </p>
               <div class="mt-4 space-y-4">
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
@@ -245,9 +250,7 @@
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label
-                      for="recordVideo"
-                      class="font-medium text-gray-700"
+                    <label for="recordVideo" class="font-medium text-gray-700"
                       >Record videos</label
                     >
                     <p class="text-gray-500">
@@ -266,13 +269,12 @@
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label
-                      for="backupCloud"
-                      class="font-medium text-gray-700"
+                    <label for="backupCloud" class="font-medium text-gray-700"
                       >Save recordings to PrintNanny Cloud</label
                     >
                     <p class="text-gray-500">
-                      Improve PrintNanny's detection algorithm and backup your video recording library to PrintNanny Cloud. 
+                      Improve PrintNanny's detection algorithm and backup your
+                      video recording library to PrintNanny Cloud.
                     </p>
                   </div>
                 </div>
@@ -456,7 +458,10 @@ import { onMounted, ref } from "vue";
 import { ChevronUpDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
 import TextSpinner from "@/components/TextSpinner.vue";
-import { useCameraSettingsStore, type CameraSettingsForm } from "@/stores/cameraSettings";
+import {
+  useCameraSettingsStore,
+  type CameraSettingsForm,
+} from "@/stores/cameraSettings";
 import {
   Listbox,
   ListboxButton,
@@ -465,7 +470,10 @@ import {
   ListboxLabel,
 } from "@headlessui/vue";
 import * as yup from "yup";
-import type { Camera, GstreamerCaps } from "@bitsy-ai/printnanny-asyncapi-models";
+import type {
+  Camera,
+  GstreamerCaps,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 const store = useCameraSettingsStore();
 
 const schema = yup.object({
@@ -474,14 +482,14 @@ const schema = yup.object({
   showDetectionGraphs: yup.boolean(),
   showDetectionOverlay: yup.boolean(),
   recordVideo: yup.boolean(),
-  backupCloud: yup.boolean()
+  backupCloud: yup.boolean(),
 });
 
-const initialValues = ref(undefined  as undefined | CameraSettingsForm);
+const initialValues = ref(undefined as undefined | CameraSettingsForm);
 
-async function submitForm(form: CameraSettingsForm) {
-  console.log("Form submitted:",form);
-  await store.save(form);
+async function submitForm(form: any) {
+  console.log("Form submitted:", form);
+  await store.save(form as CameraSettingsForm);
 }
 
 onMounted(async () => {
@@ -493,9 +501,8 @@ onMounted(async () => {
     hlsEnabled: store.settings?.hls.hls_enabled as boolean,
     showDetectionGraphs: store.settings?.detection.graphs as boolean,
     showDetectionOverlay: store.settings?.detection.overlay as boolean,
-    selectedCaps: store.settings?.video_src.selected_caps as GstreamerCaps,
-    selectedCamera: store.settings?.video_src.selected_camera as Camera
-
-  }
+    selectedCaps: store.settings?.camera.selected_caps as GstreamerCaps,
+    selectedCamera: store.settings?.camera as Camera,
+  };
 });
 </script>
