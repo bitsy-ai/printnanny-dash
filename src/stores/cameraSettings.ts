@@ -10,8 +10,7 @@ import {
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { success } from "./alerts";
-
-const DEFAULT_NATS_TIMEOUT = 12000;
+import { DEFAULT_NATS_TIMEOUT } from "@/types";
 
 export interface CameraSettingsForm {
   videoFramerate: number;
