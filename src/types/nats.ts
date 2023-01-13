@@ -24,7 +24,7 @@ export enum NatsSubjectPattern {
 
   WebrtcRecordingStarted = "pi.{pi_id}.webrtc.recording.started",
   WebrtcRecordingStopped = "pi.{pi_id}.webrtc.recording.stopped",
-  WebrtcRecordingFileName = "pi.{pi_id}.webrtc.recording.file_name"
+  WebrtcRecordingFileName = "pi.{pi_id}.webrtc.recording.file_name",
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {
