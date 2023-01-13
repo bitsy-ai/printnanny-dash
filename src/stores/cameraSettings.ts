@@ -10,8 +10,7 @@ import {
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { success } from "./alerts";
-
-const DEFAULT_NATS_TIMEOUT = 12000;
+import { DEFAULT_NATS_TIMEOUT } from "@/types";
 
 export interface CameraSettingsForm {
   videoFramerate: number;
@@ -123,7 +122,6 @@ export const useCameraSettingsStore = defineStore({
         const resCodec = JSONCodec<PrintNannyCameraSettings>();
         const settings = resCodec.decode(resMsg?.data);
         console.log("Applied camera settings:", settings);
-
         const camera = settings.camera as Camera;
         this.$patch({ settings });
         success(

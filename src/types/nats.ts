@@ -1,3 +1,5 @@
+export const DEFAULT_NATS_TIMEOUT = 12000;
+
 export enum NatsSubjectPattern {
   CameraSettingsLoad = "pi.{pi_id}.settings.camera.load",
   CameraSettingsApply = "pi.{pi_id}.settings.camera.apply",
@@ -19,6 +21,10 @@ export enum NatsSubjectPattern {
   SettingsFileApply = "pi.{pi_id}.settings.file.apply",
   SettingsApplyRevert = "pi.{pi_id}.settings.file.revert",
   PrintNannyCloudAuth = "pi.{pi_id}.settings.printnanny.cloud.auth",
+
+  WebrtcRecordingStarted = "pi.{pi_id}.webrtc.recording.started",
+  WebrtcRecordingStopped = "pi.{pi_id}.webrtc.recording.stopped",
+  WebrtcRecordingFileName = "pi.{pi_id}.webrtc.recording.file_name",
 }
 
 export function renderNatsSubjectPattern(pattern: NatsSubjectPattern): string {

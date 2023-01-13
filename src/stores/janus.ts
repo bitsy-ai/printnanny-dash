@@ -1,25 +1,32 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
+import { JSONCodec, type NatsConnection } from "nats.ws";
 import {
   VideoStreamMerger,
   type DrawFunction,
   type AddStreamOptions,
   type ConstructorOptions,
 } from "video-stream-merger";
-
-import { type JanusStream, ConnectionStatus } from "@/types";
+import { useNatsStore } from "@/stores/nats";
+import { DEFAULT_NATS_TIMEOUT } from "@/types";
+import {
+  type JanusStream,
+  ConnectionStatus,
+  renderNatsSubjectPattern,
+  NatsSubjectPattern,
+} from "@/types";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
 import { useVideoStore } from "./video";
+import type { WebrtcRecordingFileNameResponse } from "@bitsy-ai/printnanny-asyncapi-models";
 
 const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -35,6 +42,7 @@ export const useJanusStore = defineStore({
     streamList: [] as Array<JanusStream>,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
     showOverlay: true as boolean,
+    mountpoint: undefined,
   }),
 
   actions: {
@@ -334,7 +342,49 @@ export const useJanusStore = defineStore({
       const { status, id } = await janusStreamingPluginHandle.start({
         jsep: answer,
       });
-      console.log(`start ${id} response sent with status ${status}`);
+      console.log(
+        `Start mountpoint: ${id} response sent with status ${status}`
+      );
+      this.$patch({ mountpoint: id });
+      await this.startJanusRecording(id);
+    },
+
+    async getRecordingFileName(): Promise<
+      undefined | WebrtcRecordingFileNameResponse
+    > {
+      // get filename based on active print job, or camera name/label if no print job is active
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.WebrtcRecordingFileName
+      );
+
+      const resMsg = await natsConnection?.request(subject, undefined, {
+        timeout: DEFAULT_NATS_TIMEOUT,
+      });
+      if (resMsg) {
+        const resCodec = JSONCodec<WebrtcRecordingFileNameResponse>();
+        const data = resCodec.decode(resMsg?.data);
+        console.log("getRecordingFileName: ", data);
+        return data;
+      }
+    },
+
+    async startJanusRecording(mountpoint: number) {
+      const fileNameRes = await this.getRecordingFileName();
+      if (fileNameRes === undefined) {
+        console.warn(
+          "Failed to get video recording filename, refusing to start recording"
+        );
+        return;
+      }
+      const janusStreamingPluginHandle = toRaw(this.janusStreamingPluginHandle);
+      const res = await janusStreamingPluginHandle.startRecording({
+        video: fileNameRes.file_name,
+        id: mountpoint,
+      });
+      console.log("Started recording: ", res);
     },
   },
 });
