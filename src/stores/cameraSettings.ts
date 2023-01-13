@@ -38,13 +38,6 @@ const DEFAULT_CAMERA = {
   selected_caps: DEFAULT_CAPS,
 } as Camera;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> 66ffffe (remove intermediary form model)
-=======
->>>>>>> 575cefe (fix ts build/lint)
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
@@ -112,18 +105,8 @@ export const useCameraSettingsStore = defineStore({
       const req = toRaw(this.settings) as PrintNannyCameraSettings;
       req.hls.hls_enabled = form.hlsEnabled;
       req.video_framerate = form.videoFramerate as number;
-<<<<<<< HEAD
-<<<<<<< HEAD
       req.camera = form.selectedCamera as Camera;
       req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
-=======
-      req.video_src = form.selectedCamera as Camera;
-      req.video_src.selected_caps = form.selectedCaps as GstreamerCaps;
->>>>>>> 66ffffe (remove intermediary form model)
-=======
-      req.camera = form.selectedCamera as Camera;
-      req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
->>>>>>> 575cefe (fix ts build/lint)
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
