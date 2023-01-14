@@ -55,6 +55,10 @@ export const useVideoStore = defineStore({
     showGraph: true,
   }),
   getters: {
+    videoRecordingFile(_state): undefined | string {
+      const janusStore = useJanusStore();
+      return janusStore.videoRecordingFile;
+    },
     cameras(state): Array<Camera> {
       return state.sources.filter(
         (v) =>
