@@ -2,11 +2,10 @@ import { toRaw } from "vue";
 import { JSONCodec, type NatsConnection } from "nats.ws";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
-import {
-  type PrintNannyCameraSettings,
-  type GstreamerCaps,
-  type Camera,
-  CameraSourceType,
+import type {
+  PrintNannyCameraSettings,
+  GstreamerCaps,
+  Camera,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { success } from "./alerts";
@@ -29,14 +28,6 @@ const DEFAULT_CAPS = {
   width: 640,
   height: 480,
 } as GstreamerCaps;
-
-const DEFAULT_CAMERA = {
-  index: 0,
-  device_name: "/base/soc/i2c0mux/i2c@1/imx219@10",
-  label: "imx219",
-  src_type: CameraSourceType.CSI,
-  selected_caps: DEFAULT_CAPS,
-} as Camera;
 
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
@@ -82,9 +73,6 @@ export const useCameraSettingsStore = defineStore({
       if (resMsg) {
         const settings = resCodec.decode(resMsg?.data);
         console.log("Loaded camera settings:", settings);
-
-        const camera = settings.camera as Camera;
-
         this.$patch({ settings });
       }
     },

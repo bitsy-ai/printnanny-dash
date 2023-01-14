@@ -28,7 +28,7 @@
     "pinia-plugin-persistedstate": "^2.3.0",
     "plotly.js-dist-min": "^2.15.0",
     "posthog-js": "^1.33.0",
-    "printnanny-api-client": "^0.122.0",
+    "printnanny-api-client": "^0.124.0",
     "uuid": "^9.0.0",
     "vee-validate": "^4.7.0",
     "video-stream-merger": "^4.0.1",

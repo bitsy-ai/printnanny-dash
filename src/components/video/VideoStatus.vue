@@ -53,7 +53,7 @@ import { useVideoStore } from "@/stores/video";
 import TextSpinner from "@/components/TextSpinner.vue";
 
 const store = useVideoStore();
-const props = defineProps({
+defineProps({
   compact: {
     default: false,
   },

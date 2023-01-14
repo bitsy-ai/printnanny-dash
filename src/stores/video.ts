@@ -19,8 +19,6 @@ import { error, warning } from "./alerts";
 import { useSystemdServiceStore } from "./systemdService";
 import { useWidgetStore } from "./widgets";
 
-const DEFAULT_NATS_TIMEOUT = 12000;
-
 // returns true if num truthy elements / total elements >= threshold
 function atLeast(arr: Array<boolean>, threshold: number): boolean {
   return arr.filter((el) => el === true).length / arr.length >= threshold;
