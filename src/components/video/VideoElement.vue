@@ -2,7 +2,6 @@
 import { onMounted } from "vue";
 import { useVideoStore } from "@/stores/video";
 import { onBeforeRouteLeave } from "vue-router";
-import type { Camera } from "@bitsy-ai/printnanny-asyncapi-models";
 import VideoButton from "@/components/video/VideoButton.vue";
 import VideoStatus from "@/components/video/VideoStatus.vue";
 import { handleError } from "@/utils";

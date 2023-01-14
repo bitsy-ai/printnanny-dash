@@ -19,14 +19,15 @@ import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
 import { useVideoStore } from "./video";
-import type { WebrtcRecordingFileNameResponse } from "@bitsy-ai/printnanny-asyncapi-models";
+import type { WebrtcRecordingFileNameReply } from "@bitsy-ai/printnanny-asyncapi-models";
 
 const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+  }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -41,6 +42,7 @@ export const useJanusStore = defineStore({
     selectedStream: undefined as undefined | JanusStream,
     streamList: [] as Array<JanusStream>,
     status: ConnectionStatus.ConnectionNotStarted as ConnectionStatus,
+    videoRecordingFile: undefined as undefined | string,
     showOverlay: true as boolean,
     mountpoint: undefined,
   }),
@@ -350,7 +352,7 @@ export const useJanusStore = defineStore({
     },
 
     async getRecordingFileName(): Promise<
-      undefined | WebrtcRecordingFileNameResponse
+      undefined | WebrtcRecordingFileNameReply
     > {
       // get filename based on active print job, or camera name/label if no print job is active
       const natsStore = useNatsStore();
@@ -364,7 +366,7 @@ export const useJanusStore = defineStore({
         timeout: DEFAULT_NATS_TIMEOUT,
       });
       if (resMsg) {
-        const resCodec = JSONCodec<WebrtcRecordingFileNameResponse>();
+        const resCodec = JSONCodec<WebrtcRecordingFileNameReply>();
         const data = resCodec.decode(resMsg?.data);
         console.log("getRecordingFileName: ", data);
         return data;
@@ -385,6 +387,7 @@ export const useJanusStore = defineStore({
         id: mountpoint,
       });
       console.log("Started recording: ", res);
+      this.$patch({ videoRecordingFile: fileNameRes.file_name });
     },
   },
 });
