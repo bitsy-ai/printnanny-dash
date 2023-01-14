@@ -66,6 +66,7 @@ onBeforeRouteLeave((_to, _from) => {
               aria-placeholder="Video stream is loading"
               poster="@/assets/video-paused.svg"
             />
+            <span v-if="store.videoRecordingFile" class="text-center font-medium text-gray-600">Recording to {{ store.videoRecordingFile }}</span>
           </div>
         </div>
         <div
