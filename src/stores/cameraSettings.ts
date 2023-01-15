@@ -86,7 +86,6 @@ export const useCameraSettingsStore = defineStore({
       const req = toRaw(this.settings) as PrintNannyCameraSettings;
       req.hls.hls_enabled = form.hlsEnabled;
       req.video_framerate = form.videoFramerate as number;
-      req.camera = form.selectedCamera as Camera;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
