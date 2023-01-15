@@ -22,13 +22,6 @@ export interface CameraSettingsForm {
   showDetectionGraphs: boolean;
 }
 
-const DEFAULT_CAPS = {
-  media_type: "video/x-raw",
-  format: "YUY2",
-  width: 640,
-  height: 480,
-} as GstreamerCaps;
-
 export const useCameraSettingsStore = defineStore({
   id: "cameraSettings",
   state: () => ({
@@ -94,7 +87,6 @@ export const useCameraSettingsStore = defineStore({
       req.hls.hls_enabled = form.hlsEnabled;
       req.video_framerate = form.videoFramerate as number;
       req.camera = form.selectedCamera as Camera;
-      req.camera.selected_caps = form.selectedCaps as GstreamerCaps;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
