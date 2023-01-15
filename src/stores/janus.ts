@@ -347,7 +347,7 @@ export const useJanusStore = defineStore({
         `Start mountpoint: ${id} response sent with status ${status}`
       );
       this.$patch({ mountpoint: id });
-      await this.startJanusRecording(id);
+      // await this.startJanusRecording(id);
     },
 
     async getRecordingFileName(): Promise<
@@ -372,28 +372,28 @@ export const useJanusStore = defineStore({
       }
     },
 
-    async startJanusRecording(mountpoint: number) {
-      const fileNameRes = await this.getRecordingFileName();
-      if (fileNameRes === undefined) {
-        console.warn(
-          "Failed to get video recording filename, refusing to start recording"
-        );
-        return;
-      }
-      const janusStreamingPluginHandle = toRaw(this.janusStreamingPluginHandle);
-      try {
-        const res = await janusStreamingPluginHandle.startRecording({
-          video: fileNameRes.file_name,
-          id: mountpoint,
-        });
-        console.log("Started recording: ", res);
-      } catch (error) {
-        // Janus sends the following error message if recording already started:
-        // Error: 452 Recording started for this stream
-        console.warn("Error starting recording: ", error);
-      }
-      this.$patch({ videoRecordingFile: fileNameRes.file_name });
-    },
+    // async startJanusRecording(mountpoint: number) {
+    //   const fileNameRes = await this.getRecordingFileName();
+    //   if (fileNameRes === undefined) {
+    //     console.warn(
+    //       "Failed to get video recording filename, refusing to start recording"
+    //     );
+    //     return;
+    //   }
+    //   const janusStreamingPluginHandle = toRaw(this.janusStreamingPluginHandle);
+    //   try {
+    //     const res = await janusStreamingPluginHandle.startRecording({
+    //       video: fileNameRes.file_name,
+    //       id: mountpoint,
+    //     });
+    //     console.log("Started recording: ", res);
+    //   } catch (error) {
+    //     // Janus sends the following error message if recording already started:
+    //     // Error: 452 Recording started for this stream
+    //     console.warn("Error starting recording: ", error);
+    //   }
+    //   this.$patch({ videoRecordingFile: fileNameRes.file_name });
+    // },
   },
 });
 
