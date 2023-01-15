@@ -25,9 +25,8 @@ const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -382,11 +381,17 @@ export const useJanusStore = defineStore({
         return;
       }
       const janusStreamingPluginHandle = toRaw(this.janusStreamingPluginHandle);
-      const res = await janusStreamingPluginHandle.startRecording({
-        video: fileNameRes.file_name,
-        id: mountpoint,
-      });
-      console.log("Started recording: ", res);
+      try {
+        const res = await janusStreamingPluginHandle.startRecording({
+          video: fileNameRes.file_name,
+          id: mountpoint,
+        });
+        console.log("Started recording: ", res);
+      } catch (error) {
+        // Janus sends the following error message if recording already started:
+        // Error: 452 Recording started for this stream
+        console.warn("Error starting recording: ", error);
+      }
       this.$patch({ videoRecordingFile: fileNameRes.file_name });
     },
   },
