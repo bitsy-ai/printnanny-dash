@@ -45,6 +45,9 @@ onMounted(() => {
       opacity: 0.3,
     },
     mode: "lines+markers",
+    marker: {
+      symbol: "triangle-down",
+    },
     name: "Ok: Nozzle",
   } as Plotly.PlotData;
 
@@ -56,6 +59,9 @@ onMounted(() => {
       array: store.meter_y_print_std,
       visible: true,
       opacity: 0.3,
+    },
+    marker: {
+      symbol: "square",
     },
     mode: "lines+markers",
     name: "Ok: Print",
@@ -70,6 +76,9 @@ onMounted(() => {
       visible: true,
       opacity: 0.3,
     },
+    marker: {
+      symbol: "diamond-wide",
+    },
     mode: "lines+markers",
     name: "Ok: Raft",
   } as Plotly.PlotData;
@@ -83,6 +92,9 @@ onMounted(() => {
       visible: true,
       opacity: 0.3,
     },
+    marker: {
+      symbol: "bowtie",
+    },
     mode: "lines+markers",
     name: "Defect: Warping",
   } as Plotly.PlotData;
@@ -95,6 +107,9 @@ onMounted(() => {
       array: store.meter_y_spaghetti_std,
       visible: true,
       opacity: 0.3,
+    },
+    marker: {
+      symbol: "asterisk",
     },
     mode: "lines+markers",
     name: "Defect: Spaghetti/Adhesion",
@@ -115,6 +130,9 @@ store.$subscribe(() => {
       visible: true,
       opacity: 0.3,
     },
+    marker: {
+      symbol: "triangle-down",
+    },
     mode: "lines+markers",
     name: "Ok: Nozzle",
   } as Plotly.PlotData;
@@ -126,6 +144,9 @@ store.$subscribe(() => {
       array: store.meter_y_print_std,
       visible: true,
       opacity: 0.3,
+    },
+    marker: {
+      symbol: "square",
     },
     mode: "lines+markers",
     name: "Ok: Print",
@@ -140,6 +161,9 @@ store.$subscribe(() => {
       visible: true,
       opacity: 0.3,
     },
+    marker: {
+      symbol: "diamond-wide",
+    },
     mode: "lines+markers",
     name: "Ok: Raft",
   } as Plotly.PlotData;
@@ -153,6 +177,9 @@ store.$subscribe(() => {
       visible: true,
       opacity: 0.3,
     },
+    marker: {
+      symbol: "bowtie",
+    },
     mode: "lines+markers",
     name: "Defect: Adhesion",
   } as Plotly.PlotData;
@@ -165,6 +192,9 @@ store.$subscribe(() => {
       array: store.meter_y_spaghetti_std,
       visible: true,
       opacity: 0.3,
+    },
+    marker: {
+      symbol: "asterisk",
     },
     mode: "lines+markers",
     name: "Defect: Spaghetti",
