@@ -22,6 +22,7 @@ async function startStream() {
 
 onMounted(async () => {
   await store.load();
+  await cameraSettings.loadSettings();
 });
 
 const pageTitle = "📷 PrintNanny Cam";
