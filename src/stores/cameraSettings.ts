@@ -3,7 +3,7 @@ import { JSONCodec, type NatsConnection } from "nats.ws";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
 import type {
-  PrintNannyCameraSettings,
+  VideoStreamSettings,
   GstreamerCaps,
   Camera,
 } from "@bitsy-ai/printnanny-asyncapi-models";
@@ -14,8 +14,8 @@ import { DEFAULT_NATS_TIMEOUT } from "@/types";
 export interface CameraSettingsForm {
   videoFramerate: number;
   hlsEnabled: boolean;
-  recordVideo: boolean;
-  backupCloud: boolean;
+  recordAutoStart: boolean;
+  recordSyncCloud: boolean;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
   showDetectionOverlay: boolean;
@@ -28,7 +28,9 @@ export const useCameraSettingsStore = defineStore({
     loading: true,
     saving: false,
     cameras: [] as Array<Camera>,
-    settings: undefined as undefined | PrintNannyCameraSettings,
+    selectedCaps: undefined as undefined | GstreamerCaps,
+    selectedCamera: undefined as undefined | Camera,
+    settings: undefined as undefined | VideoStreamSettings,
   }),
   actions: {
     async loadCameras() {
@@ -58,7 +60,7 @@ export const useCameraSettingsStore = defineStore({
         NatsSubjectPattern.CameraSettingsLoad
       );
 
-      const resCodec = JSONCodec<PrintNannyCameraSettings>();
+      const resCodec = JSONCodec<VideoStreamSettings>();
       const resMsg = await natsConnection?.request(subject, undefined, {
         timeout: DEFAULT_NATS_TIMEOUT,
       });
@@ -66,6 +68,9 @@ export const useCameraSettingsStore = defineStore({
       if (resMsg) {
         const settings = resCodec.decode(resMsg?.data);
         console.log("Loaded camera settings:", settings);
+        const selectedCaps = { height: settings.camera.height, width: settings.camera.width, format: "", media_type: "" } as GstreamerCaps;
+        const selectedCamera = this.cameras.find(c => c.device_name == settings.camera.device_name);
+        this.$patch({ selectedCamera, selectedCaps })
         this.$patch({ settings });
       }
     },
@@ -81,11 +86,11 @@ export const useCameraSettingsStore = defineStore({
         NatsSubjectPattern.CameraSettingsApply
       );
 
-      const reqCodec = JSONCodec<PrintNannyCameraSettings>();
+      const reqCodec = JSONCodec<VideoStreamSettings>();
 
-      const req = toRaw(this.settings) as PrintNannyCameraSettings;
-      req.hls.hls_enabled = form.hlsEnabled;
-      req.video_framerate = form.videoFramerate as number;
+      const req = toRaw(this.settings) as VideoStreamSettings;
+      req.hls.enabled = form.hlsEnabled;
+      req.camera.reserved_framerate = form.videoFramerate as number;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
@@ -98,10 +103,9 @@ export const useCameraSettingsStore = defineStore({
         }
       );
       if (resMsg) {
-        const resCodec = JSONCodec<PrintNannyCameraSettings>();
+        const resCodec = JSONCodec<VideoStreamSettings>();
         const settings = resCodec.decode(resMsg?.data);
         console.log("Applied camera settings:", settings);
-        const camera = settings.camera as Camera;
         this.$patch({ settings });
         success(
           `Updated Camera Settings`,
@@ -112,7 +116,8 @@ export const useCameraSettingsStore = defineStore({
     },
 
     async load() {
-      await Promise.all([this.loadSettings(), this.loadCameras()]);
+      await this.loadCameras();
+      await this.loadSettings();
       this.$patch({ loading: false });
     },
   },
