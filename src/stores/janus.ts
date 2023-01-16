@@ -19,7 +19,6 @@ import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
 import { useVideoStore } from "./video";
-import type { WebrtcRecordingFileNameReply } from "@bitsy-ai/printnanny-asyncapi-models";
 
 const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
@@ -348,53 +347,7 @@ export const useJanusStore = defineStore({
         `Start mountpoint: ${id} response sent with status ${status}`
       );
       this.$patch({ mountpoint: id });
-      // await this.startJanusRecording(id);
     },
-
-    async getRecordingFileName(): Promise<
-      undefined | WebrtcRecordingFileNameReply
-    > {
-      // get filename based on active print job, or camera name/label if no print job is active
-      const natsStore = useNatsStore();
-      const natsConnection: NatsConnection =
-        await natsStore.getNatsConnection();
-      const subject = renderNatsSubjectPattern(
-        NatsSubjectPattern.WebrtcRecordingFileName
-      );
-
-      const resMsg = await natsConnection?.request(subject, undefined, {
-        timeout: DEFAULT_NATS_TIMEOUT,
-      });
-      if (resMsg) {
-        const resCodec = JSONCodec<WebrtcRecordingFileNameReply>();
-        const data = resCodec.decode(resMsg?.data);
-        console.log("getRecordingFileName: ", data);
-        return data;
-      }
-    },
-
-    // async startJanusRecording(mountpoint: number) {
-    //   const fileNameRes = await this.getRecordingFileName();
-    //   if (fileNameRes === undefined) {
-    //     console.warn(
-    //       "Failed to get video recording filename, refusing to start recording"
-    //     );
-    //     return;
-    //   }
-    //   const janusStreamingPluginHandle = toRaw(this.janusStreamingPluginHandle);
-    //   try {
-    //     const res = await janusStreamingPluginHandle.startRecording({
-    //       video: fileNameRes.file_name,
-    //       id: mountpoint,
-    //     });
-    //     console.log("Started recording: ", res);
-    //   } catch (error) {
-    //     // Janus sends the following error message if recording already started:
-    //     // Error: 452 Recording started for this stream
-    //     console.warn("Error starting recording: ", error);
-    //   }
-    //   this.$patch({ videoRecordingFile: fileNameRes.file_name });
-    // },
   },
 });
 

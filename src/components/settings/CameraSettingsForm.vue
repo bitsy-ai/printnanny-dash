@@ -28,7 +28,7 @@
           </div>
           <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div class="sm:col-span-3">
-              <Listbox as="div" v-model="store.settings.camera">
+              <Listbox as="div" v-model="store.selectedCamera">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
                   >Select a camera:</ListboxLabel
                 >
@@ -37,10 +37,7 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      ><strong>{{
-                        store.settings.camera.src_type.toUpperCase()
-                      }}</strong>
-                      {{ store.settings.camera.label }}
+                      ><strong>{{ store.settings.camera.label }}</strong>
                       {{ store.settings.camera.device_name }}</span
                     >
                     <span
@@ -81,10 +78,9 @@
                               selected ? 'font-semibold' : 'font-normal',
                               'block truncate',
                             ]"
-                            ><strong>{{
-                              camera.src_type.toUpperCase()
-                            }}</strong>
-                            {{ camera.label }}
+                            ><strong>
+                              {{ camera.label }}
+                            </strong>
                             {{ camera.device_name }}</span
                           >
 
@@ -106,7 +102,7 @@
             </div>
 
             <div class="sm:col-span-3">
-              <Listbox as="div" v-model="store.settings.camera.selected_caps">
+              <Listbox as="div" v-model="store.selectedCaps">
                 <ListboxLabel class="block text-sm font-medium text-gray-700"
                   >Select camera resolution:</ListboxLabel
                 >
@@ -115,14 +111,8 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      >width={{
-                        store.settings?.camera.selected_caps.width
-                      }}
-                      height={{
-                        store.settings.camera.selected_caps?.height
-                      }}
-                      format={{
-                        store.settings?.camera.selected_caps.format
+                      >width={{ store.settings?.camera.width }} height={{
+                        store.settings.camera.height
                       }}</span
                     >
                     <span
@@ -145,8 +135,8 @@
                     >
                       <ListboxOption
                         as="template"
-                        v-for="(caps, idx) in store.settings.camera
-                          .available_caps"
+                        v-for="(caps, idx) in store.selectedCamera
+                          ?.available_caps"
                         :key="idx"
                         :value="caps"
                         v-slot="{ active, selected }"
@@ -198,7 +188,7 @@
                   type="number"
                   name="videoFramerate"
                   id="videoFramerate"
-                  :value="store.settings.video_framerate"
+                  :value="store.settings.camera.reserved_framerate"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -211,7 +201,7 @@
                     id="hlsEnabled"
                     name="hlsEnabled"
                     type="checkbox"
-                    :value="store.settings.hls.hls_enabled"
+                    :value="store.settings.hls.enabled"
                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                 </div>
@@ -242,34 +232,39 @@
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
                     <Field
-                      id="recordVideo"
-                      name="recordVideo"
+                      id="recordAutoStart"
+                      name="recordAutoStart"
                       type="checkbox"
-                      :value="store.settings.record_video"
+                      :value="store.settings.recording.auto_start"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label for="recordVideo" class="font-medium text-gray-700"
-                      >Record videos</label
+                    <label
+                      for="recordAutoStart"
+                      class="font-medium text-gray-700"
+                      >Auto-start</label
                     >
                     <p class="text-gray-500">
-                      Save video recordings to your SD card.
+                      Automatically start a new recording when a print job
+                      begins.
                     </p>
                   </div>
                 </div>
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
                     <Field
-                      id="backupCloud"
-                      name="backupCloud"
+                      id="recordSyncCloud"
+                      name="recordSyncCloud"
                       type="checkbox"
-                      :value="store.settings.cloud_backup"
+                      :value="store.settings.recording.cloud_sync"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label for="backupCloud" class="font-medium text-gray-700"
+                    <label
+                      for="recordSyncCloud"
+                      class="font-medium text-gray-700"
                       >Save recordings to PrintNanny Cloud</label
                     >
                     <p class="text-gray-500">
@@ -481,8 +476,8 @@ const schema = yup.object({
   hlsEnabled: yup.boolean().required(),
   showDetectionGraphs: yup.boolean(),
   showDetectionOverlay: yup.boolean(),
-  recordVideo: yup.boolean(),
-  backupCloud: yup.boolean(),
+  recordAutoStart: yup.boolean(),
+  recordSyncCloud: yup.boolean(),
 });
 
 const initialValues = ref(undefined as undefined | CameraSettingsForm);
@@ -495,14 +490,14 @@ async function submitForm(form: any) {
 onMounted(async () => {
   await store.load();
   initialValues.value = {
-    recordVideo: store.settings?.record_video as boolean,
-    backupCloud: store.settings?.cloud_backup as boolean,
-    videoFramerate: store.settings?.video_framerate as number,
-    hlsEnabled: store.settings?.hls.hls_enabled as boolean,
+    recordAutoStart: store.settings?.recording.auto_start as boolean,
+    recordSyncCloud: store.settings?.recording.cloud_sync as boolean,
+    videoFramerate: store.settings?.camera.reserved_framerate as number,
+    hlsEnabled: store.settings?.hls.enabled as boolean,
     showDetectionGraphs: store.settings?.detection.graphs as boolean,
     showDetectionOverlay: store.settings?.detection.overlay as boolean,
-    selectedCaps: store.settings?.camera.selected_caps as GstreamerCaps,
-    selectedCamera: store.settings?.camera as Camera,
+    selectedCaps: store.selectedCaps as GstreamerCaps,
+    selectedCamera: store.selectedCamera as Camera,
   };
 });
 </script>
