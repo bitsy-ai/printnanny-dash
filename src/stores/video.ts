@@ -40,6 +40,32 @@ function atLeast(arr: Array<boolean>, threshold: number): boolean {
 //   },
 // ];
 
+// Un-comment to test Plotly graph with random data
+// const TEST_DF = [...Array(10).keys()].map(i => {
+//   const n = i + Math.random();
+//   return {
+//     adhesion__count: n * Math.random(),
+//     adhesion__mean: n * Math.random(),
+//     adhesion__std: n * Math.random(),
+//     nozzle__count: n * Math.random(),
+//     nozzle__mean: n * Math.random(),
+//     nozzle__std: n * Math.random(),
+//     print__count: n * Math.random(),
+//     print__mean: n * Math.random(),
+//     print__std: n * Math.random(),
+//     raft__count: n * Math.random(),
+//     raft__mean: n * Math.random(),
+//     raft__std: n * Math.random(),
+//     spaghetti__mean: n * Math.random(),
+//     spaghetti__count: n * Math.random(),
+//     spaghetti__std: n * Math.random(),
+//     detection_scores: n * Math.random(),
+//     rt: n * Math.random(),
+//     rt___max: n * Math.random(),
+//     rt__min: n * Math.random(),
+//   } as QcDataframeRow
+// });
+
 export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
