@@ -37,9 +37,7 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      ><strong>{{
-                        store.settings.camera.label
-                      }}</strong>
+                      ><strong>{{ store.settings.camera.label }}</strong>
                       {{ store.settings.camera.device_name }}</span
                     >
                     <span
@@ -82,7 +80,6 @@
                             ]"
                             ><strong>
                               {{ camera.label }}
-
                             </strong>
                             {{ camera.device_name }}</span
                           >
@@ -114,10 +111,7 @@
                     class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   >
                     <span class="block truncate"
-                      >width={{
-                        store.settings?.camera.width
-                      }}
-                      height={{
+                      >width={{ store.settings?.camera.width }} height={{
                         store.settings.camera.height
                       }}</span
                     >
@@ -141,7 +135,8 @@
                     >
                       <ListboxOption
                         as="template"
-                        v-for="(caps, idx) in store.selectedCamera?.available_caps"
+                        v-for="(caps, idx) in store.selectedCamera
+                          ?.available_caps"
                         :key="idx"
                         :value="caps"
                         v-slot="{ active, selected }"
@@ -245,11 +240,14 @@
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label for="recordAutoStart" class="font-medium text-gray-700"
+                    <label
+                      for="recordAutoStart"
+                      class="font-medium text-gray-700"
                       >Auto-start</label
                     >
                     <p class="text-gray-500">
-                      Automatically start a new recording when a print job begins.
+                      Automatically start a new recording when a print job
+                      begins.
                     </p>
                   </div>
                 </div>
@@ -264,7 +262,9 @@
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label for="recordSyncCloud" class="font-medium text-gray-700"
+                    <label
+                      for="recordSyncCloud"
+                      class="font-medium text-gray-700"
                       >Save recordings to PrintNanny Cloud</label
                     >
                     <p class="text-gray-500">

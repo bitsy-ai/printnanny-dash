@@ -68,9 +68,16 @@ export const useCameraSettingsStore = defineStore({
       if (resMsg) {
         const settings = resCodec.decode(resMsg?.data);
         console.log("Loaded camera settings:", settings);
-        const selectedCaps = { height: settings.camera.height, width: settings.camera.width, format: "", media_type: "" } as GstreamerCaps;
-        const selectedCamera = this.cameras.find(c => c.device_name == settings.camera.device_name);
-        this.$patch({ selectedCamera, selectedCaps })
+        const selectedCaps = {
+          height: settings.camera.height,
+          width: settings.camera.width,
+          format: "",
+          media_type: "",
+        } as GstreamerCaps;
+        const selectedCamera = this.cameras.find(
+          (c) => c.device_name == settings.camera.device_name
+        );
+        this.$patch({ selectedCamera, selectedCaps });
         this.$patch({ settings });
       }
     },
