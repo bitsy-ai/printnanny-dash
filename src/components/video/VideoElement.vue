@@ -74,9 +74,7 @@ onBeforeRouteLeave((_to, _from) => {
             >
           </div>
         </div>
-        <div
-          class="col-span-6 flex w-full sm:border-t sm:border-gray-200"
-        >
+        <div class="col-span-6 flex w-full sm:border-t sm:border-gray-200">
           <PlotlyElement />
         </div>
       </div>

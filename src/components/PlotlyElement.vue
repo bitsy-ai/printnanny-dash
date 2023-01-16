@@ -47,7 +47,7 @@ onMounted(() => {
     mode: "lines+markers",
     marker: {
       symbol: "triangle-down",
-      size: 15
+      size: 15,
     },
     name: "Ok: Nozzle",
   } as Plotly.PlotData;
@@ -63,8 +63,7 @@ onMounted(() => {
     },
     marker: {
       symbol: "square",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Ok: Print",
@@ -81,8 +80,7 @@ onMounted(() => {
     },
     marker: {
       symbol: "diamond-wide",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Ok: Raft",
@@ -99,8 +97,7 @@ onMounted(() => {
     },
     marker: {
       symbol: "bowtie",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Defect: Warping",
@@ -117,7 +114,7 @@ onMounted(() => {
     },
     marker: {
       symbol: "star",
-      size: 15
+      size: 15,
     },
     mode: "lines+markers",
     name: "Defect: Spaghetti/Adhesion",
@@ -140,8 +137,7 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "triangle-down",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Ok: Nozzle",
@@ -157,8 +153,7 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "square",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Ok: Print",
@@ -175,8 +170,7 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "diamond-wide",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Ok: Raft",
@@ -193,8 +187,7 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "bowtie",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Defect: Adhesion",
@@ -211,8 +204,7 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "star",
-      size: 15
-
+      size: 15,
     },
     mode: "lines+markers",
     name: "Defect: Spaghetti",

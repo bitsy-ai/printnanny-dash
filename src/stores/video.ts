@@ -40,37 +40,37 @@ function atLeast(arr: Array<boolean>, threshold: number): boolean {
 //   },
 // ];
 
-const TEST_DF = [...Array(10).keys()].map(i => {
-  const n = i + Math.random();
-  return {
-    adhesion__count: n * Math.random(),
-    adhesion__mean: n * Math.random(),
-    adhesion__std: n * Math.random(),
-    nozzle__count: n * Math.random(),
-    nozzle__mean: n * Math.random(),
-    nozzle__std: n * Math.random(),
-    print__count: n * Math.random(),
-    print__mean: n * Math.random(),
-    print__std: n * Math.random(),
-    raft__count: n * Math.random(),
-    raft__mean: n * Math.random(),
-    raft__std: n * Math.random(),
-    spaghetti__mean: n * Math.random(),
-    spaghetti__count: n * Math.random(),
-    spaghetti__std: n * Math.random(),
-    detection_scores: n * Math.random(),
-    rt: n * Math.random(),
-    rt___max: n * Math.random(),
-    rt__min: n * Math.random(),
-  } as QcDataframeRow
-});
-
+// Un-comment to test Plotly graph with random data
+// const TEST_DF = [...Array(10).keys()].map(i => {
+//   const n = i + Math.random();
+//   return {
+//     adhesion__count: n * Math.random(),
+//     adhesion__mean: n * Math.random(),
+//     adhesion__std: n * Math.random(),
+//     nozzle__count: n * Math.random(),
+//     nozzle__mean: n * Math.random(),
+//     nozzle__std: n * Math.random(),
+//     print__count: n * Math.random(),
+//     print__mean: n * Math.random(),
+//     print__std: n * Math.random(),
+//     raft__count: n * Math.random(),
+//     raft__mean: n * Math.random(),
+//     raft__std: n * Math.random(),
+//     spaghetti__mean: n * Math.random(),
+//     spaghetti__count: n * Math.random(),
+//     spaghetti__std: n * Math.random(),
+//     detection_scores: n * Math.random(),
+//     rt: n * Math.random(),
+//     rt___max: n * Math.random(),
+//     rt__min: n * Math.random(),
+//   } as QcDataframeRow
+// });
 
 export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
     loadingCameras: true,
-    df: TEST_DF as Array<QcDataframeRow>,
+    df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionLoading as ConnectionStatus,
     sources: [] as Array<Camera>,
@@ -93,7 +93,6 @@ export const useVideoStore = defineStore({
       ) as Array<Camera>;
     },
     meter_x(state): Array<number> {
-
       return state.df.map((el) => el.rt);
     },
     meter_y_nozzle_mean(state): Array<number> {
