@@ -76,7 +76,6 @@ onBeforeRouteLeave((_to, _from) => {
         </div>
         <div
           class="col-span-6 flex w-full sm:border-t sm:border-gray-200"
-          v-if="cameraSettings.settings?.detection.graphs"
         >
           <PlotlyElement />
         </div>

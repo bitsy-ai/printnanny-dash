@@ -1,5 +1,5 @@
 <template>
-  <div :id="plotId" class="m-auto"></div>
+  <div :id="plotId" class="px-6 w-full"></div>
 </template>
 <script setup lang="ts">
 import * as Plotly from "plotly.js-dist-min";
@@ -47,6 +47,7 @@ onMounted(() => {
     mode: "lines+markers",
     marker: {
       symbol: "triangle-down",
+      size: 15
     },
     name: "Ok: Nozzle",
   } as Plotly.PlotData;
@@ -62,6 +63,8 @@ onMounted(() => {
     },
     marker: {
       symbol: "square",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Ok: Print",
@@ -78,6 +81,8 @@ onMounted(() => {
     },
     marker: {
       symbol: "diamond-wide",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Ok: Raft",
@@ -94,6 +99,8 @@ onMounted(() => {
     },
     marker: {
       symbol: "bowtie",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Defect: Warping",
@@ -109,7 +116,8 @@ onMounted(() => {
       opacity: 0.3,
     },
     marker: {
-      symbol: "asterisk",
+      symbol: "star",
+      size: 15
     },
     mode: "lines+markers",
     name: "Defect: Spaghetti/Adhesion",
@@ -132,6 +140,8 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "triangle-down",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Ok: Nozzle",
@@ -147,6 +157,8 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "square",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Ok: Print",
@@ -163,6 +175,8 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "diamond-wide",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Ok: Raft",
@@ -179,6 +193,8 @@ store.$subscribe(() => {
     },
     marker: {
       symbol: "bowtie",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Defect: Adhesion",
@@ -194,7 +210,9 @@ store.$subscribe(() => {
       opacity: 0.3,
     },
     marker: {
-      symbol: "asterisk",
+      symbol: "star",
+      size: 15
+
     },
     mode: "lines+markers",
     name: "Defect: Spaghetti",
