@@ -3,6 +3,7 @@ import * as api from "printnanny-api-client";
 import { handleError } from "@/utils";
 import { useNatsStore } from "./nats";
 import { posthogIdentify } from "@/utils/posthog";
+import { useRouter } from "vue-router";
 
 export const useCloudStore = defineStore({
   id: "cloud",
@@ -59,7 +60,6 @@ export const useCloudStore = defineStore({
         console.log(`Success! Authenticated as ${email}`);
         this.$patch({ token, apiConfig });
         await this.fetchUser();
-        await this.connectCloudAccount();
       }
       return ok;
     },
