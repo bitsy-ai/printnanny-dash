@@ -135,7 +135,7 @@ async function submitStage2(values: any) {
   formLoading.value = false;
   if (res) {
     router.push({ name: "Home" });
-    await this.connectCloudAccount();
+    await cloud.connectCloudAccount();
   }
 }
 
