@@ -132,14 +132,11 @@ async function submitStage1(values: any) {
 async function submitStage2(values: any) {
   formLoading.value = true;
   const res = await cloud.twoFactorStage2(values.email, values.token);
-  if (res) {
-    const user = await cloud.fetchUser();
-    if (user !== undefined) {
-      router.push({ name: "Home" });
-    }
-  }
-
   formLoading.value = false;
+  if (res) {
+    router.push({ name: "Home" });
+    await this.connectCloudAccount();
+  }
 }
 
 const formSchema1 = yup.object({
