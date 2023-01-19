@@ -43,6 +43,33 @@
         <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
         Stop Camera
       </button>
+
+      <!-- camera service is active and recording is not active -->
+      <button
+        @click="store.startRecording"
+        v-if="store.status == ConnectionStatus.ConnectionReady && store.currentVideoRecording === undefined"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        <PlayCircleIcon class="w-5 h-5 mr-2"></PlayCircleIcon>
+        Start Recording
+      </button>
+      <button
+        @click="store.stopRecording"
+        v-else-if="store.status == ConnectionStatus.ConnectionReady && store.currentVideoRecording !=== undefined"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        <PlayCircleIcon class="w-5 h-5 mr-2"></PlayCircleIcon>
+        Start Recording
+      </button>
+      <button
+        disabled
+        v-else
+        class="disabled:cursor-not-allowed disabled:opacity-50 ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        <PlayCircleIcon class="w-5 h-5 mr-2"></PlayCircleIcon>
+        Stop Recording
+      </button>
+      <!-- camera service is active and recording is active -->
     </Transition>
   </div>
 </template>
@@ -60,7 +87,7 @@
 <script setup lang="ts">
 import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
-import { VideoCameraIcon } from "@heroicons/vue/20/solid";
+import { PlayCircleIcon, VideoCameraIcon } from "@heroicons/vue/20/solid";
 
 const store = useVideoStore();
 </script>

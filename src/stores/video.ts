@@ -5,11 +5,15 @@ import {
   type Camera,
   CameraSourceType,
   SystemdUnitActiveState,
+  type VideoRecording,
+  CameraRecordingLoadReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
   ConnectionStatus,
+  DEFAULT_NATS_TIMEOUT,
   NatsSubjectPattern,
+  renderNatsSubjectPattern,
   type QcDataframeRow,
 } from "@/types";
 
@@ -70,6 +74,8 @@ export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
     loadingCameras: true,
+    videoRecordings: [] as Array<VideoRecording>,
+    currentVideoRecording: undefined as undefined | VideoRecording,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionLoading as ConnectionStatus,
@@ -81,10 +87,7 @@ export const useVideoStore = defineStore({
     showGraph: true,
   }),
   getters: {
-    videoRecordingFile(_state): undefined | string {
-      const janusStore = useJanusStore();
-      return janusStore.videoRecordingFile;
-    },
+
     cameras(state): Array<Camera> {
       return state.sources.filter(
         (v) =>
@@ -215,6 +218,20 @@ export const useVideoStore = defineStore({
       } else {
         console.warn("printnanny-vision.service is not active");
         this.$patch({ status: ConnectionStatus.ServiceNotStarted });
+      }
+    },
+
+    async loadVideoRecordings() {
+      const natsStore = useNatsStore();
+      const natsConnection = await natsStore.getNatsConnection();
+      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CameraRecordingLoad);
+      const resMsg = await natsConnection?.request(subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT });
+
+      if (resMsg) {
+        const resCodec = JSONCodec<CameraRecordingLoadReply>();
+        const data = resCodec.decode(resMsg.data);
+        console.log("Loaded edge VideoRecording catalog: ", data);
+        this.$patch({ videoRecordings: data.recordings, currentVideoRecording: data.current })
       }
     },
 
