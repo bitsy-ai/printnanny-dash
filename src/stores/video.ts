@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { JSONCodec, type Subscription } from "nats.ws";
+import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
 import {
   type Camera,
   CameraSourceType,
@@ -271,6 +271,50 @@ export const useVideoStore = defineStore({
         await this.startStream();
       }
     },
+    async startRecording() {
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.CameraRecordingStart
+      );
+
+      const resMsg = await natsConnection?.request(
+        subject,
+        undefined,
+        { timeout: DEFAULT_NATS_TIMEOUT }
+      );
+
+      if (resMsg) {
+        const resCodec = JSONCodec<VideoRecording>();
+        const videoRecording = resCodec.decode(resMsg.data);
+        console.log("Started VideoRecording: ", videoRecording);
+        this.$patch({ currentVideoRecording: videoRecording })
+      }
+    },
+    async stopRecording() {
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.CameraRecordingStop
+      );
+
+      const resMsg = await natsConnection?.request(
+        subject,
+        undefined,
+        { timeout: DEFAULT_NATS_TIMEOUT }
+      );
+
+      if (resMsg) {
+        const resCodec = JSONCodec<VideoRecording>();
+        const videoRecording = resCodec.decode(resMsg.data);
+        console.log("Stopped VideoRecording: ", videoRecording);
+        this.$patch({ currentVideoRecording: undefined })
+      }
+    }
   },
 });
 

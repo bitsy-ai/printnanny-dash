@@ -1,7 +1,11 @@
 export const DEFAULT_NATS_TIMEOUT = 12000;
 
 export enum NatsSubjectPattern {
+
   CameraRecordingLoad = "pi.{pi_id}.command.camera.recording.load",
+  CameraRecordingStart = "pi.{pi_id}.command.camera.recording.start",
+  CameraRecordingStop = "pi.{pi_id}.command.camera.recording.stop",
+
   CameraSettingsLoad = "pi.{pi_id}.settings.camera.load",
   CameraSettingsApply = "pi.{pi_id}.settings.camera.apply",
   CameraSettingsRevert = "pi.{pi_id}.settings.camera.revert",
