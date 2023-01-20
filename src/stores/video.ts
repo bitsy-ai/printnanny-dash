@@ -1,15 +1,19 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { JSONCodec, type Subscription } from "nats.ws";
+import { JSONCodec, type Subscription, type NatsConnection } from "nats.ws";
 import {
   type Camera,
   CameraSourceType,
   SystemdUnitActiveState,
+  type VideoRecording,
+  CameraRecordingLoadReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
   ConnectionStatus,
+  DEFAULT_NATS_TIMEOUT,
   NatsSubjectPattern,
+  renderNatsSubjectPattern,
   type QcDataframeRow,
 } from "@/types";
 
@@ -70,6 +74,8 @@ export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
     loadingCameras: true,
+    videoRecordings: [] as Array<VideoRecording>,
+    currentVideoRecording: undefined as undefined | VideoRecording,
     df: [] as Array<QcDataframeRow>,
     natsSubscription: undefined as undefined | Subscription,
     status: ConnectionStatus.ConnectionLoading as ConnectionStatus,
@@ -81,10 +87,7 @@ export const useVideoStore = defineStore({
     showGraph: true,
   }),
   getters: {
-    videoRecordingFile(_state): undefined | string {
-      const janusStore = useJanusStore();
-      return janusStore.videoRecordingFile;
-    },
+
     cameras(state): Array<Camera> {
       return state.sources.filter(
         (v) =>
@@ -218,6 +221,20 @@ export const useVideoStore = defineStore({
       }
     },
 
+    async loadVideoRecordings() {
+      const natsStore = useNatsStore();
+      const natsConnection = await natsStore.getNatsConnection();
+      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CameraRecordingLoad);
+      const resMsg = await natsConnection?.request(subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT });
+
+      if (resMsg) {
+        const resCodec = JSONCodec<CameraRecordingLoadReply>();
+        const data = resCodec.decode(resMsg.data);
+        console.log("Loaded edge VideoRecording catalog: ", data);
+        this.$patch({ videoRecordings: data.recordings, currentVideoRecording: data.current })
+      }
+    },
+
     async startStream() {
       this.$patch({
         status: ConnectionStatus.ConnectionLoading,
@@ -254,6 +271,50 @@ export const useVideoStore = defineStore({
         await this.startStream();
       }
     },
+    async startRecording() {
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.CameraRecordingStart
+      );
+
+      const resMsg = await natsConnection?.request(
+        subject,
+        undefined,
+        { timeout: DEFAULT_NATS_TIMEOUT }
+      );
+
+      if (resMsg) {
+        const resCodec = JSONCodec<VideoRecording>();
+        const videoRecording = resCodec.decode(resMsg.data);
+        console.log("Started VideoRecording: ", videoRecording);
+        this.$patch({ currentVideoRecording: videoRecording })
+      }
+    },
+    async stopRecording() {
+      const natsStore = useNatsStore();
+      const natsConnection: NatsConnection =
+        await natsStore.getNatsConnection();
+
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.CameraRecordingStop
+      );
+
+      const resMsg = await natsConnection?.request(
+        subject,
+        undefined,
+        { timeout: DEFAULT_NATS_TIMEOUT }
+      );
+
+      if (resMsg) {
+        const resCodec = JSONCodec<VideoRecording>();
+        const videoRecording = resCodec.decode(resMsg.data);
+        console.log("Stopped VideoRecording: ", videoRecording);
+        this.$patch({ currentVideoRecording: undefined })
+      }
+    }
   },
 });
 
