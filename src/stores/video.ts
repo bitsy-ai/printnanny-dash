@@ -6,7 +6,7 @@ import {
   CameraSourceType,
   SystemdUnitActiveState,
   type VideoRecording,
-  CameraRecordingLoadReply,
+  type CameraRecordingLoadReply,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
