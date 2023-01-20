@@ -68,9 +68,10 @@ onBeforeRouteLeave((_to, _from) => {
               poster="@/assets/video-paused.svg"
             />
             <span
-              v-if="store.videoRecordingFile"
+              v-if="store.currentVideoRecording?.mp4_file_name"
               class="text-center font-medium text-gray-600"
-              >Recording to {{ store.videoRecordingFile }}</span
+              >Recording to
+              {{ store.currentVideoRecording?.mp4_file_name }}</span
             >
           </div>
         </div>
