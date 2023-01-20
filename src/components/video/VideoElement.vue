@@ -70,7 +70,8 @@ onBeforeRouteLeave((_to, _from) => {
             <span
               v-if="store.currentVideoRecording?.mp4_file_name"
               class="text-center font-medium text-gray-600"
-              >Recording to {{ store.currentVideoRecording?.mp4_file_name }}</span
+              >Recording to
+              {{ store.currentVideoRecording?.mp4_file_name }}</span
             >
           </div>
         </div>
