@@ -87,7 +87,6 @@ export const useVideoStore = defineStore({
     showGraph: true,
   }),
   getters: {
-
     cameras(state): Array<Camera> {
       return state.sources.filter(
         (v) =>
@@ -224,14 +223,21 @@ export const useVideoStore = defineStore({
     async loadVideoRecordings() {
       const natsStore = useNatsStore();
       const natsConnection = await natsStore.getNatsConnection();
-      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CameraRecordingLoad);
-      const resMsg = await natsConnection?.request(subject, undefined, { timeout: DEFAULT_NATS_TIMEOUT });
+      const subject = renderNatsSubjectPattern(
+        NatsSubjectPattern.CameraRecordingLoad
+      );
+      const resMsg = await natsConnection?.request(subject, undefined, {
+        timeout: DEFAULT_NATS_TIMEOUT,
+      });
 
       if (resMsg) {
         const resCodec = JSONCodec<CameraRecordingLoadReply>();
         const data = resCodec.decode(resMsg.data);
         console.log("Loaded edge VideoRecording catalog: ", data);
-        this.$patch({ videoRecordings: data.recordings, currentVideoRecording: data.current })
+        this.$patch({
+          videoRecordings: data.recordings,
+          currentVideoRecording: data.current,
+        });
       }
     },
 
@@ -280,17 +286,15 @@ export const useVideoStore = defineStore({
         NatsSubjectPattern.CameraRecordingStart
       );
 
-      const resMsg = await natsConnection?.request(
-        subject,
-        undefined,
-        { timeout: DEFAULT_NATS_TIMEOUT }
-      );
+      const resMsg = await natsConnection?.request(subject, undefined, {
+        timeout: DEFAULT_NATS_TIMEOUT,
+      });
 
       if (resMsg) {
         const resCodec = JSONCodec<VideoRecording>();
         const videoRecording = resCodec.decode(resMsg.data);
         console.log("Started VideoRecording: ", videoRecording);
-        this.$patch({ currentVideoRecording: videoRecording })
+        this.$patch({ currentVideoRecording: videoRecording });
       }
     },
     async stopRecording() {
@@ -302,19 +306,17 @@ export const useVideoStore = defineStore({
         NatsSubjectPattern.CameraRecordingStop
       );
 
-      const resMsg = await natsConnection?.request(
-        subject,
-        undefined,
-        { timeout: DEFAULT_NATS_TIMEOUT }
-      );
+      const resMsg = await natsConnection?.request(subject, undefined, {
+        timeout: DEFAULT_NATS_TIMEOUT,
+      });
 
       if (resMsg) {
         const resCodec = JSONCodec<VideoRecording>();
         const videoRecording = resCodec.decode(resMsg.data);
         console.log("Stopped VideoRecording: ", videoRecording);
-        this.$patch({ currentVideoRecording: undefined })
+        this.$patch({ currentVideoRecording: undefined });
       }
-    }
+    },
   },
 });
 
