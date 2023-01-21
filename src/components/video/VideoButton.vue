@@ -43,8 +43,6 @@
         <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
         Stop Camera
       </button>
-
-
     </Transition>
     <Transition
       name="fade"
