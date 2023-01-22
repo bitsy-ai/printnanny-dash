@@ -89,7 +89,7 @@ export const useVideoStore = defineStore({
   }),
   getters: {
     videoRecordingButtonEnabled(state): boolean {
-      return state.webrtcup
+      return state.webrtcup;
     },
     videoRecordingButtonShowStart(state): boolean {
       return state.currentVideoRecording === undefined;

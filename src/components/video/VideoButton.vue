@@ -97,7 +97,11 @@
 <script setup lang="ts">
 import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
-import { PlayCircleIcon, StopCircleIcon, VideoCameraIcon } from "@heroicons/vue/20/solid";
+import {
+  PlayCircleIcon,
+  StopCircleIcon,
+  VideoCameraIcon,
+} from "@heroicons/vue/20/solid";
 
 const store = useVideoStore();
 </script>
