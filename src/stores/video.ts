@@ -82,6 +82,7 @@ export const useVideoStore = defineStore({
     sources: [] as Array<Camera>,
     selectedVideoSource: null as null | Camera,
     playingStream: null as null | Camera,
+    videoRecordingLoading: false,
     webrtcup: false,
     error: null as null | Error,
     showOverlay: true,
@@ -292,6 +293,7 @@ export const useVideoStore = defineStore({
       }
     },
     async startRecording() {
+      this.$patch({ videoRecordingLoading: true });
       const natsStore = useNatsStore();
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
@@ -310,8 +312,10 @@ export const useVideoStore = defineStore({
         console.log("Started VideoRecording: ", videoRecording);
         this.$patch({ currentVideoRecording: videoRecording });
       }
+      this.$patch({ videoRecordingLoading: true });
     },
     async stopRecording() {
+      this.$patch({ videoRecordingLoading: true });
       const natsStore = useNatsStore();
       const natsConnection: NatsConnection =
         await natsStore.getNatsConnection();
@@ -330,6 +334,7 @@ export const useVideoStore = defineStore({
         console.log("Stopped VideoRecording: ", videoRecording);
         this.$patch({ currentVideoRecording: undefined });
       }
+      this.$patch({ videoRecordingLoading: true });
     },
   },
 });
