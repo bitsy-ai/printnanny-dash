@@ -121,7 +121,11 @@ export const useJanusStore = defineStore({
       // Janode exports "EVENT" property with core events
       janusStreamingPluginHandle.on(
         Janode.EVENT.HANDLE_WEBRTCUP,
-        (_data: any) => console.log("webrtcup event")
+        (_data: any) => {
+          const videoStore = useVideoStore();
+          videoStore.webrtcup = true;
+          console.log("webrtcup event");
+        }
       );
       janusStreamingPluginHandle.on(
         Janode.EVENT.HANDLE_SLOWLINK,

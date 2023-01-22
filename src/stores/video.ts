@@ -82,16 +82,14 @@ export const useVideoStore = defineStore({
     sources: [] as Array<Camera>,
     selectedVideoSource: null as null | Camera,
     playingStream: null as null | Camera,
+    webrtcup: false,
     error: null as null | Error,
     showOverlay: true,
     showGraph: true,
   }),
   getters: {
     videoRecordingButtonEnabled(state): boolean {
-      return (
-        state.playingStream !== undefined ||
-        state.currentVideoRecording !== undefined
-      );
+      return state.webrtcup;
     },
     videoRecordingButtonShowStart(state): boolean {
       return state.currentVideoRecording === undefined;
