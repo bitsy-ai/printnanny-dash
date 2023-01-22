@@ -69,7 +69,7 @@
         "
         class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        <PlayCircleIcon class="w-5 h-5 mr-2"></PlayCircleIcon>
+        <StopCircleIcon class="w-5 h-5 mr-2"></StopCircleIcon>
         {{ store.videoRecordingButtonText }}
       </button>
       <button
@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
-import { PlayCircleIcon, VideoCameraIcon } from "@heroicons/vue/20/solid";
+import { PlayCircleIcon, StopCircleIcon, VideoCameraIcon } from "@heroicons/vue/20/solid";
 
 const store = useVideoStore();
 </script>
