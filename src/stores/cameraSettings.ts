@@ -10,6 +10,7 @@ import type {
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { success } from "./alerts";
 import { DEFAULT_NATS_TIMEOUT } from "@/types";
+import { handleError } from "@/utils";
 
 export interface CameraSettingsForm {
   videoFramerate: number;
@@ -61,9 +62,14 @@ export const useCameraSettingsStore = defineStore({
       );
 
       const resCodec = JSONCodec<VideoStreamSettings>();
-      const resMsg = await natsConnection?.request(subject, undefined, {
-        timeout: DEFAULT_NATS_TIMEOUT,
-      });
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          const msg = "Error loading camera settings";
+          handleError(msg, e);
+        });
 
       if (resMsg) {
         const settings = resCodec.decode(resMsg?.data);
@@ -97,18 +103,19 @@ export const useCameraSettingsStore = defineStore({
 
       const req = toRaw(this.settings) as VideoStreamSettings;
       req.hls.enabled = form.hlsEnabled;
-      req.camera.framerate_n = form.videoFramerate as number;
+      req.camera.framerate_n = form.videoFramerate;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
       console.log("Submitting camera settings request:", req);
-      const resMsg = await natsConnection?.request(
-        subject,
-        reqCodec.encode(req),
-        {
+      const resMsg = await natsConnection
+        ?.request(subject, reqCodec.encode(req), {
           timeout: DEFAULT_NATS_TIMEOUT,
-        }
-      );
+        })
+        .catch((e) => {
+          const msg = "Error saving camera settings";
+          handleError(msg, e);
+        });
       if (resMsg) {
         const resCodec = JSONCodec<VideoStreamSettings>();
         const settings = resCodec.decode(resMsg?.data);
