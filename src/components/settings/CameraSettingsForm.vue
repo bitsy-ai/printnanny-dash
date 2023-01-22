@@ -188,7 +188,7 @@
                   type="number"
                   name="videoFramerate"
                   id="videoFramerate"
-                  :value="store.settings.camera.reserved_framerate"
+                  :value="store.settings.camera.framerate_n"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -492,7 +492,7 @@ onMounted(async () => {
   initialValues.value = {
     recordAutoStart: store.settings?.recording.auto_start as boolean,
     recordSyncCloud: store.settings?.recording.cloud_sync as boolean,
-    videoFramerate: store.settings?.camera.reserved_framerate as number,
+    videoFramerate: store.settings?.camera.framerate_n as number,
     hlsEnabled: store.settings?.hls.enabled as boolean,
     showDetectionGraphs: store.settings?.detection.graphs as boolean,
     showDetectionOverlay: store.settings?.detection.overlay as boolean,
