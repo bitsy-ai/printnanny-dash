@@ -282,6 +282,7 @@ export const useVideoStore = defineStore({
         status: ConnectionStatus.ConnectionNotStarted,
         df: [],
       });
+      await this.stopRecording();
     },
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
@@ -312,7 +313,7 @@ export const useVideoStore = defineStore({
         console.log("Started VideoRecording: ", videoRecording);
         this.$patch({ currentVideoRecording: videoRecording });
       }
-      this.$patch({ videoRecordingLoading: true });
+      this.$patch({ videoRecordingLoading: false });
     },
     async stopRecording() {
       this.$patch({ videoRecordingLoading: true });
@@ -334,7 +335,7 @@ export const useVideoStore = defineStore({
         console.log("Stopped VideoRecording: ", videoRecording);
         this.$patch({ currentVideoRecording: undefined });
       }
-      this.$patch({ videoRecordingLoading: true });
+      this.$patch({ videoRecordingLoading: false });
     },
   },
 });
