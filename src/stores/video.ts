@@ -16,6 +16,7 @@ import {
   renderNatsSubjectPattern,
   type QcDataframeRow,
 } from "@/types";
+import { handleError } from "@/utils";
 
 import { useNatsStore } from "./nats";
 import { useJanusStore } from "./janus";
@@ -241,9 +242,14 @@ export const useVideoStore = defineStore({
       const subject = renderNatsSubjectPattern(
         NatsSubjectPattern.CameraRecordingLoad
       );
-      const resMsg = await natsConnection?.request(subject, undefined, {
-        timeout: DEFAULT_NATS_TIMEOUT,
-      });
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          const msg = "Error loading recording history";
+          handleError(msg, e);
+        });
 
       if (resMsg) {
         const resCodec = JSONCodec<CameraRecordingLoadReply>();
@@ -303,9 +309,14 @@ export const useVideoStore = defineStore({
         NatsSubjectPattern.CameraRecordingStart
       );
 
-      const resMsg = await natsConnection?.request(subject, undefined, {
-        timeout: DEFAULT_NATS_TIMEOUT,
-      });
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          const msg = "Error starting camera recording";
+          handleError(msg, e);
+        });
 
       if (resMsg) {
         const resCodec = JSONCodec<VideoRecording>();
@@ -325,9 +336,14 @@ export const useVideoStore = defineStore({
         NatsSubjectPattern.CameraRecordingStop
       );
 
-      const resMsg = await natsConnection?.request(subject, undefined, {
-        timeout: DEFAULT_NATS_TIMEOUT,
-      });
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          const msg = "Error stopping camera recording";
+          handleError(msg, e);
+        });
 
       if (resMsg) {
         const resCodec = JSONCodec<VideoRecording>();
