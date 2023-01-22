@@ -100,7 +100,7 @@ defineProps({
   },
   color: {
     type: String,
-    default: "gray-500"
-  }
+    default: "gray-500",
+  },
 });
 </script>
