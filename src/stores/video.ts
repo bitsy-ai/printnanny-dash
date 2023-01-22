@@ -87,6 +87,22 @@ export const useVideoStore = defineStore({
     showGraph: true,
   }),
   getters: {
+    videoRecordingButtonEnabled(state): boolean {
+      return (
+        state.playingStream !== undefined ||
+        state.currentVideoRecording !== undefined
+      );
+    },
+    videoRecordingButtonShowStart(state): boolean {
+      return state.currentVideoRecording === undefined;
+    },
+    videoRecordingButtonText(state): string {
+      if (state.currentVideoRecording !== undefined) {
+        return "Stop Recording";
+      } else {
+        return "Start Recording";
+      }
+    },
     cameras(state): Array<Camera> {
       return state.sources.filter(
         (v) =>
