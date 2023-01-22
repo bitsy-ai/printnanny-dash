@@ -424,7 +424,7 @@ const initialValues = ref(undefined as undefined | CameraSettingsForm);
 async function submitForm(form: any) {
   console.log("Form submitted:", form);
   // field value is a string, but NATS message format requires an integer
-  form.videoFramerate = parseInt(form.videoFrameRate);
+  form.videoFramerate = parseInt(form.videoFramerate);
   await store.save(form as CameraSettingsForm);
 }
 
