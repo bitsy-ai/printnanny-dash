@@ -13,7 +13,7 @@
         disabled
         class="ml-3 inline-flex disabled:opacity-50 justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
       >
-      <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
+        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
 
         Loading
       </button>
@@ -23,7 +23,7 @@
         v-else-if="store.status == ConnectionStatus.ConnectionClosing"
         class="ml-3 inline-flex disabled:opacity-50 justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
       >
-      <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
+        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
 
         Stopping
       </button>
@@ -56,7 +56,14 @@
       <!-- camera service is active and recording is not active -->
       <button
         @click="store.startRecording"
-        v-if="
+        v-if="store.videoRecordingLoading"
+        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
+      >
+        <TextSpinner text="Loading..." class="w-5 h-5"></TextSpinner>
+      </button>
+      <button
+        @click="store.startRecording"
+        v-else-if="
           store.videoRecordingButtonShowStart &&
           store.videoRecordingButtonEnabled
         "
@@ -99,6 +106,7 @@
 }
 </style>
 <script setup lang="ts">
+import TextSpinner from "@/components/TextSpinner.vue";
 import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
 import {
