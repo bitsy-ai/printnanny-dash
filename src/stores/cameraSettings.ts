@@ -97,7 +97,7 @@ export const useCameraSettingsStore = defineStore({
 
       const req = toRaw(this.settings) as VideoStreamSettings;
       req.hls.enabled = form.hlsEnabled;
-      req.camera.reserved_framerate = form.videoFramerate as number;
+      req.camera.framerate_n = form.videoFramerate as number;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
