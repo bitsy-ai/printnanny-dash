@@ -4,7 +4,7 @@
       class="flex w-full h-full align-items-center justify-center lg:col-span-9"
       v-if="store.settings === undefined"
     >
-      <TextSpinner class="m-auto" />
+      <TextSpinner class="m-auto text-gray-500 stroke-gray-500" />
     </div>
 
     <Form
@@ -230,6 +230,7 @@
               </p>
               <div class="mt-4 space-y-4">
                 <div class="relative flex items-start">
+                  <!--
                   <div class="flex h-5 items-center">
                     <Field
                       id="recordAutoStart"
@@ -239,6 +240,7 @@
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
+                -->
                   <div class="ml-3 text-sm">
                     <label
                       for="recordAutoStart"
@@ -353,7 +355,7 @@
       <div class="pt-5">
         <div class="flex justify-end">
           <TextSpinner
-            class="m-auto"
+            class="m-auto text-gray-500 stroke-gray-500"
             text="Saving your settings..."
             v-if="store.saving"
           />

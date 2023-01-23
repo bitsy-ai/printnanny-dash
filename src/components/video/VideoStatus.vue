@@ -4,7 +4,10 @@
       class="flex items-center justify-center space-x-3 font-medium text-gray-600 m-auto"
       v-if="store.status == ConnectionStatus.ConnectionLoading && showLoading"
     >
-      <TextSpinner text="Loading video..." />
+      <TextSpinner
+        text="Loading video..."
+        class="text-gray-500 stroke-gray-500"
+      />
     </div>
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
@@ -12,7 +15,10 @@
         store.status == ConnectionStatus.ConnectionClosing && showLoading
       "
     >
-      <TextSpinner text="Stopping video..." />
+      <TextSpinner
+        text="Stopping video..."
+        class="text-gray-500 stroke-gray-500"
+      />
     </div>
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 m-auto"

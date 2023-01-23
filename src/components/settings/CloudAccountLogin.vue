@@ -98,7 +98,11 @@
         >
           Connect Account
         </button>
-        <TextSpinner text="Verifying..." v-if="formLoading" />
+        <TextSpinner
+          text="Verifying..."
+          v-if="formLoading"
+          class="text-gray-500 stroke-gray-500"
+        />
       </div>
     </Form>
   </div>

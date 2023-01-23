@@ -6,7 +6,7 @@
     >
       <TextSpinner
         text="Loading device information..."
-        class="h-24 w-full m-auto pl-4"
+        class="h-24 w-full m-auto pl-4 text-gray-500 stroke-gray-500"
       ></TextSpinner>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2" v-else>
