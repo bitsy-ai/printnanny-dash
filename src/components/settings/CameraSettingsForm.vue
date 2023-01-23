@@ -230,6 +230,7 @@
               </p>
               <div class="mt-4 space-y-4">
                 <div class="relative flex items-start">
+                  <!--
                   <div class="flex h-5 items-center">
                     <Field
                       id="recordAutoStart"
@@ -239,6 +240,7 @@
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
+                -->
                   <div class="ml-3 text-sm">
                     <label
                       for="recordAutoStart"
