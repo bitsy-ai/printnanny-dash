@@ -8,7 +8,7 @@
       <TextSpinner
         text-size="xl"
         spinner-size="64"
-        class="m-auto"
+        class="m-auto text-gray-500 stroke-gray-500"
         v-if="store.loading"
       />
       <ErrorPanel v-else-if="store.error" :errors="[store.error]"> </ErrorPanel>

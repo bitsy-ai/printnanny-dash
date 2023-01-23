@@ -4,7 +4,7 @@
       class="flex w-full h-full align-items-center justify-center lg:col-span-9"
       v-if="store.settings === undefined"
     >
-      <TextSpinner class="m-auto" />
+      <TextSpinner class="m-auto text-gray-500 stroke-gray-500" />
     </div>
 
     <Form
@@ -353,7 +353,7 @@
       <div class="pt-5">
         <div class="flex justify-end">
           <TextSpinner
-            class="m-auto"
+            class="m-auto text-gray-500 stroke-gray-500"
             text="Saving your settings..."
             v-if="store.saving"
           />

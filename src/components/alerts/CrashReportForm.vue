@@ -160,7 +160,7 @@ $ printnanny crash-report
         </button>
         <text-spinner
           v-if="loading"
-          class="mr-2"
+          class="mr-2 text-gray-500 stroke-gray-500"
           text="Sending..."
         ></text-spinner>
       </div>
