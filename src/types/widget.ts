@@ -140,7 +140,7 @@ export const WIDGETS = {
   //     },
   //   ],
   // } as WidgetItem,
-  "printnanny-cam": {
+  "printnanny-vision": {
     name: "PrintNanny Cam",
     loaded: false,
     href: "/cam/",
