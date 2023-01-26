@@ -20,7 +20,7 @@ import type {
   SystemdManagerGetUnitFileStateError,
   SystemdUnitFileState,
 } from "@bitsy-ai/printnanny-asyncapi-models";
-import { ConnectionStatus } from "@/types";
+import { ConnectionStatus, DEFAULT_NATS_TIMEOUT } from "@/types";
 
 import {
   NatsSubjectPattern,
@@ -31,8 +31,6 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import { success } from "./alerts";
-
-const DEFAULT_NATS_TIMEOUT = 12000;
 
 function isSystemdManagerGetUnitError(
   res: SystemdManagerGetUnitReply | SystemdManagerGetUnitError

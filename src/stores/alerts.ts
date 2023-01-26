@@ -7,7 +7,7 @@ import type { UiStickyAlert } from "@/types";
 import * as api from "printnanny-api-client";
 import { useCloudStore } from "./cloud";
 import posthog from "posthog-js";
-import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
+import { NatsSubjectPattern, renderNatsSubjectPattern, DEFAULT_NATS_TIMEOUT } from "@/types";
 import { useNatsStore } from "./nats";
 import type {
   CrashReportOsLogsReply,
@@ -15,7 +15,6 @@ import type {
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { browserLogFile } from "@/utils/logging";
 
-const DEFAULT_NATS_TIMEOUT = 12000;
 
 export const useAlertStore = defineStore({
   id: "alerts",

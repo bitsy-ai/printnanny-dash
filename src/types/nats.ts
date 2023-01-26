@@ -1,4 +1,4 @@
-export const DEFAULT_NATS_TIMEOUT = 12000;
+export const DEFAULT_NATS_TIMEOUT = 60000; // 60 seconds
 
 export enum NatsSubjectPattern {
   CameraRecordingLoad = "pi.{pi_id}.command.camera.recording.load",

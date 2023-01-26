@@ -200,7 +200,7 @@ async function submitForm(values: any) {
     console.warn("Form was submitted but consent field was false");
   }
   loading.value = true;
-  console.log("Form submitted:", values);
+  console.log("Form submitted:", toRaw(values));
   const ok = await store.sendCrashReport(
     values.browser,
     values.email,

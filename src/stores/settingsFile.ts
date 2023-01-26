@@ -1,5 +1,5 @@
 import { JSONCodec, type NatsConnection } from "nats.ws";
-import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
+import { NatsSubjectPattern, renderNatsSubjectPattern, DEFAULT_NATS_TIMEOUT } from "@/types";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import type {
@@ -10,8 +10,6 @@ import type {
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { success } from "./alerts";
-
-const DEFAULT_NATS_TIMEOUT = 12000;
 
 export const useSettingsFileStore = defineStore(`settingsFiles`, {
   state: () => ({

@@ -1,19 +1,14 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toRaw } from "vue";
-import { JSONCodec, type NatsConnection } from "nats.ws";
 import {
   VideoStreamMerger,
   type DrawFunction,
   type AddStreamOptions,
   type ConstructorOptions,
 } from "video-stream-merger";
-import { useNatsStore } from "@/stores/nats";
-import { DEFAULT_NATS_TIMEOUT } from "@/types";
 import {
   type JanusStream,
   ConnectionStatus,
-  renderNatsSubjectPattern,
-  NatsSubjectPattern,
 } from "@/types";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
@@ -24,9 +19,8 @@ const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+    }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }
@@ -80,7 +74,7 @@ export const useJanusStore = defineStore({
       const janusWsConnection = await Janode.connect(connectOpts).catch(
         (e: Error) => handleError("Janus websocket connection failed", e)
       );
-      console.log("Got janusWsConnection", janusWsConnection);
+      console.log("Got janusWsConnection");
       const janusSession = await janusWsConnection
         .create()
         .catch((e: Error) =>
@@ -116,7 +110,9 @@ export const useJanusStore = defineStore({
       });
 
       janusStreamingPluginHandle.once(Janode.EVENT.HANDLE_DETACHED, () => {
-        console.log(`${janusStreamingPluginHandle} manager handle detached`);
+        console.log(
+          `${janusStreamingPluginHandle.name} manager handle detached`
+        );
       });
       // Janode exports "EVENT" property with core events
       janusStreamingPluginHandle.on(
@@ -334,7 +330,7 @@ export const useJanusStore = defineStore({
       const janusStreamingPluginHandle = toRaw(this.janusStreamingPluginHandle);
       const media = toRaw(this.selectedStream.media);
       const watchdata = {
-        id: this.selectedStream.id,
+        id: toRaw(this.selectedStream.id),
         media,
       };
       console.log("Sending watchdata", watchdata);
