@@ -293,6 +293,19 @@ export const useVideoStore = defineStore({
         playingStream: null,
       });
 
+      const printNannyVisionWidget = WIDGETS["printnanny-vision"];
+      const gstWidget = WIDGETS["gstd"];
+      const printNannyVisionService = useSystemdServiceStore(
+        printNannyVisionWidget
+      );
+      const gstService = useSystemdServiceStore(gstWidget);
+
+      console.log(`Stopping ${gstService.unit}`);
+      await gstService.stopService(false); // silence gst.service restarted notification, since this is an internal service
+
+      console.log(`Stopping ${printNannyVisionService.unit}`);
+      await printNannyVisionService.stopService(true); // show message indicating printnanny-vision.service was restarted
+
       console.log("Attempting to stop all active streams");
       const janusStore = useJanusStore();
       await janusStore.stopAllStreams().catch((e: any) => {
