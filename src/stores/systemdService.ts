@@ -19,6 +19,9 @@ import type {
   SystemdManagerGetUnitFileStateReply,
   SystemdManagerGetUnitFileStateError,
   SystemdUnitFileState,
+  SystemdManagerRestartUnitReply,
+  SystemdManagerRestartUnitError,
+  SystemdManagerRestartUnitRequest
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { ConnectionStatus, DEFAULT_NATS_TIMEOUT } from "@/types";
 
@@ -45,6 +48,12 @@ function isSystemdManagerEnableUnitError(
 }
 
 function isSystemdManagerStartUnitError(
+  res: SystemdManagerStartUnitReply | SystemdManagerStartUnitError
+) {
+  return (res as SystemdManagerStartUnitError).error !== undefined;
+}
+
+function isSystemdManagerRestartUnitError(
   res: SystemdManagerStartUnitReply | SystemdManagerStartUnitError
 ) {
   return (res as SystemdManagerStartUnitError).error !== undefined;
@@ -260,6 +269,57 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           }
         }
       },
+
+      async restartService(notify: boolean) {
+        // get nats connection (awaits until NATS server is available)
+        const natsStore = useNatsStore();
+        const natsConnection: NatsConnection =
+          await natsStore.getNatsConnection();
+
+        const subject = renderNatsSubjectPattern(
+          NatsSubjectPattern.SystemdManagerRestartUnit
+        );
+
+        const requestCodec = JSONCodec<SystemdManagerRestartUnitRequest>();
+        const req = {
+          unit_name: this.widget.service,
+        } as SystemdManagerRestartUnitRequest;
+
+        console.log(`Sending request to ${subject}`, req);
+        const resMsg = await natsConnection
+          ?.request(subject, requestCodec.encode(req), {
+            timeout: DEFAULT_NATS_TIMEOUT,
+          })
+          .catch((e) => {
+            const msg = `Error stopping ${this.widget?.service}`;
+            handleError(msg, e);
+          });
+        if (resMsg) {
+          const resCodec = JSONCodec<
+            SystemdManagerRestartUnitReply | SystemdManagerRestartUnitError
+          >();
+          let res = resCodec.decode(resMsg?.data);
+          console.log(`Received reply to ${subject}`, res);
+
+          if (isSystemdManagerRestartUnitError(res)) {
+            res = res as SystemdManagerEnableUnitsError;
+            const error = new Error(res.error);
+            const msg = `Error stopping ${this.widget.service}`;
+            handleError(msg, error);
+            this.$patch({ error });
+          } else {
+            res = res as SystemdManagerRestartUnitReply;
+            if (notify) {
+              success(
+                `Stopped ${widget.service}`,
+                `${widget.name} is no longer running.`
+              );
+            }
+            console.log(`Started ${widget.service}, start job id:`, res.job);
+          }
+        }
+      },
+
 
       async loadUnit() {
         const natsStore = useNatsStore();
