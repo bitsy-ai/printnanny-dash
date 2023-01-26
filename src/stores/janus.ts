@@ -6,10 +6,7 @@ import {
   type AddStreamOptions,
   type ConstructorOptions,
 } from "video-stream-merger";
-import {
-  type JanusStream,
-  ConnectionStatus,
-} from "@/types";
+import { type JanusStream, ConnectionStatus } from "@/types";
 import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
@@ -19,8 +16,9 @@ const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
 function getJanusUri() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_JANUS_WS_PORT
+  }`;
   console.log(`Connecting to Janus signaling websocket: ${uri}`);
   return uri;
 }

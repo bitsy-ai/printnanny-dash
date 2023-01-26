@@ -2,7 +2,11 @@ import { JSONCodec, type NatsConnection } from "nats.ws";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import type { DeviceInfoLoadReply } from "@bitsy-ai/printnanny-asyncapi-models";
 import { useNatsStore } from "./nats";
-import { NatsSubjectPattern, renderNatsSubjectPattern, DEFAULT_NATS_TIMEOUT } from "@/types";
+import {
+  NatsSubjectPattern,
+  renderNatsSubjectPattern,
+  DEFAULT_NATS_TIMEOUT,
+} from "@/types";
 import { handleError } from "@/utils";
 
 export const useDeviceStore = defineStore({

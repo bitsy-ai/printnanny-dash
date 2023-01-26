@@ -21,7 +21,7 @@ import type {
   SystemdUnitFileState,
   SystemdManagerRestartUnitReply,
   SystemdManagerRestartUnitError,
-  SystemdManagerRestartUnitRequest
+  SystemdManagerRestartUnitRequest,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { ConnectionStatus, DEFAULT_NATS_TIMEOUT } from "@/types";
 
@@ -319,7 +319,6 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           }
         }
       },
-
 
       async loadUnit() {
         const natsStore = useNatsStore();

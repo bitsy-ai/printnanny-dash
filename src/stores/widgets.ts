@@ -9,7 +9,7 @@ export const useWidgetStore = defineStore({
     enabledServices: {},
     configs: undefined as undefined | Array<ConfigFile>,
     selectedConfig: undefined as undefined | string,
-    items: WIDGETS
+    items: WIDGETS,
   }),
 
   getters: {

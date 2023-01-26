@@ -13,7 +13,7 @@ export enum WidgetCategory {
   PrinterManagement = "PrinterManagement",
   PrintNannyApps = "PrintNannyApps",
   OtherApps = "OtherApps",
-  Internal = "Internal"
+  Internal = "Internal",
 }
 
 export interface WidgetMenuItem {
@@ -44,7 +44,7 @@ export interface ConfigFile {
 }
 
 export const WIDGETS = {
-  "octoprint": {
+  octoprint: {
     name: "OctoPrint",
     settings: {
       name: "edit-settings-files",
@@ -69,7 +69,7 @@ export const WIDGETS = {
       { name: "Discord", href: "https://discord.octoprint.org/" },
     ],
   } as WidgetItem,
-  "mainsail": {
+  mainsail: {
     name: "Mainsail",
     settings: {
       name: "edit-settings-files",
@@ -174,7 +174,7 @@ export const WIDGETS = {
       "Get email notifications, view camera feed from anywhere, and sync settings with PrintNanny Cloud.",
     menuItems: [],
   } as WidgetItem,
-  "swupdate": {
+  swupdate: {
     name: "OS Updates",
     loaded: false,
     href: "/update/",
@@ -191,7 +191,7 @@ export const WIDGETS = {
       },
     ],
   } as WidgetItem,
-  "syncthing": {
+  syncthing: {
     name: "Syncthing",
     href: "/syncthing/",
     logo: syncThingLogo,
@@ -210,7 +210,7 @@ export const WIDGETS = {
       { name: "Commmunity Forum", href: "https://forum.syncthing.net/" },
     ],
   } as WidgetItem,
-  "tailscale": {
+  tailscale: {
     name: "Tailscale",
     href: "https://login.tailscale.com/admin/welcome",
     logo: tailscaleLogo,
@@ -232,7 +232,7 @@ export const WIDGETS = {
       { name: "Tailscale Docs", href: "https://tailscale.com/kb/" },
     ],
   } as WidgetItem,
-  "gstd": {
+  gstd: {
     name: "Gstreamer Daemon",
     href: "",
     logo: undefined,
@@ -242,5 +242,5 @@ export const WIDGETS = {
     description: "",
     service: "gstd.service",
     menuItems: [],
-  } as WidgetItem
+  } as WidgetItem,
 };

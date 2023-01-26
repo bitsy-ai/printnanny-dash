@@ -1,5 +1,9 @@
 import { JSONCodec, type NatsConnection } from "nats.ws";
-import { NatsSubjectPattern, renderNatsSubjectPattern, DEFAULT_NATS_TIMEOUT } from "@/types";
+import {
+  NatsSubjectPattern,
+  renderNatsSubjectPattern,
+  DEFAULT_NATS_TIMEOUT,
+} from "@/types";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import type {
