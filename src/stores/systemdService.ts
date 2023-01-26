@@ -34,7 +34,6 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import { success } from "./alerts";
-import type { bool } from "yup";
 
 function isSystemdManagerGetUnitError(
   res: SystemdManagerGetUnitReply | SystemdManagerGetUnitError
