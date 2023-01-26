@@ -304,7 +304,7 @@ export const useVideoStore = defineStore({
       await gstService.stopService(false); // silence gst.service restarted notification, since this is an internal service
 
       console.log(`Stopping ${printNannyVisionService.unit}`);
-      await printNannyVisionService.stopService(true); // show message indicating printnanny-vision.service was restarted
+      await printNannyVisionService.stopService(false); // show message indicating printnanny-vision.service was restarted
 
       console.log("Attempting to stop all active streams");
       const janusStore = useJanusStore();
