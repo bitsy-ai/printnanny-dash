@@ -21,6 +21,7 @@ export enum NatsSubjectPattern {
   SystemdManagerEnableUnits = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.EnableUnit",
   SystemdManagerStartUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StartUnit",
   SystemdManagerStopUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.StopUnit",
+  SystemdManagerRestartUnit = "pi.{pi_id}.dbus.org.freedesktop.systemd1.Manager.RestartUnit",
   SettingsFileLoad = "pi.{pi_id}.settings.file.load",
   SettingsFileApply = "pi.{pi_id}.settings.file.apply",
   SettingsApplyRevert = "pi.{pi_id}.settings.file.revert",

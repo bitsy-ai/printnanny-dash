@@ -14,6 +14,7 @@ import {
   DEFAULT_NATS_TIMEOUT,
   NatsSubjectPattern,
   renderNatsSubjectPattern,
+  WIDGETS,
   type QcDataframeRow,
 } from "@/types";
 import { handleError } from "@/utils";
@@ -266,6 +267,19 @@ export const useVideoStore = defineStore({
       this.$patch({
         status: ConnectionStatus.ConnectionLoading,
       });
+
+      const printNannyVisionWidget = WIDGETS["printnanny-vision"];
+      const gstWidget = WIDGETS["gstd"];
+      const printNannyVisionService = useSystemdServiceStore(
+        printNannyVisionWidget
+      );
+      const gstService = useSystemdServiceStore(gstWidget);
+
+      console.log(`Restarting ${gstService.unit}`);
+      await gstService.restartService(false); // silence gst.service restarted notification, since this is an internal service
+
+      console.log(`Restarting ${printNannyVisionService.unit}`);
+      await printNannyVisionService.restartService(true); // show message indicating printnanny-vision.service was restarted
 
       const janusStore = useJanusStore();
 
