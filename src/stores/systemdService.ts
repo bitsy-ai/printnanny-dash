@@ -76,7 +76,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
     }),
     actions: {
       async disableService() {
-        await this.stopService();
+        await this.stopService(true);
 
         // get nats connection (awaits until NATS server is available)
         const natsStore = useNatsStore();
@@ -221,7 +221,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
         }
       },
 
-      async stopService() {
+      async stopService(notify: boolean) {
         // get nats connection (awaits until NATS server is available)
         const natsStore = useNatsStore();
         const natsConnection: NatsConnection =
@@ -261,10 +261,13 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             this.$patch({ error });
           } else {
             res = res as SystemdManagerStartUnitReply;
-            success(
-              `Stopped ${widget.service}`,
-              `${widget.name} is no longer running.`
-            );
+            if (notify) {
+              success(
+                `Stopped ${widget.service}`,
+                `${widget.name} is no longer running.`
+              );
+            }
+
             console.log(`Started ${widget.service}, start job id:`, res.job);
           }
         }
@@ -311,8 +314,8 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
             res = res as SystemdManagerRestartUnitReply;
             if (notify) {
               success(
-                `Stopped ${widget.service}`,
-                `${widget.name} is no longer running.`
+                `Restarted ${widget.service}`,
+                `${widget.name} is starting up.`
               );
             }
             console.log(`Started ${widget.service}, start job id:`, res.job);
