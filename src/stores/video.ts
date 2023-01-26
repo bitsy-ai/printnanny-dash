@@ -279,7 +279,7 @@ export const useVideoStore = defineStore({
       await gstService.restartService(false); // silence gst.service restarted notification, since this is an internal service
 
       console.log(`Restarting ${printNannyVisionService.unit}`);
-      await printNannyVisionService.restartService(true); // show message indicating printnanny-vision.service was restarted
+      await printNannyVisionService.restartService(false); // show message indicating printnanny-vision.service was restarted
 
       const janusStore = useJanusStore();
 
