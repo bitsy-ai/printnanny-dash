@@ -9,43 +9,19 @@
       <!-- various loading states -->
 
       <button
-        v-if="store.status == ConnectionStatus.ConnectionLoading"
-        disabled
-        class="ml-3 inline-flex disabled:opacity-50 justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
+        :disabled="store.cameraButtonDisabled"
+        @click="store.cameraButtonAction"
+        class="disabled:cursor-not-allowed disabled:opacity-50 ml-3 inline-flex justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
       >
-        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
+        <TextSpinner
+          text="Loading..."
+          class="w-full stroke-white text-white"
+          color="white"
+          v-if="store.cameraButtonText === 'loading'"
+        ></TextSpinner>
+        <VideoCameraIcon class="w-5 h-5 mr-2" v-else></VideoCameraIcon>
 
-        Loading
-      </button>
-
-      <button
-        disabled
-        v-else-if="store.status == ConnectionStatus.ConnectionClosing"
-        class="ml-3 inline-flex disabled:opacity-50 justify-center focus:outline-none rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm"
-      >
-        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
-
-        Stopping
-      </button>
-
-      <!-- camera service is offline -->
-      <button
-        @click="store.startStream"
-        v-else-if="store.status == ConnectionStatus.ServiceNotStarted"
-        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-      >
-        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
-        Start Camera
-      </button>
-
-      <!-- camera service is active -->
-      <button
-        @click="store.stopStream"
-        v-else-if="store.status == ConnectionStatus.ConnectionReady"
-        class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-      >
-        <VideoCameraIcon class="w-5 h-5 mr-2"></VideoCameraIcon>
-        Stop Camera
+        {{ store.cameraButtonText }}
       </button>
     </Transition>
     <Transition
