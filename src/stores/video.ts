@@ -104,6 +104,24 @@ export const useVideoStore = defineStore({
         return "Start Recording";
       }
     },
+    cameraButtonDisabled(state): boolean {
+      if (
+        state.status === ConnectionStatus.ConnectionLoading ||
+        state.status == ConnectionStatus.ConnectionClosing
+      ) {
+        return true;
+      }
+      return false;
+    },
+    cameraButtonText(state): string {
+      if (state.status == ConnectionStatus.ServiceNotStarted) {
+        return "Start Camera";
+      } else if (state.status == ConnectionStatus.ConnectionReady) {
+        return "Stop Camera";
+      } else {
+        return "";
+      }
+    },
     cameras(state): Array<Camera> {
       return state.sources.filter(
         (v) =>
@@ -379,6 +397,17 @@ export const useVideoStore = defineStore({
         this.$patch({ currentVideoRecording: undefined });
       }
       this.$patch({ videoRecordingLoading: false });
+    },
+    async cameraButtonAction() {
+      if (this.status === ConnectionStatus.ServiceNotStarted) {
+        return await this.startStream();
+      } else if (this.status === ConnectionStatus.ConnectionReady) {
+        return await this.stopStream();
+      } else {
+        console.warn(
+          `cameraButtonAction called with unhandled connection state: ${this.status}`
+        );
+      }
     },
   },
 });
