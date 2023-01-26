@@ -168,7 +168,7 @@ $ printnanny crash-report
   </Form>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
