@@ -168,7 +168,7 @@ $ printnanny crash-report
   </Form>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
@@ -200,7 +200,7 @@ async function submitForm(values: any) {
     console.warn("Form was submitted but consent field was false");
   }
   loading.value = true;
-  console.log("Form submitted:", values);
+  console.log("Form submitted:", toRaw(values));
   const ok = await store.sendCrashReport(
     values.browser,
     values.email,
