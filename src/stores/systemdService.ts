@@ -77,7 +77,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
     }),
     actions: {
       async disableService() {
-        await this.stopService();
+        await this.stopService(true);
 
         // get nats connection (awaits until NATS server is available)
         const natsStore = useNatsStore();
