@@ -114,7 +114,7 @@ export const useVideoStore = defineStore({
       return false;
     },
     cameraButtonText(state): string {
-      if (state.status == ConnectionStatus.ServiceNotStarted) {
+      if (state.status == ConnectionStatus.ServiceNotStarted || state.status == ConnectionStatus.ConnectionNotStarted) {
         return "Start Camera";
       } else if (state.status == ConnectionStatus.ConnectionReady) {
         return "Stop Camera";
@@ -399,7 +399,7 @@ export const useVideoStore = defineStore({
       this.$patch({ videoRecordingLoading: false });
     },
     async cameraButtonAction() {
-      if (this.status === ConnectionStatus.ServiceNotStarted) {
+      if (this.status === ConnectionStatus.ServiceNotStarted || this.status == ConnectionStatus.ConnectionNotStarted) {
         return await this.startStream();
       } else if (this.status === ConnectionStatus.ConnectionReady) {
         return await this.stopStream();
