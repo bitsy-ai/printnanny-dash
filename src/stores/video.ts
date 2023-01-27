@@ -287,16 +287,10 @@ export const useVideoStore = defineStore({
       });
 
       const printNannyVisionWidget = WIDGETS["printnanny-vision"];
-      const gstWidget = WIDGETS["gstd"];
       const printNannyVisionService = useSystemdServiceStore(
         printNannyVisionWidget
       );
-      const gstService = useSystemdServiceStore(gstWidget);
-
-      console.log(`Restarting ${gstService.unit}`);
-      await gstService.restartService(false); // silence gst.service restarted notification, since this is an internal service
-
-      console.log(`Restarting ${printNannyVisionService.unit}`);
+      console.log(`Restarting ${printNannyVisionService.widget.name}`);
       await printNannyVisionService.restartService(false); // show message indicating printnanny-vision.service was restarted
 
       const janusStore = useJanusStore();
@@ -312,16 +306,10 @@ export const useVideoStore = defineStore({
       });
 
       const printNannyVisionWidget = WIDGETS["printnanny-vision"];
-      const gstWidget = WIDGETS["gstd"];
       const printNannyVisionService = useSystemdServiceStore(
         printNannyVisionWidget
       );
-      const gstService = useSystemdServiceStore(gstWidget);
-
-      console.log(`Stopping ${gstService.unit}`);
-      await gstService.stopService(false); // silence gst.service restarted notification, since this is an internal service
-
-      console.log(`Stopping ${printNannyVisionService.unit}`);
+      console.log(`Stopping ${printNannyVisionService.widget.service}`);
       await printNannyVisionService.stopService(false); // show message indicating printnanny-vision.service was restarted
 
       console.log("Attempting to stop all active streams");
