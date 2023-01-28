@@ -17,11 +17,13 @@ router.afterEach((_to, _from) => {
 
 router.beforeEach(async (to, _from) => {
   // if we're redirecting to startup splash, continue
-  if (to.name == "startup") { return }
+  if (to.name == "startup") {
+    return;
+  }
   // is PrintNanny OS finished starting up?
   const ready = printnannyReady();
   if (ready === false) {
-    return { name: "startup" }
+    return { name: "startup" };
   }
 
   const cloud = useCloudStore();
