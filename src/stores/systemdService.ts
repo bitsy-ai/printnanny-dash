@@ -1,27 +1,28 @@
 import { JSONCodec, type NatsConnection } from "nats.ws";
 
-import type {
-  SystemdManagerGetUnitRequest,
-  SystemdManagerGetUnitError,
-  SystemdManagerGetUnitReply,
-  SystemdManagerEnableUnitsReply,
-  SystemdManagerEnableUnitsError,
-  SystemdManagerDisableUnitsReply,
-  SystemdManagerUnitFilesRequest,
-  SystemdManagerDisableUnitsError,
-  SystemdManagerStartUnitReply,
-  SystemdManagerStartUnitError,
-  SystemdManagerStartUnitRequest,
-  SystemdUnit,
-  SystemdManagerStopUnitRequest,
-  SystemdManagerStopUnitReply,
-  SystemdManagerStopUnitError,
-  SystemdManagerGetUnitFileStateReply,
-  SystemdManagerGetUnitFileStateError,
-  SystemdUnitFileState,
-  SystemdManagerRestartUnitReply,
-  SystemdManagerRestartUnitError,
-  SystemdManagerRestartUnitRequest,
+import {
+  type SystemdManagerGetUnitRequest,
+  type SystemdManagerGetUnitError,
+  type SystemdManagerGetUnitReply,
+  type SystemdManagerEnableUnitsReply,
+  type SystemdManagerEnableUnitsError,
+  type SystemdManagerDisableUnitsReply,
+  type SystemdManagerUnitFilesRequest,
+  type SystemdManagerDisableUnitsError,
+  type SystemdManagerStartUnitReply,
+  type SystemdManagerStartUnitError,
+  type SystemdManagerStartUnitRequest,
+  type SystemdUnit,
+  type SystemdManagerStopUnitRequest,
+  type SystemdManagerStopUnitReply,
+  type SystemdManagerStopUnitError,
+  type SystemdManagerGetUnitFileStateReply,
+  type SystemdManagerGetUnitFileStateError,
+  type SystemdUnitFileState,
+  type SystemdManagerRestartUnitReply,
+  type SystemdManagerRestartUnitError,
+  type SystemdManagerRestartUnitRequest,
+  SystemdUnitActiveState,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { ConnectionStatus, DEFAULT_NATS_TIMEOUT } from "@/types";
 
@@ -413,6 +414,26 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
       async load() {
         await this.loadUnit();
         this.$patch({ loading: false });
+      },
+      // poll until service is active
+      async pollReady(interval: number, timeout: number) {
+        let total = 0;
+        console.warn(
+          `Waiting for ${this.widget.service} to enter ACTIVe state`
+        );
+        while (
+          this.unit?.active_state !== SystemdUnitActiveState.ACTIVE &&
+          total <= timeout
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, interval));
+          total += interval;
+          console.debug(
+            `${total} ms elapsed waiting for ${this.widget.service}`
+          );
+        }
+        if (this.unit?.active_state !== SystemdUnitActiveState.ACTIVE) {
+          console.warn(`Timed out waiting for ${this.widget.service}`);
+        }
       },
     },
   });

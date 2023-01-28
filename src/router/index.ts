@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import posthog from "posthog-js";
 import { useCloudStore } from "@/stores/cloud";
 import { AllRoutes } from "./routes";
+import { printnannyReady } from "@/utils/ready";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,16 @@ router.afterEach((_to, _from) => {
 });
 
 router.beforeEach(async (to, _from) => {
+  // if we're redirecting to startup splash, continue
+  if (to.name == "startup") {
+    return;
+  }
+  // is PrintNanny OS finished starting up?
+  const ready = printnannyReady();
+  if (ready === false) {
+    return { name: "startup" };
+  }
+
   const cloud = useCloudStore();
   await cloud.fetchUser();
 
