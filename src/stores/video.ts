@@ -246,7 +246,10 @@ export const useVideoStore = defineStore({
     async load() {
       // is printnanny-vision service enabled?
       const widgetStore = useWidgetStore();
-      const systemdServices = useSystemdServiceStore(widgetStore.cameraWidget);
+      const systemdServices = useSystemdServiceStore(
+        widgetStore.cameraWidget,
+        false
+      );
       await systemdServices.load();
       if (
         systemdServices.unit?.active_state === SystemdUnitActiveState.ACTIVE
@@ -291,7 +294,8 @@ export const useVideoStore = defineStore({
 
       const printNannyVisionWidget = WIDGETS["printnanny-vision"];
       const printNannyVisionService = useSystemdServiceStore(
-        printNannyVisionWidget
+        printNannyVisionWidget,
+        false
       );
       console.log(`Restarting ${printNannyVisionService.widget.name}`);
       await printNannyVisionService.restartService(false); // show message indicating printnanny-vision.service was restarted
@@ -310,7 +314,8 @@ export const useVideoStore = defineStore({
 
       const printNannyVisionWidget = WIDGETS["printnanny-vision"];
       const printNannyVisionService = useSystemdServiceStore(
-        printNannyVisionWidget
+        printNannyVisionWidget,
+        false
       );
       console.log(`Stopping ${printNannyVisionService.widget.service}`);
       await printNannyVisionService.stopService(false); // show message indicating printnanny-vision.service was restarted

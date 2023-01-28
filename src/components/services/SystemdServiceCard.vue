@@ -83,7 +83,7 @@ const props = defineProps({
   },
 });
 
-const store = useSystemdServiceStore(props.item);
+const store = useSystemdServiceStore(props.item, false);
 
 onMounted(async () => {
   await store.load();

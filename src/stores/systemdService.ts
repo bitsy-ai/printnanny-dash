@@ -67,7 +67,10 @@ function isSystemdManagerGetUnitFileState(
   return (res as SystemdManagerGetUnitFileStateError).error !== undefined;
 }
 
-export const useSystemdServiceStore = (widget: WidgetItem) => {
+export const useSystemdServiceStore = (
+  widget: WidgetItem,
+  persist: boolean
+) => {
   const scopedStoreDefinition = defineStore(`systemd/${widget.service}`, {
     state: () => ({
       widget: widget,
@@ -75,6 +78,10 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
       unitFileState: null as null | SystemdUnitFileState,
       unit: null as null | SystemdUnit,
       error: null as null | Error,
+      persist: {
+        enabled: persist,
+        storage: sessionStorage, // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
+      },
     }),
     actions: {
       async disableService() {

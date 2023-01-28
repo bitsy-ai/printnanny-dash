@@ -7,6 +7,6 @@ const interval = 2000; // 2 seconds
 // polls status of printnanny-online.target systemd unit. used to re-route to splash screen if PrintNanny OS is still starting up
 export function printnannyReady(): boolean {
   const widget = WIDGETS["printnanny-online"];
-  const store = useSystemdServiceStore(widget);
+  const store = useSystemdServiceStore(widget, true);
   return store.unit?.active_state === SystemdUnitActiveState.ACTIVE;
 }

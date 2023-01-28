@@ -44,7 +44,7 @@ import TextSpinner from "@/components/TextSpinner.vue";
 
 const router = useRouter();
 const widget = WIDGETS["printnanny-online"];
-const store = useSystemdServiceStore(widget);
+const store = useSystemdServiceStore(widget, true);
 const timeout = 300000; // 5 minutes in ms
 const interval = 2000; // 2 seconds
 
