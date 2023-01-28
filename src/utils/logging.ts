@@ -15,17 +15,43 @@ console.stderr = console.error.bind(console);
 console.logs = [];
 
 console.log = function () {
-  console.logs.push(Array.from(arguments));
+  // attempt to JSON.stringify log line
+  let line = "[INFO]";
+  try {
+    line += JSON.stringify(Array.from(arguments));
+  } catch {
+    // JSON.stringify failed, for example with error:
+    // TypeError: Converting circular structure to JSON
+    line += `console.log failed to JSON.stringify arguments: ${arguments}`;
+  }
+  console.logs.push(line);
   console.stdlog.apply(console, arguments);
 };
 
 console.warn = function () {
-  console.logs.push(Array.from(arguments));
+  // attempt to JSON.stringify log line
+  let line = "[WARN]";
+  try {
+    line += JSON.stringify(Array.from(arguments));
+  } catch {
+    // JSON.stringify failed, for example with error:
+    // TypeError: Converting circular structure to JSON
+    line += `console.warn Failed to JSON.stringify arguments: ${arguments}`;
+  }
+  console.logs.push(line);
   console.stdwarn.apply(console, arguments);
 };
 
 console.error = function () {
-  console.logs.push(Array.from(arguments));
+  let line = "[ERROR]";
+  try {
+    line += JSON.stringify(Array.from(arguments));
+  } catch {
+    // JSON.stringify failed, for example with error:
+    // TypeError: Converting circular structure to JSON
+    line += `console.warn Failed to JSON.stringify arguments: ${arguments}`;
+  }
+  console.logs.push(line);
   console.stderr.apply(console, arguments);
 };
 

@@ -6,7 +6,10 @@ import {
   NatsSubjectPattern,
   renderNatsSubjectPattern,
 } from "@/types";
-import type { PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-models";
+import type {
+  PrintNannyCloudAuthReply,
+  PrintNannyCloudAuthRequest,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
@@ -93,16 +96,19 @@ export const useNatsStore = defineStore({
       const jsonCodec = JSONCodec<PrintNannyCloudAuthRequest>();
 
       console.debug("Publishing NATS PrintNannyCloudAuthRequest:", req);
-      const res = await natsClient
+      const resMsg = await natsClient
         ?.request(subject, jsonCodec.encode(req), {
           timeout: 120000, // 120 seconds
         })
         .catch((e) => handleError("Failed to sync with PrintNanny Cloud", e));
-
-      console.log(
-        "Success! Synced with PrintNanny Cloud. ConnectCloudAccountResponse:",
-        res
-      );
+      if (resMsg) {
+        const resCodec = JSONCodec<PrintNannyCloudAuthReply>();
+        const res = resCodec.decode(resMsg.data);
+        console.log(
+          "Success! Synced with PrintNanny Cloud. ConnectCloudAccountResponse:",
+          res
+        );
+      }
     },
   },
 });
