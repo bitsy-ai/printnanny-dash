@@ -42,6 +42,7 @@ import { WIDGETS } from "@/types";
 import { useRouter } from "vue-router";
 import TextSpinner from "@/components/TextSpinner.vue";
 
+const router = useRouter();
 const widget = WIDGETS["printnanny-online"];
 const store = useSystemdServiceStore(widget);
 const timeout = 300000; // 5 minutes in ms
@@ -49,7 +50,6 @@ const interval = 2000; // 2 seconds
 
 onMounted(async () => {
   await store.pollReady(timeout, interval);
-  const router = useRouter();
   console.warn("Redirecting to Home view");
   router.push({ name: "Home" });
 });
