@@ -6,12 +6,16 @@ import {
   NatsSubjectPattern,
   renderNatsSubjectPattern,
 } from "@/types";
-import { PrintNannyCloudAuthReply, type PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-models";
+import type {
+  PrintNannyCloudAuthReply,
+  PrintNannyCloudAuthRequest,
+} from "@bitsy-ai/printnanny-asyncapi-models";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-    }`;
+  const uri = `ws://${hostname}:${
+    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+  }`;
   return uri;
 }
 
@@ -105,7 +109,6 @@ export const useNatsStore = defineStore({
           res
         );
       }
-
     },
   },
 });
