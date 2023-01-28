@@ -50,6 +50,7 @@ const interval = 2000; // 2 seconds
 onMounted(async () => {
   await store.pollReady(timeout, interval);
   const router = useRouter();
+  console.warn("Redirecting to Home view")
   router.push({ name: "Home" });
 });
 
