@@ -417,7 +417,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
         this.$patch({ loading: false });
       },
       // poll until service is active
-      async pollReady(interval: number, timeout: number) {
+      async pollReady(interval: number, timeout: number): Promise<any> {
         await this.loadUnit();
         console.warn(
           `Waiting for ${this.widget.service} to enter ACTIVE state, current: ${this.unit?.active_state}, ${timeout} ms remaining`
@@ -427,12 +427,14 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
           timeout > 0
         ) {
           await new Promise((resolve) => setTimeout(resolve, interval));
-          let newTimeout = timeout - interval;
+          const newTimeout = timeout - interval;
           return await this.pollReady(interval, newTimeout);
-        }
-        else if (this.unit?.active_state !== SystemdUnitActiveState.ACTIVE && timeout < 0) {
+        } else if (
+          this.unit?.active_state !== SystemdUnitActiveState.ACTIVE &&
+          timeout < 0
+        ) {
           console.warn(`Timed out waiting for ${this.widget.service}`);
-          return
+          return;
         }
         console.warn(`${this.widget.service} is active`);
       },
