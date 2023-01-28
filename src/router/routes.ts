@@ -74,6 +74,13 @@ const AllRoutes = [
       default: () => import("@/views/LoginView.vue"),
     },
   },
+  {
+    path: "/startup",
+    name: "startup",
+    components: {
+      default: () => import("@/views/StartupView.vue"),
+    },
+  },
 ]
   .concat(TopBarRoutes)
   .concat(SettingsRoutes) as RouteRecordRaw[];
