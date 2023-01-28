@@ -35,6 +35,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNatsStore } from "./nats";
 import { handleError } from "@/utils";
 import { success } from "./alerts";
+import { toRaw } from "vue";
 
 function isSystemdManagerGetUnitError(
   res: SystemdManagerGetUnitReply | SystemdManagerGetUnitError
@@ -419,7 +420,7 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
       async pollReady(interval: number, timeout: number) {
         let total = 0;
         console.warn(
-          `Waiting for ${this.widget.service} to enter ACTIVe state`
+          `Waiting for ${this.widget.service} to enter ACTIVE state`
         );
         while (
           this.unit?.active_state !== SystemdUnitActiveState.ACTIVE &&
@@ -427,8 +428,10 @@ export const useSystemdServiceStore = (widget: WidgetItem) => {
         ) {
           await new Promise((resolve) => setTimeout(resolve, interval));
           total += interval;
-          console.debug(
-            `${total} ms elapsed waiting for ${this.widget.service}`
+          await this.loadUnit();
+          console.log(
+            `${total} ms elapsed waiting for ${this.widget.service}`,
+            toRaw(this.unit)
           );
         }
         if (this.unit?.active_state !== SystemdUnitActiveState.ACTIVE) {
