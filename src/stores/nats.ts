@@ -6,13 +6,12 @@ import {
   NatsSubjectPattern,
   renderNatsSubjectPattern,
 } from "@/types";
-import type { PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-models";
+import { PrintNannyCloudAuthReply, type PrintNannyCloudAuthRequest } from "@bitsy-ai/printnanny-asyncapi-models";
 
 function getNatsURI() {
   const hostname = window.location.hostname;
-  const uri = `ws://${hostname}:${
-    import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
-  }`;
+  const uri = `ws://${hostname}:${import.meta.env.VITE_PRINTNANNY_EDGE_NATS_WS_PORT
+    }`;
   return uri;
 }
 
@@ -93,16 +92,20 @@ export const useNatsStore = defineStore({
       const jsonCodec = JSONCodec<PrintNannyCloudAuthRequest>();
 
       console.debug("Publishing NATS PrintNannyCloudAuthRequest:", req);
-      const res = await natsClient
+      const resMsg = await natsClient
         ?.request(subject, jsonCodec.encode(req), {
           timeout: 120000, // 120 seconds
         })
         .catch((e) => handleError("Failed to sync with PrintNanny Cloud", e));
+      if (resMsg) {
+        const resCodec = JSONCodec<PrintNannyCloudAuthReply>();
+        const res = resCodec.decode(resMsg.data);
+        console.log(
+          "Success! Synced with PrintNanny Cloud. ConnectCloudAccountResponse:",
+          res
+        );
+      }
 
-      console.log(
-        "Success! Synced with PrintNanny Cloud. ConnectCloudAccountResponse:",
-        res
-      );
     },
   },
 });
