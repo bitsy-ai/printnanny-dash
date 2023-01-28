@@ -6,6 +6,7 @@ import type {
   VideoStreamSettings,
   GstreamerCaps,
   Camera,
+  CameraSettings,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
 import { success } from "./alerts";
@@ -100,9 +101,15 @@ export const useCameraSettingsStore = defineStore({
       );
 
       const reqCodec = JSONCodec<VideoStreamSettings>();
-
       const req = toRaw(this.settings) as VideoStreamSettings;
       req.hls.enabled = form.hlsEnabled;
+      req.camera = {
+        height: this.selectedCaps?.height,
+        width: this.selectedCaps?.width,
+        format: this.selectedCaps?.format,
+        device_name: this.selectedCamera?.device_name,
+        label: this.selectedCamera?.label,
+      } as CameraSettings;
       req.camera.framerate_n = form.videoFramerate;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
