@@ -72,16 +72,13 @@ export const useSystemdServiceStore = (
   persist: boolean
 ) => {
   const scopedStoreDefinition = defineStore(`systemd/${widget.service}`, {
+    persist: persist ? { storage: sessionStorage } : persist,
     state: () => ({
       widget: widget,
       loading: true,
       unitFileState: null as null | SystemdUnitFileState,
       unit: null as null | SystemdUnit,
       error: null as null | Error,
-      persist: {
-        enabled: persist,
-        storage: sessionStorage, // localStorage is available to all browser tabs, and isn't cleared when browsing session ends
-      },
     }),
     actions: {
       async disableService() {
