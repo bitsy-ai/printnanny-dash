@@ -108,7 +108,7 @@ export const useCameraSettingsStore = defineStore({
         height: this.selectedCaps?.height,
         width: this.selectedCaps?.width,
         format: this.selectedCaps?.format,
-        colorimetry: this.selectedCamera.colorimetry,
+        colorimetry: this.selectedCaps?.colorimetry,
         device_name: this.selectedCamera?.device_name,
         label: this.selectedCamera?.label,
       } as CameraSettings;
