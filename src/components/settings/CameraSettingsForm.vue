@@ -113,6 +113,9 @@
                     <span class="block truncate"
                       >width={{ store.settings?.camera.width }} height={{
                         store.settings.camera.height
+                      }}
+                      format={{ store.settings.camera.format }} color={{
+                        store.settings.camera.colorimetry
                       }}</span
                     >
                     <span
@@ -157,7 +160,9 @@
                             >width={{ caps.width }} height={{
                               caps.height
                             }}
-                            format={{ caps.format }}</span
+                            format={{ caps.format }} color={{
+                              store.settings.camera.colorimetry
+                            }}</span
                           >
 
                           <span

@@ -78,7 +78,8 @@ export const useCameraSettingsStore = defineStore({
         const selectedCaps = {
           height: settings.camera.height,
           width: settings.camera.width,
-          format: "",
+          format: settings.camera.format,
+          colorimetry: settings.camera.colorimetry,
           media_type: "",
         } as GstreamerCaps;
         const selectedCamera = this.cameras.find(
@@ -107,6 +108,7 @@ export const useCameraSettingsStore = defineStore({
         height: this.selectedCaps?.height,
         width: this.selectedCaps?.width,
         format: this.selectedCaps?.format,
+        colorimetry: this.selectedCamera.colorimetry,
         device_name: this.selectedCamera?.device_name,
         label: this.selectedCamera?.label,
       } as CameraSettings;
