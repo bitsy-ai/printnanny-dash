@@ -216,14 +216,7 @@ export const useVideoStore = defineStore({
 
     async subscribeQcDataframes() {
       const natsStore = useNatsStore();
-
-      if (natsStore.natsConnection === undefined) {
-        console.warn(
-          "subscribeQcDataframes called before NATS connection initialized"
-        );
-        return;
-      }
-      const natsClient = toRaw(natsStore.natsConnection);
+      const natsClient = await natsStore.getNatsConnection();
 
       // create a JSON codec/decoder
       const jsonCodec = JSONCodec<Array<QcDataframeRow>>();
