@@ -32,7 +32,18 @@ const plotlyLayout = {
   },
 } as Plotly.Layout;
 
-const config = { responsive: true, autosize: true };
+const config = {
+  responsive: true,
+  autosize: true,
+  modeBarButtonsToRemove: [
+    "zoom2d",
+    "pan2d",
+    "zoomIn2d",
+    "zoomOut2d",
+    "autoScale2d",
+    "resetScale2d",
+  ] as Plotly.ModeBarDefaultButtons[],
+};
 
 onMounted(() => {
   const nozzlePlot = {
