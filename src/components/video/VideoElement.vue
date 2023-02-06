@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useVideoStore } from "@/stores/video";
+import { onMounted, ref } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import VideoButton from "@/components/video/VideoButton.vue";
 import VideoStatus from "@/components/video/VideoStatus.vue";
@@ -8,8 +7,13 @@ import { handleError } from "@/utils";
 import PlotlyElement from "@/components/PlotlyElement.vue";
 import { useCameraSettingsStore } from "@/stores/cameraSettings";
 import { Cog6ToothIcon } from "@heroicons/vue/20/solid";
+import { useVideoStore } from "@/stores/video";
 
 const cameraSettings = useCameraSettingsStore();
+
+// set a default height/width on video element
+const height = ref(480);
+const width = ref(640);
 
 const store = useVideoStore();
 store.subscribeQcDataframes();
@@ -23,6 +27,13 @@ async function startStream() {
 onMounted(async () => {
   await store.load();
   await cameraSettings.loadSettings();
+  // update default height/width on video element
+  if (cameraSettings.selectedCaps?.height) {
+    height.value = cameraSettings.selectedCaps?.height;
+  }
+  if (cameraSettings.selectedCaps?.width) {
+    width.value = cameraSettings.selectedCaps?.width;
+  }
 });
 
 const pageTitle = "📷 PrintNanny Cam";
@@ -60,6 +71,8 @@ onBeforeRouteLeave((_to, _from) => {
             </div>
             <video
               @click="startStream"
+              :height="height"
+              :width="width"
               id="janus-video"
               muted
               controls
