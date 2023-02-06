@@ -32,7 +32,11 @@ const plotlyLayout = {
   },
 } as Plotly.Layout;
 
-const config = { responsive: true, autosize: true };
+const config = { 
+  responsive: true, 
+  autosize: true,
+  modeBarButtonsToRemove: ["zoom", "pan", "zoomIn", "zoomOut", "autoScale", "resetScale"]
+};
 
 onMounted(() => {
   const nozzlePlot = {
