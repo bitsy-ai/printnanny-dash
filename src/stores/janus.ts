@@ -11,6 +11,7 @@ import Janode from "janode";
 import StreamingPlugin from "janode/plugins/streaming";
 import { handleError } from "@/utils";
 import { useVideoStore } from "./video";
+import { useCameraSettingsStore } from "./cameraSettings";
 
 const RTCPeerConnection = window.RTCPeerConnection.bind(window);
 
@@ -206,6 +207,11 @@ export const useJanusStore = defineStore({
       }
     },
     async jsepAnswer(offer: any) {
+      const cameraSettings = useCameraSettingsStore();
+      if (cameraSettings.settings === undefined) {
+        await cameraSettings.loadSettings();
+      }
+      const streamSettings = toRaw(cameraSettings.settings);
       const pc = new RTCPeerConnection({
         iceServers: [
           {
@@ -231,7 +237,11 @@ export const useJanusStore = defineStore({
         }
       };
 
-      const merger = new VideoStreamMerger({ fps: 15 } as ConstructorOptions);
+      const merger = new VideoStreamMerger({
+        fps: streamSettings?.camera.framerate_n,
+        height: streamSettings?.camera.height,
+        width: streamSettings?.camera.width,
+      } as ConstructorOptions);
       merger.start();
       this.setVideoElement(merger.result);
 
