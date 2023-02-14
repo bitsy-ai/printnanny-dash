@@ -299,7 +299,18 @@ export const useVideoStore = defineStore({
       janusStore.selectJanusStreamByPort();
       janusStore.startJanusStream(toRaw(this.showOverlay));
     },
-    async stopStream() {
+    async stopWebrtcStream() {
+      this.$patch({
+        status: ConnectionStatus.ConnectionClosing,
+        playingStream: null,
+      });
+      console.log(`Attempting to close Webrtc connection`);
+      const janusStore = useJanusStore();
+      await janusStore.stopAllStreams().catch((e: any) => {
+        console.error("Error hanging up Janus connection:", e);
+      });
+    },
+    async stopCameraService() {
       this.$patch({
         status: ConnectionStatus.ConnectionClosing,
         playingStream: null,
@@ -327,7 +338,7 @@ export const useVideoStore = defineStore({
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
       if (this.playingStream !== null) {
-        return this.stopStream();
+        return this.stopCameraService();
       } else {
         this.$patch({ playingStream: toRaw(this.selectedVideoSource) });
         await this.startStream();
@@ -394,7 +405,7 @@ export const useVideoStore = defineStore({
       ) {
         return await this.startStream();
       } else if (this.status === ConnectionStatus.ConnectionReady) {
-        return await this.stopStream();
+        return await this.stopCameraService();
       } else {
         console.warn(
           `cameraButtonAction called with unhandled connection state: ${this.status}`
