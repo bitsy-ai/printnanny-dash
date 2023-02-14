@@ -40,7 +40,7 @@ const pageTitle = "📷 PrintNanny Cam";
 
 // stop video stream before leaving route
 onBeforeRouteLeave((_to, _from) => {
-  return store.stopStream();
+  return store.stopWebrtcStream();
 });
 </script>
 
