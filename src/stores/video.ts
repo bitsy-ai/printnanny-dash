@@ -7,8 +7,7 @@ import {
   SystemdUnitActiveState,
   type VideoRecording,
   type CameraRecordingLoadReply,
-  CameraStatus,
-  type CameraStatusReply,
+  type CameraStatus,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
@@ -297,7 +296,7 @@ export const useVideoStore = defineStore({
           handleError(msg, e);
         });
       if (resMsg) {
-        const resCodec = JSONCodec<CameraStatusReply>();
+        const resCodec = JSONCodec<CameraStatus>();
         const data = resCodec.decode(resMsg.data);
         console.log("Loaded camera status", data);
         this.$patch({
