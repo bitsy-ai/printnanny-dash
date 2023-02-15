@@ -22,7 +22,7 @@ export const useDeviceStore = defineStore({
         const lines = state.deviceInfo.issue.split("\n");
         return lines[0].replace("IMAGE_NAME = ", "");
       }
-    }
+    },
   },
   actions: {
     async load() {

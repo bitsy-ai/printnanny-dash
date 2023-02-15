@@ -7,7 +7,7 @@ const version = ref(undefined as undefined | string);
 onMounted(async () => {
   await store.load();
   version.value = store.imageName;
-})
+});
 
 const footerNavigation = {
   printnannyos: [
@@ -19,7 +19,10 @@ const footerNavigation = {
       name: "Search Open Issues",
       href: "https://github.com/bitsy-ai/printnanny-os/issues",
     },
-    { name: "Connect Cloud Account", href: "https://printnanny.ai/docs/quick-start/connect-printnanny-cloud/"}
+    {
+      name: "Connect Cloud Account",
+      href: "https://printnanny.ai/docs/quick-start/connect-printnanny-cloud/",
+    },
   ],
   intro: [
     {
