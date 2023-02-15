@@ -7,6 +7,7 @@ import {
   SystemdUnitActiveState,
   type VideoRecording,
   type CameraRecordingLoadReply,
+  type CameraStatus,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 
 import {
@@ -76,6 +77,7 @@ export const useVideoStore = defineStore({
   id: "videos",
   state: () => ({
     loadingCameras: true,
+    cameraStatus: undefined as undefined | CameraStatus,
     videoRecordings: [] as Array<VideoRecording>,
     currentVideoRecording: undefined as undefined | VideoRecording,
     df: [] as Array<QcDataframeRow>,
@@ -276,6 +278,29 @@ export const useVideoStore = defineStore({
         this.$patch({
           videoRecordings: data.recordings,
           currentVideoRecording: data.current,
+        });
+      }
+    },
+
+    async loadCameraStatus() {
+      const natsStore = useNatsStore();
+      const natsConnection = await natsStore.getNatsConnection();
+      const subject = renderNatsSubjectPattern(NatsSubjectPattern.CameraStatus);
+
+      const resMsg = await natsConnection
+        ?.request(subject, undefined, {
+          timeout: DEFAULT_NATS_TIMEOUT,
+        })
+        .catch((e) => {
+          const msg = "Error loading camera status";
+          handleError(msg, e);
+        });
+      if (resMsg) {
+        const resCodec = JSONCodec<CameraStatus>();
+        const data = resCodec.decode(resMsg.data);
+        console.log("Loaded camera status", data);
+        this.$patch({
+          cameraStatus: data,
         });
       }
     },

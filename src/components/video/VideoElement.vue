@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import VideoButton from "@/components/video/VideoButton.vue";
-import VideoStatus from "@/components/video/VideoStatus.vue";
+import WebrtcConnectionStatus from "@/components/video/WebrtcConnectionStatus.vue";
 import { handleError } from "@/utils";
 import PlotlyElement from "@/components/PlotlyElement.vue";
 import { useCameraSettingsStore } from "@/stores/cameraSettings";
@@ -57,7 +57,7 @@ onBeforeRouteLeave((_to, _from) => {
       >
         <div class="col-span-6">
           <div class="flex grid grid-cols-1">
-            <VideoStatus />
+            <WebrtcConnectionStatus />
             <div class="flex w-full items-center justify-center">
               <VideoButton class="m-2" />
               <router-link :to="{ name: 'camera-settings' }">
