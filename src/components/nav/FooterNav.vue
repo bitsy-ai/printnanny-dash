@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { defineComponent, h } from "vue";
+import { defineComponent, h, onMounted, ref } from "vue";
+import { useDeviceStore } from "@/stores/device";
+
+const store = useDeviceStore();
+const version = ref(undefined as undefined | string);
+onMounted(async () => {
+  await store.load();
+  version.value = store.imageName;
+});
 
 const footerNavigation = {
   printnannyos: [
@@ -10,6 +18,10 @@ const footerNavigation = {
     {
       name: "Search Open Issues",
       href: "https://github.com/bitsy-ai/printnanny-os/issues",
+    },
+    {
+      name: "Connect Cloud Account",
+      href: "https://printnanny.ai/docs/quick-start/connect-printnanny-cloud/",
     },
   ],
   intro: [
@@ -24,7 +36,6 @@ const footerNavigation = {
   ],
   documentation: [
     { name: "API Docs", href: import.meta.env.VITE_PRINTNANNY_API_REDOCS_URL },
-    { name: "CLI Docs", href: import.meta.env.VITE_PRINTNANNY_CLI_DOCS_URL },
     {
       name: "Release History",
       href: "https://printnanny.ai/docs/docs/release-history/",
@@ -38,7 +49,7 @@ const footerNavigation = {
   social: [
     {
       name: "Twitter",
-      href: "https://twitter.com/grepLeigh",
+      href: "https://twitter.com/printnanny",
       icon: defineComponent({
         render: () =>
           h("svg", { fill: "currentColor", viewBox: "0 0 24 24" }, [
@@ -182,6 +193,7 @@ const footerNavigation = {
       <div class="mt-12 border-t border-gray-200 py-8">
         <p class="text-sm font-medium text-gray-400 flex">
           <span>&copy; 2022 Bitsy AI Labs, LLC. All rights reserved.</span>
+          <span v-if="version" class="text-right">Version: {{ version }}</span>
         </p>
       </div>
     </div>
