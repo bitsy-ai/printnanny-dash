@@ -23,6 +23,12 @@ export const useDeviceStore = defineStore({
         return lines[3].replace("IMAGE_NAME = ", "");
       }
     },
+    distroVersion: (state) => {
+      if (state.deviceInfo !== undefined) {
+        const lines = state.deviceInfo.issue.split("\n");
+        return lines[9].replace("DISTRO_VERSION = ", "");
+      }
+    },
   },
   actions: {
     async load() {
