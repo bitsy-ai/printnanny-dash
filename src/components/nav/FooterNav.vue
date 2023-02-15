@@ -38,7 +38,7 @@ const footerNavigation = {
   social: [
     {
       name: "Twitter",
-      href: "https://twitter.com/grepLeigh",
+      href: "https://twitter.com/printnanny",
       icon: defineComponent({
         render: () =>
           h("svg", { fill: "currentColor", viewBox: "0 0 24 24" }, [
