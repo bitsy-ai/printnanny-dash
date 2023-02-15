@@ -254,6 +254,7 @@ export const useVideoStore = defineStore({
         console.warn("printnanny-vision.service is not active");
         this.$patch({ status: ConnectionStatus.ServiceNotStarted });
       }
+      await this.loadCameraStatus();
     },
 
     async loadVideoRecordings() {
@@ -359,6 +360,7 @@ export const useVideoStore = defineStore({
         df: [],
       });
       await this.stopRecording();
+      await this.loadCameraStatus();
     },
     async toggleVideoPlayer() {
       // if selected stream is playing stream, stop video
