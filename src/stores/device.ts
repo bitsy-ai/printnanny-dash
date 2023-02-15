@@ -16,6 +16,14 @@ export const useDeviceStore = defineStore({
     deviceInfo: undefined as undefined | DeviceInfoLoadReply,
     error: null as null | Error,
   }),
+  getters: {
+    imageName: (state) => {
+      if (state.deviceInfo !== undefined) {
+        const lines = state.deviceInfo.issue.split("\n");
+        return lines[0].replace("IMAGE_NAME = ", "");
+      }
+    }
+  },
   actions: {
     async load() {
       const natsStore = useNatsStore();
