@@ -56,7 +56,6 @@ import {
   VideoCameraIcon,
   PauseCircleIcon,
 } from "@heroicons/vue/20/solid";
-import { ConnectionStatus } from "@/types";
 import { useVideoStore } from "@/stores/video";
 import TextSpinner from "@/components/TextSpinner.vue";
 
