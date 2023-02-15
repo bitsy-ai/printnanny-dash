@@ -50,7 +50,7 @@
 }
 </style>
 <script setup lang="ts">
-import { onMounted, ref, toRaw } from "vue";
+import { onMounted, ref } from "vue";
 import {
   PlayCircleIcon,
   VideoCameraIcon,
@@ -64,7 +64,6 @@ const loading = ref(true);
 
 onMounted(async () => {
   await store.loadCameraStatus();
-  console.log("Loaded camera status: ", toRaw(store.cameraStatus));
   loading.value = false;
 });
 </script>
