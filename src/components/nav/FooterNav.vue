@@ -190,9 +190,11 @@ const footerNavigation = {
           </div>
         </div>
       </div>
-      <div class="mt-12 border-t border-gray-200 py-8">
-        <p class="text-sm font-medium text-gray-400 flex">
+      <div class="mt-12 border-t border-gray-200 py-8 grid grid-cols-1 md:grid-cols-2">
+        <p class="text-sm font-medium text-gray-400">
           <span>&copy; 2022 Bitsy AI Labs, LLC. All rights reserved.</span>
+        </p>
+        <p class="text-sm font-medium text-gray-400">
           <span v-if="version" class="text-right">Version: {{ version }}</span>
         </p>
       </div>

@@ -20,7 +20,7 @@ export const useDeviceStore = defineStore({
     imageName: (state) => {
       if (state.deviceInfo !== undefined) {
         const lines = state.deviceInfo.issue.split("\n");
-        return lines[0].replace("IMAGE_NAME = ", "");
+        return lines[3].replace("IMAGE_NAME = ", "");
       }
     },
   },
