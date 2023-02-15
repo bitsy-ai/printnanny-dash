@@ -21,10 +21,10 @@ router.beforeEach(async (to, _from) => {
     return;
   }
   // is PrintNanny OS finished starting up?
-  const ready = printnannyReady();
-  if (ready === false) {
-    return { name: "startup" };
-  }
+  // const ready = printnannyReady();
+  // if (ready === false) {
+  //   return { name: "startup" };
+  // }
 
   const cloud = useCloudStore();
   await cloud.fetchUser();
