@@ -246,6 +246,7 @@ export const useVideoStore = defineStore({
         false
       );
       await systemdServices.load();
+      await this.loadCameraStatus();
       if (
         systemdServices.unit?.active_state === SystemdUnitActiveState.ACTIVE
       ) {
@@ -254,7 +255,6 @@ export const useVideoStore = defineStore({
         console.warn("printnanny-vision.service is not active");
         this.$patch({ status: ConnectionStatus.ServiceNotStarted });
       }
-      await this.loadCameraStatus();
     },
 
     async loadVideoRecordings() {
@@ -316,8 +316,8 @@ export const useVideoStore = defineStore({
         printNannyVisionWidget,
         false
       );
-      console.log(`Restarting ${printNannyVisionService.widget.name}`);
-      await printNannyVisionService.restartService(false); // show message indicating printnanny-vision.service was restarted
+      console.log(`Starting ${printNannyVisionService.widget.name}`);
+      await printNannyVisionService.startService(); // show message indicating printnanny-vision.service was restarted
 
       const janusStore = useJanusStore();
 
