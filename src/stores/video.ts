@@ -397,6 +397,7 @@ export const useVideoStore = defineStore({
         this.$patch({ currentVideoRecording: videoRecording });
       }
       this.$patch({ videoRecordingLoading: false });
+      await this.loadCameraStatus();
     },
     async stopRecording() {
       this.$patch({ videoRecordingLoading: true });
@@ -424,6 +425,7 @@ export const useVideoStore = defineStore({
         this.$patch({ currentVideoRecording: undefined });
       }
       this.$patch({ videoRecordingLoading: false });
+      await this.loadCameraStatus();
     },
     async cameraButtonAction() {
       if (
