@@ -113,6 +113,7 @@ export const useCameraSettingsStore = defineStore({
         label: this.selectedCamera?.label,
       } as CameraSettings;
       req.camera.framerate_n = form.videoFramerate;
+      req.camera.framerate_d = 1;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
 
