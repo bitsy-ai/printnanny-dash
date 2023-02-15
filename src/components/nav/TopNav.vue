@@ -28,7 +28,7 @@
               ]"
               :aria-current="item.current ? 'page' : undefined"
               >{{ item.name }}
-              <VideoStatus
+              <CameraStatus
                 v-if="item.name === 'Camera'"
                 :compact="true"
                 :show-loading="false"
@@ -119,7 +119,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import { Cog6ToothIcon, FireIcon } from "@heroicons/vue/24/solid";
 import CloudSyncStatus from "@/components/status/CloudSyncStatus.vue";
-import VideoStatus from "@/components/video/VideoStatus.vue";
+import CameraStatus from "@/components/video/CameraStatus.vue";
 import { useRouter, RouterLink } from "vue-router";
 import { useAlertStore } from "@/stores/alerts";
 

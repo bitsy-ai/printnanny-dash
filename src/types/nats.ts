@@ -8,6 +8,7 @@ export enum NatsSubjectPattern {
   CameraSettingsLoad = "pi.{pi_id}.settings.camera.load",
   CameraSettingsApply = "pi.{pi_id}.settings.camera.apply",
   CameraSettingsRevert = "pi.{pi_id}.settings.camera.revert",
+  CameraStatus = "pi.{pi_id}.settings.camera.status",
   CrashReportOsLogs = "pi.{pi_id}.crash_reports.os",
 
   CamerasLoad = "pi.{pi_id}.cameras.load",
