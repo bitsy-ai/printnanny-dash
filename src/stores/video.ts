@@ -255,6 +255,7 @@ export const useVideoStore = defineStore({
         console.warn("printnanny-vision.service is not active");
         this.$patch({ status: ConnectionStatus.ServiceNotStarted });
       }
+      await this.loadVideoRecordings();
     },
 
     async loadVideoRecordings() {
