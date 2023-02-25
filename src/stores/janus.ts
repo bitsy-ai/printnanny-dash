@@ -1,4 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
+import adapter from "webrtc-adapter";
 import { toRaw } from "vue";
 import {
   VideoStreamMerger,
@@ -13,7 +14,7 @@ import { handleError } from "@/utils";
 import { useVideoStore } from "./video";
 import { useCameraSettingsStore } from "./cameraSettings";
 
-const RTCPeerConnection = window.RTCPeerConnection.bind(window);
+window.adapter = adapter;
 
 function getJanusUri() {
   const hostname = window.location.hostname;
@@ -325,6 +326,15 @@ export const useJanusStore = defineStore({
       });
     },
     async startJanusStream(showOverlay: boolean) {
+      console.log(
+        "WebRTC adaptor detected browser: ",
+        adapter.browserDetails.browser
+      );
+      console.log(
+        "WebRTC adaptor detected version: ",
+        adapter.browserDetails.version
+      );
+
       this.$patch({ showOverlay });
       if (this.selectedStream == undefined) {
         console.warn(
