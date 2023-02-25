@@ -8,6 +8,12 @@ declare global {
   }
 }
 
+declare global {
+  interface Window {
+    adapter: any;
+  }
+}
+
 console.stdlog = console.log.bind(console);
 console.stdwarn = console.warn.bind(console);
 console.stderr = console.error.bind(console);

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import adapter from "webrtc-adapter";
 import { onMounted, ref } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import VideoButton from "@/components/video/VideoButton.vue";
@@ -26,15 +25,6 @@ async function startStream() {
 }
 
 onMounted(async () => {
-  console.log(
-    "WebRTC adaptor detected browser: ",
-    adapter.browserDetails.browser
-  );
-  console.log(
-    "WebRTC adaptor detected version: ",
-    adapter.browserDetails.version
-  );
-
   await store.load();
   await cameraSettings.loadSettings();
   // update default height/width on video element
