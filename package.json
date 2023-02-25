@@ -35,6 +35,7 @@
     "vue": "^3.2.38",
     "vue-codemirror": "^6.1.1",
     "vue-router": "^4.1.5",
+    "webrtc-adapter": "^8.2.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {
