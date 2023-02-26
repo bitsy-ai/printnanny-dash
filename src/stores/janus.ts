@@ -151,6 +151,10 @@ export const useJanusStore = defineStore({
         },
         webrtcState: (isConnected: boolean) => {
           console.log(`WebRTC is connected: ${isConnected}`);
+          if (isConnected){
+            merger.start();
+            this.setVideoElement(merger.result);
+          }
         },
         slowLink: (uplink: boolean, lost: number, mid: string) => {
           console.warn(
@@ -228,11 +232,6 @@ export const useJanusStore = defineStore({
               `showOverlay=${showOverlay}, only adding stream with mid=${mid}`
             );
             merger.addStream(videoStream, undefined);
-          }
-
-          if (on) {
-            merger.start();
-            this.setVideoElement(merger.result);
           }
         },
       });
