@@ -321,10 +321,9 @@ export const useVideoStore = defineStore({
       await printNannyVisionService.startService(); // show message indicating printnanny-vision.service was restarted
 
       const janusStore = useJanusStore();
-
-      await janusStore.connectJanus();
-      janusStore.selectJanusStreamByPort();
-      janusStore.startJanusStream(toRaw(this.showOverlay));
+      janusStore.connectJanus();
+      // janusStore.selectJanusStreamByPort();
+      // janusStore.startJanusStream(toRaw(this.showOverlay));
     },
     async stopWebrtcStream() {
       this.$patch({
