@@ -107,6 +107,11 @@ export const useJanusStore = defineStore({
         },
       });
     },
+    startStream(pluginHandle: JanusJS.PluginHandle) {
+      const message = { request: "watch", id: 1 };
+      console.log("Requesting WebRTC stream start", message);
+      pluginHandle.send({ message });
+    },
     async onConnectSuccess(janus: JanusJS.Janus) {
       const self = this;
       let streaming = undefined as undefined | JanusJS.PluginHandle;
@@ -130,6 +135,7 @@ export const useJanusStore = defineStore({
         success: async (pluginHandle: JanusJS.PluginHandle) => {
           this.$patch({ janusStreamingPluginHandle: pluginHandle });
           streaming = pluginHandle;
+          self.startStream(pluginHandle);
           await self.loadStreamsList(pluginHandle);
         },
         error: (error) => {
@@ -235,6 +241,7 @@ export const useJanusStore = defineStore({
     connectJanus() {
       // initialize janus library
       const self = this;
+      this.$patch({ status: ConnectionStatus.ConnectionLoading });
       Janus.init({
         debug: "all",
         callback: () => {
