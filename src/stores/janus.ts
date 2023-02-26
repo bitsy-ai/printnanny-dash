@@ -224,7 +224,7 @@ export const useJanusStore = defineStore({
             merger.addStream(videoStream, undefined);
           }
 
-          if (on){
+          if (on) {
             merger.start();
             this.setVideoElement(merger.result);
           }
