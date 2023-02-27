@@ -253,9 +253,15 @@ declare namespace JanusJS {
     candidates: RTCIceCandidateInit[];
   }
 
+  interface PluginCreateAnswerTrack {
+    type: "audio" | "video" | "data";
+    capture?: boolean;
+    recv?: boolean;
+  }
+
   type PluginCreateAnswerParam = {
     jsep: JSEP;
-    media: { audioSend: any; videoSend: any };
+    tracks: Array<PluginCreateAnswerTrack>;
     success?: (data: JSEP) => void;
     error?: (error: string) => void;
   };
