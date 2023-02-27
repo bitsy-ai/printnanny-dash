@@ -87,14 +87,13 @@ export const useVideoStore = defineStore({
     selectedVideoSource: null as null | Camera,
     playingStream: null as null | Camera,
     videoRecordingLoading: false,
-    webrtcup: false,
     error: null as null | Error,
     showOverlay: true,
     showGraph: true,
   }),
   getters: {
     videoRecordingButtonEnabled(state): boolean {
-      return state.webrtcup;
+      return state.status === ConnectionStatus.ConnectionReady
     },
     videoRecordingButtonShowStart(state): boolean {
       return state.currentVideoRecording === undefined;
@@ -109,7 +108,7 @@ export const useVideoStore = defineStore({
     cameraButtonDisabled(state): boolean {
       if (
         state.status === ConnectionStatus.ConnectionLoading ||
-        state.status == ConnectionStatus.ConnectionClosing
+        state.status === ConnectionStatus.ConnectionClosing
       ) {
         return true;
       }
