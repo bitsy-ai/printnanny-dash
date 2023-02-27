@@ -102,7 +102,15 @@ export const useCameraSettingsStore = defineStore({
       );
 
       const reqCodec = JSONCodec<VideoStreamSettings>();
-      const req = toRaw(this.settings) as VideoStreamSettings;
+      const originalSettings = toRaw(this.settings) as VideoStreamSettings;
+      const req = {
+        hls: originalSettings.hls,
+        camera: originalSettings.camera,
+        detection: originalSettings.detection,
+        recording: originalSettings.recording,
+        rtp: originalSettings.rtp,
+        snapshot: originalSettings.snapshot,
+      };
       req.hls.enabled = form.hlsEnabled;
       req.camera = {
         height: this.selectedCaps?.height,
@@ -111,11 +119,12 @@ export const useCameraSettingsStore = defineStore({
         colorimetry: this.selectedCaps?.colorimetry,
         device_name: this.selectedCamera?.device_name,
         label: this.selectedCamera?.label,
+        framerate_d: form.videoFramerate,
+        framerate_n: 1,
       } as CameraSettings;
-      req.camera.framerate_n = form.videoFramerate;
-      req.camera.framerate_d = 1;
       req.detection.graphs = form.showDetectionGraphs as boolean;
       req.detection.overlay = form.showDetectionOverlay as boolean;
+      req.recording.cloud_sync = form.recordSyncCloud;
 
       console.log("Submitting camera settings request:", req);
       const resMsg = await natsConnection
