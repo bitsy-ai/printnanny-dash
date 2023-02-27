@@ -3,6 +3,14 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 
+// load all node_modules in a vendor chunk file
+// see: https://rollupjs.org/configuration-options/#output-manualchunks
+function manualChunks(id: string) {
+  if (id.includes("node_modules")) {
+    return "vendor";
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ _command, mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -11,6 +19,11 @@ export default defineConfig(({ _command, mode }) => {
     build: {
       sourcemap: true,
       manifest: true,
+      rollupOptions: {
+        output: {
+          manualChunks,
+        },
+      },
     },
     server: {
       proxy: {
