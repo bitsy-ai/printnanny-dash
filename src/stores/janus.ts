@@ -151,7 +151,7 @@ export const useJanusStore = defineStore({
         },
         webrtcState: (isConnected: boolean) => {
           console.log(`WebRTC is connected: ${isConnected}`);
-          if (isConnected){
+          if (isConnected) {
             merger.start();
             this.setVideoElement(merger.result);
           }
@@ -183,7 +183,11 @@ export const useJanusStore = defineStore({
             console.log("Handling SDP: ", jsep);
             streaming?.createAnswer({
               jsep,
-              media: { audioSend: null, videoSend: null },
+              tracks: [
+                { type: "audio", capture: false, recv: false },
+                { type: "video", capture: false, recv: true },
+                { type: "data" },
+              ],
               success: (jsep) => {
                 console.log("Received SDP: ", jsep);
                 const startStreamRequest = { request: "start" };
