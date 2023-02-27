@@ -7,8 +7,6 @@ import {
   type ConstructorOptions,
 } from "video-stream-merger";
 import { type JanusStream, ConnectionStatus } from "@/types";
-// import Janode from "janode";
-// import StreamingPlugin from "janode/plugins/streaming";
 import Janus from "@/vendor/janus";
 import type { JanusJS } from "@/vendor/janus";
 import { handleError } from "@/utils";
@@ -217,7 +215,7 @@ export const useJanusStore = defineStore({
               index: 0,
               draw: null as null | DrawFunction,
             } as AddStreamOptions;
-            if (mid !== undefined) {
+            if (mid && on) {
               opts.index = parseInt(mid.replace("v", "") as string);
 
               // remove black background from overlay video
