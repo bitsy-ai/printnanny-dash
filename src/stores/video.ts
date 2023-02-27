@@ -93,7 +93,7 @@ export const useVideoStore = defineStore({
   }),
   getters: {
     videoRecordingButtonEnabled(state): boolean {
-      return state.status === ConnectionStatus.ConnectionReady
+      return state.status === ConnectionStatus.ConnectionReady;
     },
     videoRecordingButtonShowStart(state): boolean {
       return state.currentVideoRecording === undefined;

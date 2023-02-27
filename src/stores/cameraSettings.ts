@@ -111,7 +111,6 @@ export const useCameraSettingsStore = defineStore({
         rtp: originalSettings.rtp,
         snapshot: originalSettings.snapshot,
       };
-      req.hls.enabled = form.hlsEnabled;
       req.camera = {
         height: this.selectedCaps?.height,
         width: this.selectedCaps?.width,
@@ -122,9 +121,14 @@ export const useCameraSettingsStore = defineStore({
         framerate_d: form.videoFramerate,
         framerate_n: 1,
       } as CameraSettings;
-      req.detection.graphs = form.showDetectionGraphs as boolean;
-      req.detection.overlay = form.showDetectionOverlay as boolean;
-      req.recording.cloud_sync = form.recordSyncCloud;
+      // vee-validate will set form.<field> to undefined if checkbox is unchecked, coorce to boolean
+      req.detection.graphs =
+        form.showDetectionGraphs === undefined ? false : true;
+      req.detection.overlay =
+        form.showDetectionOverlay === undefined ? false : true;
+      req.recording.cloud_sync =
+        form.recordSyncCloud === undefined ? false : true;
+      req.hls.enabled = form.hlsEnabled === undefined ? false : true;
 
       console.log("Submitting camera settings request:", req);
       const resMsg = await natsConnection
