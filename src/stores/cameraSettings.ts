@@ -15,13 +15,13 @@ import { handleError } from "@/utils";
 
 export interface CameraSettingsForm {
   videoFramerate: number;
-  hlsEnabled: boolean;
-  recordAutoStart: boolean;
-  recordSyncCloud: boolean;
+  hlsEnabled: boolean | undefined;
+  recordAutoStart: boolean | undefined;
+  recordSyncCloud: boolean | undefined;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
-  showDetectionOverlay: boolean;
-  showDetectionGraphs: boolean;
+  showDetectionOverlay: boolean | undefined;
+  showDetectionGraphs: boolean | undefined;
 }
 
 export const useCameraSettingsStore = defineStore({
@@ -123,12 +123,16 @@ export const useCameraSettingsStore = defineStore({
       } as CameraSettings;
       // vee-validate will set form.<field> to undefined if checkbox is unchecked, coorce to boolean
       req.detection.graphs =
-        form.showDetectionGraphs === undefined ? false : true;
+        form.showDetectionGraphs === undefined
+          ? false
+          : form.showDetectionGraphs;
       req.detection.overlay =
-        form.showDetectionOverlay === undefined ? false : true;
+        form.showDetectionOverlay === undefined
+          ? false
+          : form.showDetectionOverlay;
       req.recording.cloud_sync =
-        form.recordSyncCloud === undefined ? false : true;
-      req.hls.enabled = form.hlsEnabled === undefined ? false : true;
+        form.recordSyncCloud === undefined ? false : form.recordSyncCloud;
+      req.hls.enabled = form.hlsEnabled === undefined ? false : form.hlsEnabled;
 
       console.log("Submitting camera settings request:", req);
       const resMsg = await natsConnection
