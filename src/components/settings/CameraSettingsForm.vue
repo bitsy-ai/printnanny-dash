@@ -235,31 +235,6 @@
                 Save timelapse video recordings.
               </p>
               <div class="mt-4 space-y-4">
-                <!--
-                <div class="relative flex items-start">
-                  <div class="flex h-5 items-center">
-                    <Field
-                      id="recordAutoStart"
-                      name="recordAutoStart"
-                      type="checkbox"
-                      :value="store.settings.recording.auto_start"
-                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                    />
-                  </div>
-                  <div class="ml-3 text-sm">
-                    <label
-                      for="recordAutoStart"
-                      class="font-medium text-gray-700"
-                      >Auto-start</label
-                    >
-                    <p class="text-gray-500">
-                      Automatically start a new recording when a print job
-                      begins.
-                    </p>
-                  </div>
-                </div>
-                -->
-
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
                     <Field
@@ -442,13 +417,19 @@ async function submitForm(form: any) {
 
 onMounted(async () => {
   await store.load();
+
   initialValues.value = {
-    recordAutoStart: store.settings?.recording.auto_start as boolean,
-    recordSyncCloud: store.settings?.recording.cloud_sync as boolean,
+    // vee-validate will set form.<field> to undefined if checkbox is unchecked, coorce boolean to undefined
+    recordAutoStart:
+      store.settings?.recording.auto_start === true ? true : undefined,
+    recordSyncCloud:
+      store.settings?.recording.cloud_sync === true ? true : undefined,
     videoFramerate: store.settings?.camera.framerate_n as number,
-    hlsEnabled: store.settings?.hls.enabled as boolean,
-    showDetectionGraphs: store.settings?.detection.graphs as boolean,
-    showDetectionOverlay: store.settings?.detection.overlay as boolean,
+    hlsEnabled: store.settings?.hls.enabled === true ? true : undefined,
+    showDetectionGraphs:
+      store.settings?.detection.graphs === true ? true : undefined,
+    showDetectionOverlay:
+      store.settings?.detection.overlay === true ? true : undefined,
     selectedCaps: store.selectedCaps as GstreamerCaps,
     selectedCamera: store.selectedCamera as Camera,
   };
