@@ -207,6 +207,7 @@
                     name="hlsEnabled"
                     type="checkbox"
                     :value="store.settings.hls.enabled"
+                    :unchecked-value="false"
                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                 </div>
@@ -266,6 +267,7 @@
                       name="recordSyncCloud"
                       type="checkbox"
                       :value="store.settings.recording.cloud_sync"
+                      :unchecked-value="false"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
@@ -317,6 +319,7 @@
                       name="showDetectionOverlay"
                       type="checkbox"
                       :value="store.settings.detection.overlay"
+                      :unchecked-value="false"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
@@ -338,6 +341,7 @@
                       name="showDetectionGraphs"
                       type="checkbox"
                       :value="store.settings.detection.graphs"
+                      :unchecked-value="false"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
