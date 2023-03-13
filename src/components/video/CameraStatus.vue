@@ -1,14 +1,16 @@
 <template>
   <Transition name="fade" mode="out-in" :duration="{ enter: 800, leave: 500 }">
+    <!-- loading indicator -->
     <div
       class="flex items-center justify-center space-x-3 font-medium text-gray-600 m-auto"
       v-if="loading"
     >
       <TextSpinner text="" class="text-gray-500 stroke-gray-500" />
     </div>
+    <!-- if camera stream is active and recording, show recording indicator -->
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
-      v-else-if="store.cameraStatus?.recording"
+      v-else-if="store.cameraStatus?.streaming && store.cameraStatus?.recording"
     >
       <PlayCircleIcon
         class="text-red-500 flex-shrink-0 w-5 h-5"
@@ -16,6 +18,7 @@
         alt="Recording in progress"
       ></PlayCircleIcon>
     </div>
+    <!-- otherwise if just streaming is active, show streaming indicator-->
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
       v-else-if="store.cameraStatus?.streaming"
@@ -26,6 +29,7 @@
         alt="Camera stream active"
       ></VideoCameraIcon>
     </div>
+    <!-- inactive indicator -->
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 m-auto"
       v-else
