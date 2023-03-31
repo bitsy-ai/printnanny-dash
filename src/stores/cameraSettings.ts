@@ -118,8 +118,8 @@ export const useCameraSettingsStore = defineStore({
         colorimetry: this.selectedCaps?.colorimetry,
         device_name: this.selectedCamera?.device_name,
         label: this.selectedCamera?.label,
-        framerate_d: form.videoFramerate,
-        framerate_n: 1,
+        framerate_d: 1,
+        framerate_n: form.videoFramerate,
       } as CameraSettings;
       // vee-validate will set form.<field> to undefined if checkbox is unchecked, coorce to boolean
       req.detection.graphs =
