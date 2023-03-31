@@ -229,32 +229,32 @@
           <div>
             <fieldset>
               <h3 class="text-lg font-medium leading-6 text-gray-900">
-                Video Recording Settings
+                Snapshot Settings
               </h3>
               <p class="mt-1 text-sm text-gray-500">
-                Save timelapse video recordings.
+                Capture print job snapshots.
               </p>
               <div class="mt-4 space-y-4">
                 <div class="relative flex items-start">
                   <div class="flex h-5 items-center">
                     <Field
-                      id="recordSyncCloud"
-                      name="recordSyncCloud"
+                      id="cameraSnapshotEnabled"
+                      name="cameraSnapshotEnabled"
                       type="checkbox"
-                      :value="store.settings.recording.cloud_sync"
+                      :value="store.settings.snapshot.enabled"
                       :unchecked-value="false"
                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </div>
                   <div class="ml-3 text-sm">
                     <label
-                      for="recordSyncCloud"
+                      for="cameraSnapshotEnabled"
                       class="font-medium text-gray-700"
-                      >Save recordings to PrintNanny Cloud</label
+                      >Save print job snapshots to PrintNanny Cloud</label
                     >
                     <p class="text-gray-500">
-                      Improve PrintNanny's detection algorithm and backup your
-                      video recording library to PrintNanny Cloud.
+                      View your 3D printer's progress from anywhere in the
+                      world. Help improve PrintNanny's AI.
                     </p>
                   </div>
                 </div>
@@ -403,7 +403,7 @@ const schema = yup.object({
   showDetectionGraphs: yup.boolean(),
   showDetectionOverlay: yup.boolean(),
   recordAutoStart: yup.boolean(),
-  recordSyncCloud: yup.boolean(),
+  cameraSnapshotEnabled: yup.boolean(),
 });
 
 const initialValues = ref(undefined as undefined | CameraSettingsForm);
@@ -422,7 +422,7 @@ onMounted(async () => {
     // vee-validate will set form.<field> to undefined if checkbox is unchecked, coorce boolean to undefined
     recordAutoStart:
       store.settings?.recording.auto_start === true ? true : undefined,
-    recordSyncCloud:
+    cameraSnapshotEnabled:
       store.settings?.recording.cloud_sync === true ? true : undefined,
     videoFramerate: store.settings?.camera.framerate_n as number,
     hlsEnabled: store.settings?.hls.enabled === true ? true : undefined,

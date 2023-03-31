@@ -24,12 +24,12 @@
         {{ store.cameraButtonText }}
       </button>
     </Transition>
+    <!-- video recording button
     <Transition
       name="fade"
       mode="out-in"
       :duration="{ enter: 800, leave: 500 }"
     >
-      <!-- camera service is active and recording is not active -->
       <button
         @click="store.startRecording"
         v-if="store.videoRecordingLoading"
@@ -70,6 +70,7 @@
         Start Recording
       </button>
     </Transition>
+          -->
   </div>
 </template>
 <style>
