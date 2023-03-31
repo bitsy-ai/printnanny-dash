@@ -17,7 +17,7 @@ export interface CameraSettingsForm {
   videoFramerate: number;
   hlsEnabled: boolean | undefined;
   recordAutoStart: boolean | undefined;
-  recordSyncCloud: boolean | undefined;
+  cameraSnapshotEnabled: boolean | undefined;
   selectedCaps: GstreamerCaps;
   selectedCamera: Camera;
   showDetectionOverlay: boolean | undefined;
@@ -131,7 +131,7 @@ export const useCameraSettingsStore = defineStore({
           ? false
           : form.showDetectionOverlay;
       req.recording.cloud_sync =
-        form.recordSyncCloud === undefined ? false : form.recordSyncCloud;
+        form.cameraSnapshotEnabled === undefined ? false : form.cameraSnapshotEnabled;
       req.hls.enabled = form.hlsEnabled === undefined ? false : form.hlsEnabled;
 
       console.log("Submitting camera settings request:", req);
