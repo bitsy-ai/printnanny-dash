@@ -71,7 +71,6 @@
       </button>
     </Transition>
           -->
-
   </div>
 </template>
 <style>

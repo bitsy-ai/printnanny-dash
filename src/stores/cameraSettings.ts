@@ -131,7 +131,9 @@ export const useCameraSettingsStore = defineStore({
           ? false
           : form.showDetectionOverlay;
       req.recording.cloud_sync =
-        form.cameraSnapshotEnabled === undefined ? false : form.cameraSnapshotEnabled;
+        form.cameraSnapshotEnabled === undefined
+          ? false
+          : form.cameraSnapshotEnabled;
       req.hls.enabled = form.hlsEnabled === undefined ? false : form.hlsEnabled;
 
       console.log("Submitting camera settings request:", req);

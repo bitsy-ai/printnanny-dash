@@ -253,7 +253,8 @@
                       >Save print job snapshots to PrintNanny Cloud</label
                     >
                     <p class="text-gray-500">
-                      View your 3D printer's progress from anywhere in the world. Help improve PrintNanny's AI.
+                      View your 3D printer's progress from anywhere in the
+                      world. Help improve PrintNanny's AI.
                     </p>
                   </div>
                 </div>
