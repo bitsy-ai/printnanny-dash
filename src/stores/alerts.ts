@@ -3,7 +3,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { JSONCodec, type NatsConnection } from "nats.ws";
 
 import { CheckIcon, ExclamationTriangleIcon } from "@heroicons/vue/20/solid";
-import type { UiStickyAlert } from "@/types";
+import type { UiStickyAlert, AlertAction } from "@/types";
 import * as api from "printnanny-api-client";
 import { useCloudStore } from "./cloud";
 import posthog from "posthog-js";
@@ -158,12 +158,35 @@ export function warning(header: string, message: string) {
 
 export function error(header: string, message: string) {
   const store = useAlertStore();
+
+  const actions = [
+    {
+      bgColor: "bg-red-500",
+      hoverBgColor: "bg-red-700",
+      textColor: "text-white",
+      hoverTextColor: "text-white",
+      text: "Send Crash Report",
+      onClick: () => {
+        store.openCrashReport(header);
+      },
+    },
+    {
+      bgColor: "bg-white",
+      hoverBgColor: "bg-gray-50",
+      textColor: "text-gray-700",
+      hoverTextColor: "text-gray-700",
+      text: "Refresh",
+      onClick: () => {
+        window.location.reload();
+      },
+    },
+  ] as Array<AlertAction>;
   const alert = {
     header,
     message,
+    actions,
     icon: ExclamationTriangleIcon,
     iconClass: "text-red-500",
-    actions: [],
   };
   store.pushAlert(alert);
 }
