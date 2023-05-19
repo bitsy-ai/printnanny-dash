@@ -9,7 +9,7 @@ import type {
   CameraSettings,
 } from "@bitsy-ai/printnanny-asyncapi-models";
 import { NatsSubjectPattern, renderNatsSubjectPattern } from "@/types";
-import { success } from "./alerts";
+import { success, error } from "./alerts";
 import { DEFAULT_NATS_TIMEOUT } from "@/types";
 import { handleError } from "@/utils";
 
@@ -50,6 +50,15 @@ export const useCameraSettingsStore = defineStore({
       if (resMsg) {
         const data = resCodec.decode(resMsg?.data);
         console.log("Loaded available cameras", data);
+
+        if (data.cameras.length === 0) {
+          error(
+            "No camera detected",
+            `Double-check that you're using a supported camera: https://printnanny.ai/docs/quick-start/hardware/#3-camera
+          
+          Submit a crash report if your camera should be supported, or you'd like to request support for a new camera.`
+          );
+        }
         this.$patch({ cameras: data.cameras });
       }
     },
