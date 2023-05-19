@@ -53,10 +53,10 @@ export const useCameraSettingsStore = defineStore({
 
         if (data.cameras.length === 0) {
           error(
-            "No camera detected",
-            `Double-check that you're using a supported camera: https://printnanny.ai/docs/quick-start/hardware/#3-camera
+            "No Camera Detected",
+            `<p>Double-check that your camera is on the <a href="https://printnanny.ai/docs/quick-start/hardware/#3-camera" target="_blank">supported list</a>.</p>
           
-          Submit a crash report if your camera should be supported, or you'd like to request support for a new camera.`
+          <p>Submit a crash report if your camera is not detected, or you'd like to request support for a new camera</p>`
           );
         }
         this.$patch({ cameras: data.cameras });
