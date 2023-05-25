@@ -3,6 +3,7 @@ import posthog from "posthog-js";
 import { useCloudStore } from "@/stores/cloud";
 import { AllRoutes } from "./routes";
 import { printnannyReady } from "@/utils/ready";
+import { checkBrowserSupport } from "@/utils/browser";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,6 +18,7 @@ router.afterEach((_to, _from) => {
 
 router.beforeEach(async (to, _from) => {
   // if we're redirecting to startup splash, continue
+  checkBrowserSupport();
   if (to.name == "startup") {
     return;
   }
