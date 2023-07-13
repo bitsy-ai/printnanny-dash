@@ -24,7 +24,9 @@
     </div>
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
-      v-else-if="store.unit?.active_state == SystemdUnitActiveState.DEACTIVATING"
+      v-else-if="
+        store.unit?.active_state == SystemdUnitActiveState.DEACTIVATING
+      "
     >
       <div
         class="bg-blue-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
