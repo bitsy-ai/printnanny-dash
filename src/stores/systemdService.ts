@@ -127,6 +127,7 @@ export const useSystemdServiceStore = (
             );
           }
         }
+        await this.load();
       },
       async enableService() {
         // get nats connection (awaits until NATS server is available)
@@ -173,7 +174,6 @@ export const useSystemdServiceStore = (
               res.changes
             );
           }
-
           await this.startService();
         }
       },
@@ -225,6 +225,7 @@ export const useSystemdServiceStore = (
             console.log(`Started ${widget.service}, start job id:`, res.job);
           }
         }
+        await this.load();
       },
 
       async stopService(notify: boolean) {
@@ -274,9 +275,10 @@ export const useSystemdServiceStore = (
               );
             }
 
-            console.log(`Started ${widget.service}, start job id:`, res.job);
+            console.log(`Stopped ${widget.service}, start job id:`, res.job);
           }
         }
+        await this.load();
       },
 
       async restartService(notify: boolean) {
