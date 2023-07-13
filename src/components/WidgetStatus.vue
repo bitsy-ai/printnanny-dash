@@ -14,6 +14,28 @@
     </div>
     <div
       class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
+      v-else-if="store.unit?.active_state == SystemdUnitActiveState.ACTIVATING"
+    >
+      <div
+        class="bg-blue-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+        aria-hidden="true"
+      ></div>
+      <span class="text-grey-600">Starting</span>
+    </div>
+    <div
+      class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
+      v-else-if="
+        store.unit?.active_state == SystemdUnitActiveState.DEACTIVATING
+      "
+    >
+      <div
+        class="bg-blue-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+        aria-hidden="true"
+      ></div>
+      <span class="text-grey-600">Stopping</span>
+    </div>
+    <div
+      class="flex items-center space-x-3 font-medium text-gray-600 justify-self-start"
       v-else-if="store.unit?.active_state == SystemdUnitActiveState.INACTIVE"
     >
       <div
