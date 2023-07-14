@@ -7,14 +7,15 @@
       :duration="{ enter: 800, leave: 500 }"
     >
       <TextSpinner
-        text="Syncing..."
+        text="Syncing"
+        class="text-sm font-medium"
         v-if="
           nats.status == ConnectionStatus.ConnectionNotStarted ||
           nats.status == ConnectionStatus.ConnectionLoading
         "
       />
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600"
+        class="flex items-center space-x-3 text-sm font-medium text-gray-600"
         v-else-if="nats.status == ConnectionStatus.ConnectionReady"
       >
         <div
@@ -24,11 +25,11 @@
         <span class="text-grey-600">Synced</span>
       </div>
       <div
-        class="flex items-center space-x-3 font-medium text-gray-600"
+        class="flex items-center space-x-3 text-sm font-medium text-gray-600"
         v-else-if="nats.status == ConnectionStatus.ConnectionError"
       >
         <div
-          class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 rounded-full"
+          class="bg-red-500 flex-shrink-0 w-2.5 h-2.5 text-sm font-medium rounded-full"
           aria-hidden="true"
         ></div>
         <span class="text-grey-600">Error</span>
