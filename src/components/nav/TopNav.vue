@@ -85,7 +85,7 @@
           >
             <FireIcon class="h-6 w-6 mr-2" />Crash Report
           </a>
-          <CloudSyncStatus class="justify-self-end"/>
+          <CloudSyncStatus class="justify-self-end" />
         </div>
       </div>
     </div>

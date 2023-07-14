@@ -15,7 +15,7 @@
         "
       />
       <div
-        class="flex items-center space-x-3  text-sm font-medium text-gray-600"
+        class="flex items-center space-x-3 text-sm font-medium text-gray-600"
         v-else-if="nats.status == ConnectionStatus.ConnectionReady"
       >
         <div
